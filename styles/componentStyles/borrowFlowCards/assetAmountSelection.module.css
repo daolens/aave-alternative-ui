@@ -1,0 +1,109 @@
+.container {
+    border: 2px solid;
+    border-image-slice: 1;
+    border-width: 2px;
+    border-image-source: linear-gradient(30deg, #30BAC6, #B6509E);
+    border-radius: 4px;
+    background-clip: padding-box;
+    display: flex;
+    align-items: center;
+}
+
+.table_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 420px;
+    background-color: #2A2E3F;
+
+}
+
+.table_container__head {
+    background-color: #2A2E3F;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 16px;
+    min-width: 300px;
+}
+
+.table_container__head span {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #A5A8B6;
+}
+
+.table_container__data {
+    padding: 16px;
+    background-color: #2A2E3F;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-width: 300px;
+}
+
+.table_container__data:hover {
+    background-color: #333A52;
+}
+
+
+
+.table_container__data span {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #FFFFFF;
+}
+
+.amount_input_container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-right: 12px;
+}
+
+.amount_input_container__input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    height: 60px;
+    width: 100%;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    color: #ffffff;
+
+}
+
+.amount_input_container__input::placeholder {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    color: #62677B;
+}
+
+.amount_input_container__dollar {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #62677B;
+}
+
+.amount_input_container__max_cta {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A5A8B6;
+    padding: 8px 12px;
+    background-color: #383D5180;
+    border-radius: 4px;
+    display: inline-block;
+    margin-left: 12px;
+    cursor: pointer;
+}

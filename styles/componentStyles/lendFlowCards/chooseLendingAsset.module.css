@@ -1,0 +1,53 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #3F424F;
+    border-radius: 4px;
+}
+
+.wallet_assets_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 12px;
+}
+
+.wallet_balance_text {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A5A8B6;
+    display: inline-block;
+    margin-top: 28px;
+}
+
+.selected_asset_details {
+    display: flex;
+    align-items: center;
+
+}
+
+.selected_asset_details__container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 50px;
+    justify-content: space-between;
+}
+
+.selected_asset_details__container+.selected_asset_details__container {
+    margin-left: 36px;
+    border-left: 1px solid #3F424F;
+    padding-left: 36px;
+}
+
+.selected_asset_details__container span:first-child {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A5A8B6;
+}

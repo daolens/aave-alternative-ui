@@ -1,0 +1,39 @@
+.back_container {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    background: #383D51;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+}
+
+.back_container span {
+    display: inline-block;
+    margin-left: 8px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A5A8B6;
+}
+
+.proceed_container {
+    background: linear-gradient(55.61deg, #30BAC6 -0.35%, #B6509E 92.67%);
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+}
+
+.proceed_container span {
+    display: inline-block;
+    margin-right: 8px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #EAEBEF;
+}

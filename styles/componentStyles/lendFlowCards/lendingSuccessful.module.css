@@ -1,0 +1,107 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #3f424f;
+    border-radius: 4px;
+}
+
+.container_top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.container_top_title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 28px;
+    color: #eaebef;
+    display: inline-block;
+    margin: 36px 0 10px 0;
+}
+
+.container_top_subtitle {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    color: #a5a8b6;
+    display: inline-block;
+    margin: 10px 0 36px 0;
+}
+
+.lending_receipt_container {
+    background: #292E41;
+    border: 1px solid #3F424F;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    position: relative;
+    min-height: 150px;
+}
+
+.lending_receipt_container__details {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.lending_receipt_container__details__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #EAEBEF;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.lending_receipt_container__details__subtitle {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A5A8B6;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+.lending_receipt_container__acknowledgement {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 6px 20px;
+    width: 100%;
+    background-color: #0e413e;
+    background-blend-mode: overlay;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+    /* mix-blend-mode: overlay; */
+}
+
+.lending_receipt_container__acknowledgement span {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #0E9F6E;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.container_bottom_buttons {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-top: 1px solid #3f424f;
+}

@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "name": "USDC",
+        "icon_slug": "usdc_icon.svg",
+        "balance": 20,
+        "interest_rate": "1.5%"
+    },
+    {
+        "id": "2",
+        "name": "USDT",
+        "icon_slug": "usdt_icon.svg",
+        "balance": 40,
+        "interest_rate": "3.5%"
+    },
+    {
+        "id": "3",
+        "name": "ETH",
+        "icon_slug": "eth_icon.svg",
+        "balance": 100,
+        "interest_rate": "0.5%"
+    }
+]

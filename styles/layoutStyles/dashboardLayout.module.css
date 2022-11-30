@@ -1,0 +1,39 @@
+.container {
+    background-image: url("/images/layout_background.png");
+    background-position: center center;
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toolbar_left {
+    display: flex;
+    align-items: center;
+}
+
+.toolbar_right {
+    display: flex;
+    align-items: center;
+}
+
+.toolbar_left__typography {
+    margin-left: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100% - 64px);
+}

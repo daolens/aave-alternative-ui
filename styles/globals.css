@@ -17,10 +17,63 @@ a {
 
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: dark;
+    /* color-scheme: dark; */
   }
+
   body {
-    color: white;
-    background: black;
+    /* color: white; */
+    background: #0B1124;
   }
 }
+
+/* ! MUI override styles */
+.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon {
+  fill: #ffffff;
+}
+
+.MuiTabs-flexContainer.css-heg063-MuiTabs-flexContainer {
+  justify-content: space-between;
+  background-color: #292E41;
+  margin-top: 20px;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.MuiTabs-indicator.css-1aquho2-MuiTabs-indicator {
+  display: none;
+}
+
+.MuiButtonBase-root {
+  text-transform: none;
+
+}
+
+.MuiButtonBase-root.Mui-selected {
+  color: #fff;
+  font-weight: 600;
+  background-color: #383D51;
+  border-radius: 8px;
+  text-transform: none;
+}
+
+/* .css-5hh9wz-MuiButtonBase-root-MuiTab-root {
+  height: 32px;
+  padding: 0;
+} */
+
+.css-6hp17o-MuiList-root-MuiMenu-list {
+
+  padding: 0;
+}
+
+.MuiButtonBase-root.Mui-selected {
+  border-radius: 0;
+}
+
+.MuiButtonBase-root.Mui-selected:hover {
+  background-color: #333A52;
+}
+
+/* label+.css-etpkar-MuiInputBase-root-MuiInput-root-MuiSelect-root {
+  margin-top: 0;
+} */
