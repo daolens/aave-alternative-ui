@@ -12,7 +12,7 @@ interface Props {
   sectionTitle?: string;
   title?: ReactNode;
   proceedButtonText?: string;
-  nextPath?: string;
+  nextPath: string;
 }
 function FlowLayout({
   children,
@@ -54,7 +54,7 @@ function FlowLayout({
             <HelpButton />
             <ThemeProvider theme={theme}>
               <Button
-                color="link_button_color"
+                color={"link_button_color" as any}
                 sx={{ textTransform: "none" }}
                 variant="text"
               >
@@ -63,7 +63,7 @@ function FlowLayout({
             </ThemeProvider>
             <ThemeProvider theme={theme}>
               <Button
-                color="link_button_color"
+                color={"link_button_color" as any}
                 sx={{ textTransform: "none" }}
                 variant="text"
               >

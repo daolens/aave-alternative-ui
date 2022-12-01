@@ -1,11 +1,11 @@
-import React, { ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode } from "react";
 import styles from "../../styles/componentStyles/internalComponents/walletAssetDetails.module.css";
 interface Props {
   tokenName?: string;
   tokenIcon?: ReactNode;
   tokenBalance?: number;
   tokenInterestRate?: string;
-  clickHandle?: Function;
+  clickHandle?: MouseEventHandler<HTMLDivElement> | undefined;
 }
 function WalletAssetDetails({
   tokenName,

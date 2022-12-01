@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEventHandler, ReactNode, useState } from "react";
 import styles from "../../styles/componentStyles/lendFlowCards/assetAmountSelection.module.css";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,9 +7,11 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import lendingAssetData from "../../store/staticData/lendingAssetDetails.json";
 interface Props {
   selectedAsset?: string;
-  selectedAmount?: number;
-  updateAsset?: Function;
-  updateAmount?: Function;
+  selectedAmount: number;
+  updateAsset?:
+    | ((event: SelectChangeEvent<string>, child: ReactNode) => void)
+    | undefined;
+  updateAmount?: ChangeEventHandler<HTMLInputElement> | undefined;
   setMaxBalance?: Function;
 }
 function createData(
@@ -106,7 +108,7 @@ function AssetAmountSelection({
           <span
             className={styles.amount_input_container__max_cta}
             onClick={() => {
-              setMaxBalance(fetchBalance(selectedAsset));
+              setMaxBalance?.(fetchBalance(selectedAsset));
             }}
           >
             MAX

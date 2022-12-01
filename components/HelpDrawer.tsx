@@ -25,8 +25,8 @@ function HelpDrawer() {
       <SwipeableDrawer
         anchor={"right"}
         open={drawerContext.anchorPosition["right"]}
-        onClose={drawerContext.toggleDrawer("right", false)}
-        onOpen={drawerContext.toggleDrawer("right", true)}
+        onClose={drawerContext.toggleDrawer("right", false) as any}
+        onOpen={drawerContext.toggleDrawer("right", true) as any}
       >
         <div className={styles.container}>
           <div className={styles.header}>
@@ -36,7 +36,7 @@ function HelpDrawer() {
               height={12}
               width={12}
               style={{ cursor: "pointer" }}
-              onClick={drawerContext.toggleDrawer("right", false)}
+              onClick={drawerContext.toggleDrawer("right", false) as any}
             />
             <Image
               src="/icons_svg/aave_mascot_small.svg"

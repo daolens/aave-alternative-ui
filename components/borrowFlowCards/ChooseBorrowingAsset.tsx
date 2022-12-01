@@ -57,7 +57,7 @@ function ChooseBorrowingAsset() {
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("event.target.value", event.target.value);
     // if (decimalNumberRegex.test(event.target.value))
-    setSelectedAmount(event.target.value);
+    setSelectedAmount(+event.target.value);
   };
   const setMaxBalance = (balance: number) => {
     setSelectedAmount(balance);

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 interface Props {
   buttonText?: string;
-  nextPath?: string;
+  nextPath: string;
 }
 function ProceedButton({ buttonText, nextPath }: Props) {
   const router = useRouter();

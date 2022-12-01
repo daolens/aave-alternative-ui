@@ -1,10 +1,10 @@
-import React, { ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode } from "react";
 import styles from "../../styles/componentStyles/cards/titleSubtitleCard.module.css";
 interface Props {
   title?: string;
   subTitle?: string;
   icon?: ReactNode;
-  clickHandler?: Function;
+  clickHandler?: MouseEventHandler<HTMLDivElement> | undefined;
 }
 function TitleSubtitleCard({ title, subTitle, icon, clickHandler }: Props) {
   return (

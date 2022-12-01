@@ -7,11 +7,12 @@ import { HelpDrawerContext } from "../../contexts/HelpDrawerContextProvider";
 
 function HelpButton() {
   const drawerContext = useContext(HelpDrawerContext);
+  const openDrawer = drawerContext.toggleDrawer("right", true);
   return (
     <ThemeProvider theme={theme}>
       <Button
         variant="text"
-        color="help_icon"
+        color={"help_icon" as any}
         size="medium"
         startIcon={
           <Image
@@ -22,7 +23,7 @@ function HelpButton() {
           />
         }
         style={{ textTransform: "none" }}
-        onClick={drawerContext.toggleDrawer("right", true)}
+        onClick={openDrawer as any}
       >
         Help
       </Button>
