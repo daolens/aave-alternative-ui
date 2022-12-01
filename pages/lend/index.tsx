@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"; 
-import CustomBoxComponent from "../../../components/wrappers/CustomBoxComponent";
-import DashboardLayout from "../../../layouts/DashboardLayout";
+import CustomBoxComponent from "../../components/wrappers/CustomBoxComponent";
+import DashboardLayout from "../../layouts/DashboardLayout";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
