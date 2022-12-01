@@ -16,6 +16,7 @@ function FlowSelectionScreen() {
             What do you want to do today?{" "}
           </>
         }
+        nextPath={""}
       >
         <TitleSubtitleCard
           title="Earn interest"

@@ -12,7 +12,7 @@ function AddToWallet({ buttonText, clickHandle }: Props) {
     <Button
       variant="contained"
       onClick={() => {
-        clickHandle();
+        clickHandle?.();
       }}
       startIcon={
         <Image

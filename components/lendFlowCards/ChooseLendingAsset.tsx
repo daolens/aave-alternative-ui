@@ -10,7 +10,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
 interface assetData {
-  id?: string;
+  id: string;
   name?: string;
   balance?: number;
   interest_rate?: string;
@@ -56,7 +56,7 @@ function ChooseLendingAsset() {
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("event.target.value", event.target.value);
     // if (decimalNumberRegex.test(event.target.value))
-    setSelectedAmount(event.target.value);
+    setSelectedAmount(+event.target.value);
   };
   const setMaxBalance = (balance: number) => {
     setSelectedAmount(balance);

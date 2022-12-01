@@ -2,36 +2,42 @@
     {
         "id": "1",
         "name": "USDC",
+        "balance": 0,
         "icon_slug": "usdc_icon.svg",
         "interest_rate": "6.5%"
     },
     {
         "id": "2",
         "name": "USDT",
+        "balance": 0,
         "icon_slug": "usdt_icon.svg",
         "interest_rate": "8.5%"
     },
     {
         "id": "3",
         "name": "ETH",
+        "balance": 0,
         "icon_slug": "eth_icon.svg",
         "interest_rate": "4%"
     },
     {
         "id": "4",
         "name": "USDC",
+        "balance": 0,
         "icon_slug": "usdc_icon.svg",
         "interest_rate": "5.5%"
     },
     {
         "id": "5",
         "name": "USDT",
+        "balance": 0,
         "icon_slug": "usdt_icon.svg",
         "interest_rate": "3.5%"
     },
     {
         "id": "6",
         "name": "ETH",
+        "balance": 0,
         "icon_slug": "eth_icon.svg",
         "interest_rate": "1.5%"
     }

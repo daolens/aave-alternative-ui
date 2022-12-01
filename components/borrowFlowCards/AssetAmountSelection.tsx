@@ -8,9 +8,11 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import borrowingAssetData from "../../store/staticData/borrowingAssetDetails.json";
 interface Props {
   selectedAsset?: string;
-  selectedAmount?: number;
-  updateAsset?: Function;
-  updateAmount?: Function;
+  selectedAmount: number ;
+  updateAsset?:
+    | ((event: SelectChangeEvent<string>, child: React.ReactNode) => void)
+    | undefined;
+  updateAmount?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 function createData(id: string, name: string, interest_rate: string) {
   return { id, name, interest_rate };

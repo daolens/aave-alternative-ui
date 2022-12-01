@@ -17,7 +17,9 @@ function ConnectWalletScreen() {
           width={135}
         />
         <p className={styles.container_top__typography}>
-          Hey, connect your wallet to<br/>lend or borrow assets
+          Hey, connect your wallet to
+          <br />
+          lend or borrow assets
         </p>
         <ConnectWallet buttonText={"Connect Wallet"} />
       </div>
@@ -25,7 +27,7 @@ function ConnectWalletScreen() {
         <HelpButton />
         <ThemeProvider theme={theme}>
           <Button
-            color="link_button_color"
+            color={"link_button_color" as any}
             sx={{ textTransform: "none" }}
             variant="text"
           >
@@ -34,7 +36,7 @@ function ConnectWalletScreen() {
         </ThemeProvider>
         <ThemeProvider theme={theme}>
           <Button
-            color="link_button_color"
+            color={"link_button_color" as any}
             sx={{ textTransform: "none" }}
             variant="text"
           >
