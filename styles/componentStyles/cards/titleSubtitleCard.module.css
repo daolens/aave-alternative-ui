@@ -11,10 +11,10 @@
 }
 
 .container:hover {
-    border: 10px solid !important;
+    border: 2px solid !important;
     border-image-slice: 1 !important;
 
-    border-width: 2px !important;
+    /* border-width: 2px !important; */
     -webkit-border-image: none;
     border-image-source: linear-gradient(30deg, #30BAC6, #B6509E) !important;
     border-radius: 4px !important;
