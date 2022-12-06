@@ -62,6 +62,9 @@
     align-items: center;
     width: 100%;
     padding-right: 12px;
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid #3F424F;
 }
 
 .amount_input_container__input {

@@ -12,9 +12,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import lendingAssetData from "../../store/staticData/lendingAssetDetails.json";
 import { shortenAPY, shortenNumber } from "src/helpers/shortenStrings";
 import { emptyObject } from "src/helpers/types";
+import { Divider } from "@mui/material";
 interface Props {
   selectedAsset?: string;
-  selectedAmount: number;
+  selectedAmount: string;
   updateAsset?:
     | ((event: SelectChangeEvent<string>, child: ReactNode) => void)
     | undefined;
@@ -53,7 +54,7 @@ function AssetAmountSelection({
         </InputLabel>
         <Select
           labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
+          id="lend_asset_selection_dropdown"
           value={selectedAsset}
           onChange={updateAsset}
           label="Choose asset to lend"
@@ -85,6 +86,7 @@ function AssetAmountSelection({
       </FormControl>
       {selectedAsset && (
         <div className={styles.amount_input_container}>
+          {/* <Divider orientation="vertical" variant="middle" flexItem /> */}
           <input
             placeholder="Enter amount to lend"
             className={styles.amount_input_container__input}
@@ -94,7 +96,7 @@ function AssetAmountSelection({
             onChange={updateAmount}
           />
           <span className={styles.amount_input_container__dollar}>
-            ${selectedAmount * 0.5}
+            ${+selectedAmount * 0.5}
           </span>
           <span
             className={styles.amount_input_container__max_cta}

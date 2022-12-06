@@ -20,7 +20,8 @@ import BigNumber from "bignumber.js";
 import {
   API_ETH_MOCK_ADDRESS,
   EthereumTransactionTypeExtended,
- Pool } from "@aave/contract-helpers";
+  Pool,
+} from "@aave/contract-helpers";
 import { fetchIconSymbolAndName } from "src/ui-config/reservePatches";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
 import {
@@ -56,7 +57,7 @@ function ChooseLendingAsset() {
   const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
   // ! Local states ************************************************************************************************************
   const [selectedAsset, setSelectedAsset] = useState("");
-  const [selectedAmount, setSelectedAmount] = useState(0);
+  const [selectedAmount, setSelectedAmount] = useState("");
   const [currentAssetDetails, setcurrentAssetDetails] = useState(
     {} as emptyObject
   );
@@ -82,6 +83,7 @@ function ChooseLendingAsset() {
     txError,
     retryWithApproval,
     mainTxState: supplyTxState,
+    close: clearModalContext,
   } = useModalContext();
   const {
     bridge,
@@ -269,7 +271,7 @@ function ChooseLendingAsset() {
   // ! Effects ************************************************************************************************************
   useEffect(() => {
     console.log("supplyTxState", supplyTxState);
-    if (supplyTxState.success)
+    if (supplyTxState.success) {
       router.push({
         pathname: "/lend/success",
         query: {
@@ -277,6 +279,8 @@ function ChooseLendingAsset() {
           amount: selectedAmount,
         },
       });
+      clearModalContext();
+    }
   }, [supplyTxState]);
 
   useEffect(() => {
@@ -412,15 +416,15 @@ function ChooseLendingAsset() {
 
   // ! Local handlers
   const handleAssetChange = (event: SelectChangeEvent) => {
-    setMaxBalance(0);
+    setMaxBalance("");
     setSelectedAsset(event.target.value);
   };
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("event.target.value", event.target.value);
     // if (decimalNumberRegex.test(event.target.value))
-    setSelectedAmount(+event.target.value);
+    setSelectedAmount(event.target.value);
   };
-  const setMaxBalance = (balance: number): any => {
+  const setMaxBalance = (balance: string): any => {
     setSelectedAmount(balance);
   };
 
@@ -428,7 +432,7 @@ function ChooseLendingAsset() {
   const fetchYearlyEarnings = () => {
     const interest_rate = currentAssetDetails.supplyAPY;
     if (Number(interest_rate))
-      return shortenNumber(selectedAmount * Number(interest_rate));
+      return shortenNumber(+selectedAmount * Number(interest_rate));
     return 0;
   };
   // console.log(reserves);
@@ -476,16 +480,18 @@ function ChooseLendingAsset() {
             {shortenLongNumber(currentAssetDetails.walletBalance)}
           </span>
         )}
-        <Divider
-          sx={{
-            color: "#A5A8B6",
-            margin: "20px 0",
-            "&::after": { borderTop: "thin dotted #3F424F" },
-            "&::before": { borderTop: "thin dotted #3F424F" },
-          }}
-        >
-          OR
-        </Divider>
+        {!selectedAsset && (
+          <Divider
+            sx={{
+              color: "#A5A8B6",
+              margin: "20px 0",
+              "&::after": { borderTop: "thin dotted #3F424F" },
+              "&::before": { borderTop: "thin dotted #3F424F" },
+            }}
+          >
+            OR
+          </Divider>
+        )}
         {selectedAsset ? (
           <div className={styles.selected_asset_details}>
             <div className={styles.selected_asset_details__container}>

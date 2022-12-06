@@ -34,7 +34,7 @@ function FlowSelectionScreen() {
         <TitleSubtitleCard
           title="Borrow"
           subTitle="Get instant overcollateralized crypto loans for trading"
-          clickHandler={() => {router.push("/borrow/asset")}}
+          clickHandler={() => {router.push("/borrow/cannot-borrow/")}}
           icon={
             <Image
               src="/icons_svg/decrease_icon_purple.svg"

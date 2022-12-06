@@ -2,7 +2,8 @@
     border: 2px solid;
     border-image-slice: 1;
     border-width: 2px;
-    border-image-source: linear-gradient(30deg, #30BAC6, #B6509E);
+    /* -webkit-border-image: none; */
+    border-image-source: linear-gradient(30deg, #30BAC6, #B6509E) !important;
     border-radius: 4px;
     background-clip: padding-box;
     display: flex;
@@ -62,6 +63,9 @@
     align-items: center;
     width: 100%;
     padding-right: 12px;
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid #3F424F;
 }
 
 .amount_input_container__input {

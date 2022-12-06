@@ -1,15 +1,21 @@
-
+import MobileScreenMessage from "components/MobileScreenMessage";
+import useWindowSize from "src/hooks/useWindowSize";
 import ConnectWalletScreen from "../components/ConnectWalletScreen";
 import CustomBoxComponent from "../components/wrappers/CustomBoxComponent";
 import DashboardLayout from "../layouts/DashboardLayout";
 
-
 export default function Home() {
-  return (
-    <DashboardLayout>
-      <CustomBoxComponent>
-        <ConnectWalletScreen />
-      </CustomBoxComponent>
-    </DashboardLayout>
-  );
+  const { windowSize } = useWindowSize();
+
+  if (windowSize && windowSize.width) {
+    return windowSize?.width < 1200 ? (
+      <MobileScreenMessage />
+    ) : (
+      <DashboardLayout>
+        <CustomBoxComponent>
+          <ConnectWalletScreen />
+        </CustomBoxComponent>
+      </DashboardLayout>
+    );
+  }
 }

@@ -100,3 +100,15 @@ input[type=number] {
 .MuiCircularProgress-root {
   margin: 0 !important;
 }
+
+#lend_asset_selection_dropdown {
+padding-left: 10px;
+}
+
+#lend_asset_selection_dropdown span {
+  display: none !important;
+}
+
+#lend_asset_selection_dropdown span:first-child {
+  display: block !important;
+}

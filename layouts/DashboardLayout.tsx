@@ -46,7 +46,7 @@ function DashboardLayout({ children }: Props) {
     setTestnetsMode(!testnetsEnabled);
     window.localStorage.setItem(testnetsEnabledId, newState ? "true" : "false");
     // Set window.location to trigger a page reload when navigating to the the dashboard
-    // window.location.href = "/";
+    window.location.reload()
   };
   const label = {
     inputProps: {
