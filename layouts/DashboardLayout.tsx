@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { ReactNode, useState, createContext } from "react";
+import React, { ReactNode, useState, createContext, useEffect } from "react";
 import styles from "../styles/layoutStyles/dashboardLayout.module.css";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -18,6 +18,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import HelpDrawer from "../components/HelpDrawer";
 import { HelpDrawerContextProvider } from "../contexts/HelpDrawerContextProvider";
 import { useRouter } from "next/router";
+import Switch from "@mui/material/Switch";
 interface Props {
   children?: ReactNode;
 }
@@ -31,6 +32,27 @@ function DashboardLayout({ children }: Props) {
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedMarket(event.target.value);
+  };
+  const testnetsEnabledId = "testnetsEnabled";
+  const [testnetsEnabled, setTestnetsMode] = useState(false);
+  useEffect(() => {
+    const testnetsEnabledLocalstorage =
+      window.localStorage.getItem(testnetsEnabledId) === "true" || false;
+    setTestnetsMode(testnetsEnabledLocalstorage);
+  }, []);
+
+  const toggleTestnetsEnabled = () => {
+    const newState = !testnetsEnabled;
+    setTestnetsMode(!testnetsEnabled);
+    window.localStorage.setItem(testnetsEnabledId, newState ? "true" : "false");
+    // Set window.location to trigger a page reload when navigating to the the dashboard
+    window.location.reload()
+  };
+  const label = {
+    inputProps: {
+      "aria-label": "Testnet",
+      label: "Testnet",
+    },
   };
   return (
     <div className={styles.container}>
@@ -77,6 +99,21 @@ function DashboardLayout({ children }: Props) {
                   </Typography> */}
                 </div>
                 <div className={styles.toolbar_right}>
+                  <Typography
+                    className={styles.toolbar_left__typography}
+                    color="#ffffff"
+                    variant="h4"
+                    component="div"
+                    sx={{ flexGrow: 1 }}
+                    // onClick={() => router.push("/")}
+                  >
+                    Testnet
+                  </Typography>
+                  <Switch
+                    checked={testnetsEnabled}
+                    onChange={toggleTestnetsEnabled}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
                   <HelpButton />
                   <FormControl
                     variant="standard"

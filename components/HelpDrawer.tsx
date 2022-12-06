@@ -19,7 +19,7 @@ function HelpDrawer() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
-  console.log("selectedTab", selectedTab);
+  // console.log("selectedTab", selectedTab);
   return (
     <React.Fragment key={"right"}>
       <SwipeableDrawer

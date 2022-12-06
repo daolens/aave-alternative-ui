@@ -3,7 +3,6 @@ import CustomBoxComponent from "../../components/wrappers/CustomBoxComponent";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import FlowLayout from "../../layouts/FlowLayout";
 
-
 export default function Home() {
   const router = useRouter();
 
@@ -14,10 +13,11 @@ export default function Home() {
           sectionTitle={"Cannot borrow assets"}
           title={
             <>
-              You don’t have any borrowing capacity yet, as you haven’t lent any
-              assets.
+              Coming soon!
+              <br />
+              Daolens is working on the borrowing functionality.
             </>
-          } 
+          }
           nextPath=""
         ></FlowLayout>
       </CustomBoxComponent>
