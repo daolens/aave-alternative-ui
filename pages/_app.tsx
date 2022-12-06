@@ -5,6 +5,7 @@ import { providers } from "ethers";
 import createEmotionCache from "src/createEmotionCache";
 import { NextPage } from "next";
 import { CacheProvider } from "@emotion/react";
+import { LanguageProvider } from "src/libs/LanguageProvider";
 import { Web3ReactProvider } from "@web3-react/core";
 import { ModalContextProvider } from "src/hooks/useModal";
 import { Web3ContextProvider } from "src/libs/web3-data-provider/Web3Provider";
@@ -13,7 +14,7 @@ import { AppDataProvider } from "src/hooks/app-data-provider/useAppDataProvider"
 import { GasStationProvider } from "src/components/transactions/GasStation/GasStationProvider";
 import { PermissionProvider } from "src/hooks/usePermissions";
 import { BackgroundDataProvider } from "src/hooks/app-data-provider/BackgroundDataProvider";
-// import { AddressBlocked } from "src/components/AddressBlocked";
+import { AddressBlocked } from "src/components/AddressBlocked";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -43,7 +44,7 @@ export default function App(props: MyAppProps) {
       <Web3ReactProvider getLibrary={getWeb3Library}>
         <Web3ContextProvider>
           <AppGlobalStyles>
-            {/* <AddressBlocked> */}
+            <AddressBlocked>
               {/*@ts-ignore */}
               <PermissionProvider>
                 {/*@ts-ignore */}
@@ -60,7 +61,7 @@ export default function App(props: MyAppProps) {
                   </BackgroundDataProvider>
                 </ModalContextProvider>
               </PermissionProvider>
-            {/* </AddressBlocked> */}
+            </AddressBlocked>
           </AppGlobalStyles>
         </Web3ContextProvider>
       </Web3ReactProvider>
