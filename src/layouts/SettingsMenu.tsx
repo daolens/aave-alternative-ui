@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { PROD_ENV } from 'src/utils/marketsAndNetworksConfig';
 
 import { DarkModeSwitcher } from './components/DarkModeSwitcher';
-// import { LanguageListItem, LanguagesList } from './components/LanguageSwitcher';
+import { LanguageListItem, LanguagesList } from './components/LanguageSwitcher';
 import { TestNetModeSwitcher } from './components/TestNetModeSwitcher';
 
 export function SettingsMenu() {
@@ -71,7 +71,7 @@ export function SettingsMenu() {
 
         <DarkModeSwitcher component={MenuItem} />
         {PROD_ENV && <TestNetModeSwitcher />}
-        {/* <LanguageListItem onClick={handleLanguageClick} component={MenuItem} /> */}
+        <LanguageListItem onClick={handleLanguageClick} component={MenuItem} />
       </Menu>
 
       <Menu
@@ -84,7 +84,7 @@ export function SettingsMenu() {
         onClose={handleClose}
         keepMounted={true}
       >
-        {/* <LanguagesList onClick={handleCloseLanguage} component={MenuItem} /> */}
+        <LanguagesList onClick={handleCloseLanguage} component={MenuItem} />
       </Menu>
     </>
   );
