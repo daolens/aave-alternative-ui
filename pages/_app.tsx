@@ -36,8 +36,6 @@ interface MyAppProps extends AppProps {
 export default function App(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const getLayout = Component.getLayout ?? ((page: React.ReactElement) => page);
-  console.log("pageProps", pageProps);
-
   return (
     <CacheProvider value={emotionCache}>
       {/*@ts-ignore */}
