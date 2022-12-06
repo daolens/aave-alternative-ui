@@ -224,7 +224,7 @@ export const EmodeModalContent = ({ mode }: EmodeModalContentProps) => {
           </Typography>
         </Warning>
       )}
-
+{/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         {!showModal && (
           <Row caption={<Trans>E-Mode category</Trans>} captionVariant="description" mb={4}>

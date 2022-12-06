@@ -248,6 +248,7 @@ export const SwapModalContent = ({
           {error}
         </Typography>
       )}
+      {/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLine
           description={<Trans>Supply apy</Trans>}

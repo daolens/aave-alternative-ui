@@ -4,6 +4,7 @@ const theme = createTheme({
     danger: "#e53e3e",
   },
   palette: {
+    //@ts-ignore
     help_icon: {
       main: "#A5A8B6",
     },

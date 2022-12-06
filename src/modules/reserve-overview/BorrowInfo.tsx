@@ -1,21 +1,24 @@
-import { valueToBigNumber } from '@aave/math-utils';
-import { Trans } from '@lingui/macro';
-import { Box, Typography } from '@mui/material';
-import { CapsCircularStatus } from 'src/components/caps/CapsCircularStatus';
-import { IncentivesButton } from 'src/components/incentives/IncentivesButton';
-import { StableAPYTooltip } from 'src/components/infoTooltips/StableAPYTooltip';
-import { VariableAPYTooltip } from 'src/components/infoTooltips/VariableAPYTooltip';
-import { FormattedNumber } from 'src/components/primitives/FormattedNumber';
-import { Link } from 'src/components/primitives/Link';
-import { ReserveSubheader } from 'src/components/ReserveSubheader';
-import { TextWithTooltip } from 'src/components/TextWithTooltip';
-import { ComputedReserveData } from 'src/hooks/app-data-provider/useAppDataProvider';
-import { AssetCapHookData } from 'src/hooks/useAssetCaps';
-import { MarketDataType, NetworkConfig } from 'src/utils/marketsAndNetworksConfig';
+import { valueToBigNumber } from "@aave/math-utils";
+import { Trans } from "@lingui/macro";
+import { Box, Typography } from "@mui/material";
+import { CapsCircularStatus } from "src/components/caps/CapsCircularStatus";
+import { IncentivesButton } from "src/components/incentives/IncentivesButton";
+import { StableAPYTooltip } from "src/components/infoTooltips/StableAPYTooltip";
+import { VariableAPYTooltip } from "src/components/infoTooltips/VariableAPYTooltip";
+import { FormattedNumber } from "src/components/primitives/FormattedNumber";
+import { Link } from "src/components/primitives/Link";
+import { ReserveSubheader } from "src/components/ReserveSubheader";
+import { TextWithTooltip } from "src/components/TextWithTooltip";
+import { ComputedReserveData } from "src/hooks/app-data-provider/useAppDataProvider";
+import { AssetCapHookData } from "src/hooks/useAssetCaps";
+import {
+  MarketDataType,
+  NetworkConfig,
+} from "src/utils/marketsAndNetworksConfig";
 
-import { ApyGraphContainer } from './graphs/ApyGraphContainer';
-import { ReserveFactorOverview } from './ReserveFactorOverview';
-import { PanelItem } from './ReservePanels';
+import { ApyGraphContainer } from "./graphs/ApyGraphContainer";
+import { ReserveFactorOverview } from "./ReserveFactorOverview";
+import { PanelItem } from "./ReservePanels";
 
 interface BorrowInfoProps {
   reserve: ComputedReserveData;
@@ -35,12 +38,12 @@ export const BorrowInfo = ({
   borrowCap,
 }: BorrowInfoProps) => {
   return (
-    <Box sx={{ flexGrow: 1, minWidth: 0, maxWidth: '100%', width: '100%' }}>
+    <Box sx={{ flexGrow: 1, minWidth: 0, maxWidth: "100%", width: "100%" }}>
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
         }}
       >
         {showBorrowCapStatus ? (
@@ -51,14 +54,14 @@ export const BorrowInfo = ({
               tooltipContent={
                 <>
                   <Trans>
-                    Maximum amount available to supply is{' '}
+                    Maximum amount available to supply is{" "}
                     <FormattedNumber
                       value={
                         valueToBigNumber(reserve.borrowCap).toNumber() -
                         valueToBigNumber(reserve.totalDebt).toNumber()
                       }
                       variant="secondary12"
-                    />{' '}
+                    />{" "}
                     {reserve.symbol} (
                     <FormattedNumber
                       value={
@@ -73,6 +76,7 @@ export const BorrowInfo = ({
                 </>
               }
             />
+            {/*@ts-ignore */}
             <PanelItem
               title={
                 <Box display="flex" alignItems="center">
@@ -80,9 +84,9 @@ export const BorrowInfo = ({
                   <TextWithTooltip>
                     <>
                       <Trans>
-                        Borrowing of this asset is limited to a certain amount to minimize liquidity
-                        pool insolvency.
-                      </Trans>{' '}
+                        Borrowing of this asset is limited to a certain amount
+                        to minimize liquidity pool insolvency.
+                      </Trans>{" "}
                       <Link
                         href="https://docs.aave.com/developers/whats-new/supply-borrow-caps"
                         underline="always"
@@ -100,7 +104,7 @@ export const BorrowInfo = ({
                   component="span"
                   color="text.primary"
                   variant="secondary16"
-                  sx={{ display: 'inline-block', mx: 1 }}
+                  sx={{ display: "inline-block", mx: 1 }}
                 >
                   <Trans>of</Trans>
                 </Typography>
@@ -112,7 +116,7 @@ export const BorrowInfo = ({
                   component="span"
                   color="text.primary"
                   variant="secondary16"
-                  sx={{ display: 'inline-block', mx: 1 }}
+                  sx={{ display: "inline-block", mx: 1 }}
                 >
                   <Trans>of</Trans>
                 </Typography>
@@ -122,17 +126,21 @@ export const BorrowInfo = ({
           </>
         ) : (
           // Without a borrow cap
-          <PanelItem
-            title={
-              <Box display="flex" alignItems="center">
-                <Trans>Total borrowed</Trans>
-              </Box>
-            }
-          >
-            <FormattedNumber value={reserve.totalDebt} variant="main16" />
-            <ReserveSubheader value={reserve.totalDebtUSD} />
-          </PanelItem>
+          <>
+            {/*@ts-ignore */}
+            <PanelItem
+              title={
+                <Box display="flex" alignItems="center">
+                  <Trans>Total borrowed</Trans>
+                </Box>
+              }
+            >
+              <FormattedNumber value={reserve.totalDebt} variant="main16" />
+              <ReserveSubheader value={reserve.totalDebtUSD} />
+            </PanelItem>
+          </>
         )}
+        {/*@ts-ignore */}
         <PanelItem
           title={
             <VariableAPYTooltip
@@ -142,7 +150,11 @@ export const BorrowInfo = ({
             />
           }
         >
-          <FormattedNumber value={reserve.variableBorrowAPY} percent variant="main16" />
+          <FormattedNumber
+            value={reserve.variableBorrowAPY}
+            percent
+            variant="main16"
+          />
           <IncentivesButton
             symbol={reserve.symbol}
             incentives={reserve.vIncentivesData}
@@ -150,28 +162,38 @@ export const BorrowInfo = ({
           />
         </PanelItem>
         {reserve.stableBorrowRateEnabled && (
-          <PanelItem
-            title={
-              <StableAPYTooltip
-                text={<Trans>APY, stable</Trans>}
-                key="APY_res_stable_type"
-                variant="description"
+          <>
+            {/*@ts-ignore */}
+            <PanelItem
+              title={
+                <StableAPYTooltip
+                  text={<Trans>APY, stable</Trans>}
+                  key="APY_res_stable_type"
+                  variant="description"
+                />
+              }
+            >
+              <FormattedNumber
+                value={reserve.stableBorrowAPY}
+                percent
+                variant="main16"
               />
-            }
-          >
-            <FormattedNumber value={reserve.stableBorrowAPY} percent variant="main16" />
-            <IncentivesButton
-              symbol={reserve.symbol}
-              incentives={reserve.sIncentivesData}
-              displayBlank={true}
-            />
-          </PanelItem>
+              <IncentivesButton
+                symbol={reserve.symbol}
+                incentives={reserve.sIncentivesData}
+                displayBlank={true}
+              />
+            </PanelItem>
+          </>
         )}
-        {reserve.borrowCapUSD && reserve.borrowCapUSD !== '0' && (
-          <PanelItem title={<Trans>Borrow cap</Trans>}>
-            <FormattedNumber value={reserve.borrowCap} variant="main16" />
-            <ReserveSubheader value={reserve.borrowCapUSD} />
-          </PanelItem>
+        {reserve.borrowCapUSD && reserve.borrowCapUSD !== "0" && (
+          <>
+            {/*@ts-ignore */}
+            <PanelItem title={<Trans>Borrow cap</Trans>}>
+              <FormattedNumber value={reserve.borrowCap} variant="main16" />
+              <ReserveSubheader value={reserve.borrowCapUSD} />
+            </PanelItem>
+          </>
         )}
       </Box>
       {renderCharts && (
@@ -182,8 +204,13 @@ export const BorrowInfo = ({
         />
       )}
       <Box
-        sx={{ display: 'inline-flex', alignItems: 'center', pt: '42px', pb: '12px' }}
-        paddingTop={'42px'}
+        sx={{
+          display: "inline-flex",
+          alignItems: "center",
+          pt: "42px",
+          pb: "12px",
+        }}
+        paddingTop={"42px"}
       >
         <Typography variant="subheader1" color="text.main">
           <Trans>Collector Info</Trans>

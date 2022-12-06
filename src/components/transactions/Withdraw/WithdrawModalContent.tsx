@@ -190,7 +190,7 @@ export const WithdrawModalContent = ({
           {handleBlocked()}
         </Typography>
       )}
-
+{/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         {poolReserve.isWrappedBaseAsset && (
           <DetailsUnwrapSwitch

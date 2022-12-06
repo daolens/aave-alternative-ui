@@ -99,6 +99,7 @@ export const StakeRewardClaimModalContent = ({ stakeAssetName }: StakeRewardClai
           {handleBlocked()}
         </Typography>
       )}
+      {/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLineWithSub
           description={<Trans>Amount</Trans>}

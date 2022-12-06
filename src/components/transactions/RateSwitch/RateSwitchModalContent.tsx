@@ -90,6 +90,7 @@ export const RateSwitchModalContent = ({
           {handleBlocked()}
         </Warning>
       )}
+      {/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLine
           description={<Trans>New APY</Trans>}

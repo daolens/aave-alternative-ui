@@ -248,7 +248,7 @@ export const SupplyModalContent = ({
           {handleBlocked()}
         </Typography>
       )}
-
+{/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLine description={<Trans>Supply APY</Trans>} value={supplyApy} percent />
         <DetailsIncentivesLine

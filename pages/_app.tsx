@@ -37,29 +37,34 @@ export default function App(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const getLayout = Component.getLayout ?? ((page: React.ReactElement) => page);
   console.log("pageProps", pageProps);
-  
+
   return (
     <CacheProvider value={emotionCache}>
       {/* <LanguageProvider> */}
-        <Web3ReactProvider getLibrary={getWeb3Library}>
-          <Web3ContextProvider>
-            <AppGlobalStyles>
-              <AddressBlocked>
-                <PermissionProvider>
-                  <ModalContextProvider>
-                    <BackgroundDataProvider>
-                      <AppDataProvider>
-                        <GasStationProvider>
-                          {getLayout(<Component {...pageProps} />)}
-                        </GasStationProvider>
-                      </AppDataProvider>
-                    </BackgroundDataProvider>
-                  </ModalContextProvider>
-                </PermissionProvider>
-              </AddressBlocked>
-            </AppGlobalStyles>
-          </Web3ContextProvider>
-        </Web3ReactProvider>
+      <Web3ReactProvider getLibrary={getWeb3Library}>
+        <Web3ContextProvider>
+          <AppGlobalStyles>
+            <AddressBlocked>
+              {/*@ts-ignore */}
+              <PermissionProvider>
+                {/*@ts-ignore */}
+                <ModalContextProvider>
+                  {/*@ts-ignore */}
+                  <BackgroundDataProvider>
+                    {/*@ts-ignore */}
+                    <AppDataProvider>
+                      {/*@ts-ignore */}
+                      <GasStationProvider>
+                        {getLayout(<Component {...pageProps} />)}
+                      </GasStationProvider>
+                    </AppDataProvider>
+                  </BackgroundDataProvider>
+                </ModalContextProvider>
+              </PermissionProvider>
+            </AddressBlocked>
+          </AppGlobalStyles>
+        </Web3ContextProvider>
+      </Web3ReactProvider>
       {/* </LanguageProvider> */}
     </CacheProvider>
   );

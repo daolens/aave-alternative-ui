@@ -25,7 +25,7 @@ interface PanelItemProps {
   className?: string;
 }
 
-export const PanelItem: React.FC<PanelItemProps> = ({ title, children, className }) => {
+export const PanelItem: React.FC<PanelItemProps> = ({ title, children, className }:any) => {
   const theme = useTheme();
   const mdUp = useMediaQuery(theme.breakpoints.up('md'));
 

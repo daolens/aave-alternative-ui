@@ -124,7 +124,7 @@ export const CollateralChangeModalContent = ({
       )}
 
       {poolReserve.isIsolated && debtCeiling.determineWarningDisplay({ debtCeiling })}
-
+{/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLine
           symbol={symbol}

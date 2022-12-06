@@ -34,6 +34,7 @@ export const FaucetModalContent = ({ poolReserve, isWrongNetwork }: ModalWrapper
 
   return (
     <>
+    {/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLine
           description={<Trans>Amount</Trans>}

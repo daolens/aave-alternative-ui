@@ -86,6 +86,7 @@ export const GovVoteModalContent = ({
           {handleBlocked()}
         </Typography>
       )}
+      {/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLine description={<Trans>Voting power</Trans>} value={votingPower} />
       </TxModalDetails>

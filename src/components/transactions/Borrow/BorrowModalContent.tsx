@@ -258,7 +258,7 @@ export const BorrowModalContent = ({
           stableRate={poolReserve.stableBorrowAPY}
         />
       )}
-
+{/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         {poolReserve.isWrappedBaseAsset && (
           <DetailsUnwrapSwitch

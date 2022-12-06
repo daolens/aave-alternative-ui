@@ -18,7 +18,7 @@ export interface TxModalDetailsProps {
   gasLimit?: string;
 }
 
-export const TxModalDetails: React.FC<TxModalDetailsProps> = ({ gasLimit, children }) => {
+export const TxModalDetails: React.FC<TxModalDetailsProps> = ({ gasLimit, children }:any) => {
   return (
     <Box sx={{ pt: 5 }}>
       <Typography sx={{ mb: 1 }} color="text.secondary">

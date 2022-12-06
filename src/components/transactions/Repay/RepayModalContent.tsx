@@ -230,7 +230,7 @@ export const RepayModalContent = ({
           </Trans>
         </Typography>
       )}
-
+{/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLineWithSub
           description={<Trans>Remaining debt</Trans>}

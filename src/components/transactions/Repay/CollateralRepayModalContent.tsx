@@ -250,6 +250,7 @@ export function CollateralRepayModalContent({
           </StyledToggleButton>
         </StyledToggleButtonGroup>
       </Box>
+      {/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLineWithSub
           description={<Trans>Remaining debt</Trans>}

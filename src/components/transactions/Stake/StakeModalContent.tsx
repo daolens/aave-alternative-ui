@@ -124,6 +124,7 @@ export const StakeModalContent = ({ stakeAssetName, icon }: StakeProps) => {
           {handleBlocked()}
         </Typography>
       )}
+      {/*@ts-ignore */}
       <TxModalDetails gasLimit={gasLimit}>
         <DetailsNumberLine
           description={<Trans>Staking APR</Trans>}
