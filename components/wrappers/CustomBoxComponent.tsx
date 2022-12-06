@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import Paper from "@mui/material/Paper";
 interface Props {
   children?: ReactNode;
-  isWalletSet?: Boolean;
+  isWalletSet?: boolean;
 }
 function CustomBoxComponent({ children, isWalletSet }: Props) {
   return (

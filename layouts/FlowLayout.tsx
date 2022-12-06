@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode } from "react";
 import HelpButton from "../components/buttons/HelpButton";
 import styles from "../styles/layoutStyles/flowLayout.module.css";
 import theme from "../themes/mui_theme";
@@ -12,14 +12,15 @@ interface Props {
   sectionTitle?: string;
   title?: ReactNode;
   proceedButtonText?: string;
-  nextPath: string;
+  nextPath?: string;
+  clickHandle?:  MouseEventHandler<HTMLDivElement> | undefined;
 }
 function FlowLayout({
   children,
   sectionTitle,
   title,
   proceedButtonText,
-  nextPath,
+  nextPath,clickHandle
 }: Props) {
   return (
     <div className={styles.container}>
@@ -47,7 +48,7 @@ function FlowLayout({
         {proceedButtonText ? (
           <>
             <BackButton buttonText={"Back"} />
-            <ProceedButton buttonText={proceedButtonText} nextPath={nextPath} />
+            <ProceedButton buttonText={proceedButtonText} nextPath={nextPath} clickHandle={clickHandle} />
           </>
         ) : (
           <>

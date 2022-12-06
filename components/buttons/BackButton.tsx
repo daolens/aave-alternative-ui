@@ -3,7 +3,7 @@ import styles from "../../styles/componentStyles/buttons/buttons.module.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
 interface Props {
-  buttonText?: String;
+  buttonText?: string;
 }
 
 function BackButton({ buttonText }: Props) {

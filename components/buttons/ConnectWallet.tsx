@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -8,7 +8,8 @@ import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
 import { textCenterEllipsis } from "src/helpers/text-center-ellipsis";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
 interface Props {
-  buttonText?: String;
+  buttonText?: string;
+  
 }
 function ConnectWallet({ buttonText }: Props) {
   const { setWalletModalOpen } = useWalletModalContext();

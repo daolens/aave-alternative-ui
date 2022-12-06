@@ -1,8 +1,8 @@
-import { InterestRate } from '@aave/contract-helpers';
-import { createContext, useContext, useState } from 'react';
-import { EmodeModalType } from 'src/components/transactions/Emode/EmodeModalContent';
-import { useWeb3Context } from 'src/libs/hooks/useWeb3Context';
-import { TxErrorType } from 'src/ui-config/errorMapping';
+import { InterestRate } from "@aave/contract-helpers";
+import { createContext, useContext, useState } from "react";
+import { EmodeModalType } from "src/components/transactions/Emode/EmodeModalContent";
+import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
+import { TxErrorType } from "src/ui-config/errorMapping";
 
 export enum ModalType {
   Supply,
@@ -47,7 +47,10 @@ export interface ModalContextType<T extends ModalArgsType> {
   openBorrow: (underlyingAsset: string) => void;
   openRepay: (underlyingAsset: string, currentRateMode: InterestRate) => void;
   openCollateralChange: (underlyingAsset: string) => void;
-  openRateSwitch: (underlyingAsset: string, currentRateMode: InterestRate) => void;
+  openRateSwitch: (
+    underlyingAsset: string,
+    currentRateMode: InterestRate
+  ) => void;
   openStake: (stakeAssetName: string, icon: string) => void;
   openUnstake: (stakeAssetName: string, icon: string) => void;
   openStakeCooldown: (stakeAssetName: string) => void;
@@ -79,7 +82,7 @@ export const ModalContext = createContext<ModalContextType<ModalArgsType>>(
   {} as ModalContextType<ModalArgsType>
 );
 
-export const ModalContextProvider: React.FC = ({ children }) => {
+export const ModalContextProvider: React.FC = ({ children }: any) => {
   const { setSwitchNetworkError } = useWeb3Context();
   // contains the current modal open state if any
   const [type, setType] = useState<ModalType>();
@@ -88,7 +91,7 @@ export const ModalContextProvider: React.FC = ({ children }) => {
   const [approvalTxState, setApprovalTxState] = useState<TxStateType>({});
   const [retryWithApproval, setRetryWithApproval] = useState<boolean>(false);
   const [mainTxState, setMainTxState] = useState<TxStateType>({});
-  const [gasLimit, setGasLimit] = useState<string>('');
+  const [gasLimit, setGasLimit] = useState<string>("");
   const [loadingTxns, setLoadingTxns] = useState(false);
   const [txError, setTxError] = useState<TxErrorType>();
 
@@ -162,7 +165,7 @@ export const ModalContextProvider: React.FC = ({ children }) => {
           setArgs({});
           setMainTxState({});
           setApprovalTxState({});
-          setGasLimit('');
+          setGasLimit("");
           setTxError(undefined);
           setSwitchNetworkError(undefined);
           setRetryWithApproval(false);
@@ -192,7 +195,7 @@ export const useModalContext = () => {
   const context = useContext(ModalContext);
 
   if (context === undefined) {
-    throw new Error('useModalContext must be used within a ModalProvider');
+    throw new Error("useModalContext must be used within a ModalProvider");
   }
 
   return context;

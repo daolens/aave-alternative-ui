@@ -21,6 +21,7 @@ interface Props {
   updateAmount?: ChangeEventHandler<HTMLInputElement> | undefined;
   setMaxBalance: MouseEventHandler<HTMLDivElement> | undefined;
   availableReserves?: Array<object>;
+  walletBalance: number;
 }
 function AssetAmountSelection({
   selectedAmount,
@@ -29,14 +30,16 @@ function AssetAmountSelection({
   updateAmount,
   setMaxBalance,
   availableReserves,
+  walletBalance,
 }: Props) {
   // ! Local helpers
   const fetchBalance = (assetId: string) => {
-    if(availableReserves){
-    const found = availableReserves.find(
-      (singleAsset: emptyObject) => singleAsset.id == assetId
-    );
-    if (found ) return shortenNumber(+found?.walletBalance);}
+    if (availableReserves) {
+      const found: any = availableReserves.find(
+        (singleAsset: emptyObject) => singleAsset.id == assetId
+      );
+      if (found) return shortenNumber(+found?.walletBalance);
+    }
     return 0;
   };
   return (
@@ -62,7 +65,8 @@ function AssetAmountSelection({
             <span>Annual interest rate</span>
             <span>Wallet balance</span>
           </div>
-          {availableReserves && availableReserves.length > 0 &&
+          {availableReserves &&
+            availableReserves.length > 0 &&
             availableReserves?.map((singleRow: emptyObject, index: number) => {
               return (
                 <MenuItem
@@ -95,7 +99,7 @@ function AssetAmountSelection({
           <span
             className={styles.amount_input_container__max_cta}
             onClick={() => {
-              setMaxBalance?.(fetchBalance(selectedAsset));
+              return setMaxBalance?.(walletBalance as any);
             }}
           >
             MAX

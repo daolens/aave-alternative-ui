@@ -3,7 +3,6 @@ import ChooseLendingAsset from "../../components/lendFlowCards/ChooseLendingAsse
 import LendingSuccessful from "../../components/lendFlowCards/LendingSuccessful";
 import CustomBoxComponent from "../../components/wrappers/CustomBoxComponent";
 import DashboardLayout from "../../layouts/DashboardLayout";
-import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const router = useRouter();

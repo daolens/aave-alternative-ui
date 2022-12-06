@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:populate-cache": "npx esbuild src/static-build/populateCache.ts --tsconfig=./tsconfig.json --bundle --outfile=scripts/populate-cache.js --platform=node --target=es6"
   },
   "dependencies": {
     "@aave/contract-helpers": "1.9.0",

@@ -1,19 +1,17 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import { useRouter } from "next/router";
 interface Props {
-  buttonText?: String;
-  clickHandle?: Function;
+  buttonText?: string;
+  clickHandle: MouseEventHandler<HTMLDivElement> | undefined;
 }
 function AddToWallet({ buttonText, clickHandle }: Props) {
   const router = useRouter();
   return (
     <Button
       variant="contained"
-      onClick={() => {
-        clickHandle?.();
-      }}
+      onClick={clickHandle as any}
       startIcon={
         <Image
           src="/icons_svg/wallet_icon_color.svg"
@@ -30,7 +28,7 @@ function AddToWallet({ buttonText, clickHandle }: Props) {
       <span
         style={{
           background:
-            "linear-gradient(55.61deg, #30BAC6 -0.35%, #B6509E 92.67%);",
+            "linear-gradient(55.61deg, #30BAC6 -0.35%, #B6509E 92.67%)",
           backgroundClip: "text",
           WebkitTextFillColor: "transparent",
           WebkitBackgroundClip: "text",

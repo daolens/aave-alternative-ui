@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import {
   useIncentiveDataSubscription,
   usePoolDataSubscription,
   useWalletBalancesSubscription,
-} from 'src/store/root';
+} from "src/store/root";
 
 interface BackgroundDataProviderContextType {
   refetchWalletBalances: () => Promise<void>;
@@ -11,16 +11,17 @@ interface BackgroundDataProviderContextType {
   refetchPoolData?: () => Promise<void> | Promise<void[]>;
 }
 
-const BackgroundDataProviderContext = React.createContext<BackgroundDataProviderContextType>(
-  {} as BackgroundDataProviderContextType
-);
+const BackgroundDataProviderContext =
+  React.createContext<BackgroundDataProviderContextType>(
+    {} as BackgroundDataProviderContextType
+  );
 
 /**
  * Naive provider that subscribes to different data sources.
  * @param param0
  * @returns
  */
-export const BackgroundDataProvider: React.FC = ({ children }) => {
+export const BackgroundDataProvider: React.FC = ({ children }: any) => {
   const refetchWalletBalances = useWalletBalancesSubscription();
   const refetchPoolData = usePoolDataSubscription();
   const refetchIncentiveData = useIncentiveDataSubscription();
@@ -33,4 +34,5 @@ export const BackgroundDataProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useBackgroundDataProvider = () => useContext(BackgroundDataProviderContext);
+export const useBackgroundDataProvider = () =>
+  useContext(BackgroundDataProviderContext);

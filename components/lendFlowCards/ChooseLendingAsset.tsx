@@ -11,12 +11,16 @@ import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import {
   ComputedReserveData,
+  ComputedUserReserveData,
   useAppDataContext,
 } from "src/hooks/app-data-provider/useAppDataProvider";
 import { useWalletBalances } from "src/hooks/app-data-provider/useWalletBalances";
 import { USD_DECIMALS, valueToBigNumber } from "@aave/math-utils";
 import BigNumber from "bignumber.js";
-import { API_ETH_MOCK_ADDRESS } from "@aave/contract-helpers";
+import {
+  API_ETH_MOCK_ADDRESS,
+  EthereumTransactionTypeExtended,
+ Pool } from "@aave/contract-helpers";
 import { fetchIconSymbolAndName } from "src/ui-config/reservePatches";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
 import {
@@ -25,6 +29,19 @@ import {
   shortenNumber,
 } from "src/helpers/shortenStrings";
 import { emptyObject } from "src/helpers/types";
+import { useRootStore } from "src/store/root";
+import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
+import { useTransactionHandler } from "src/helpers/useTransactionHandler";
+import { utils } from "ethers";
+import { permitByChainAndToken } from "src/ui-config/permitConfig";
+import { useModalContext } from "src/hooks/useModal";
+import { TxAction } from "src/ui-config/errorMapping";
+import { isEmpty } from "lodash";
+import { ColorSwatchIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
+export enum ErrorType {
+  CAP_REACHED,
+}
 interface assetData {
   id: string;
   name?: string;
@@ -34,20 +51,10 @@ interface assetData {
 }
 
 function ChooseLendingAsset() {
-  // ! Regex
+  const router = useRouter();
+  // ! Regex ************************************************************************************************************
   const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
-  // ! Contexts
-  const { reserves, marketReferencePriceInUsd, user } = useAppDataContext();
-  const { walletBalances } = useWalletBalances();
-  const { currentNetworkConfig, currentChainId } = useProtocolDataContext();
-  const {
-    bridge,
-    isTestnet,
-    baseAssetSymbol,
-    name: networkName,
-    networkLogoPath,
-  } = currentNetworkConfig;
-  // ! Local states
+  // ! Local states ************************************************************************************************************
   const [selectedAsset, setSelectedAsset] = useState("");
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [currentAssetDetails, setcurrentAssetDetails] = useState(
@@ -55,7 +62,223 @@ function ChooseLendingAsset() {
   );
   const [availableReserves, setAvailableReserves] = useState([]);
   const [supplyReserves, setSupplyReserves] = useState([]);
-  // ! Effects
+  // ! Contexts ************************************************************************************************************
+  const { reserves, marketReferencePriceInUsd, user } = useAppDataContext();
+  const { walletBalances } = useWalletBalances();
+  const {
+    currentNetworkConfig,
+    currentChainId: marketChainId,
+    currentMarketData,
+    jsonRpcProvider,
+  } = useProtocolDataContext();
+  const {
+    connected,
+    currentAccount,
+    disconnectWallet,
+    chainId: connectedChainId,
+    watchModeOnlyAddress,
+  } = useWeb3Context();
+  const {
+    txError,
+    retryWithApproval,
+    mainTxState: supplyTxState,
+  } = useModalContext();
+  const {
+    bridge,
+    isTestnet,
+    baseAssetSymbol,
+    name: networkName,
+    networkLogoPath,
+  } = currentNetworkConfig;
+  const supply = useRootStore((state) => state.supply);
+  const supplyWithPermit = useRootStore((state) => state.supplyWithPermit);
+  // ! variables ************************************************************************************************************
+  const requiredChainId = marketChainId;
+  const isWrongNetwork = connectedChainId !== requiredChainId;
+  const poolReserve = reserves.find((reserve) => {
+    if (
+      currentAssetDetails.underlyingAsset?.toLowerCase() ===
+      API_ETH_MOCK_ADDRESS.toLowerCase()
+    )
+      return reserve.isWrappedBaseAsset;
+    return currentAssetDetails.underlyingAsset === reserve.underlyingAsset;
+  }) as ComputedReserveData;
+
+  const userReserve = user?.userReservesData.find((userReserve) => {
+    if (
+      currentAssetDetails.underlyingAsset?.toLowerCase() ===
+      API_ETH_MOCK_ADDRESS.toLowerCase()
+    )
+      return userReserve.reserve.isWrappedBaseAsset;
+    return currentAssetDetails.underlyingAsset === userReserve.underlyingAsset;
+  }) as ComputedUserReserveData;
+
+  const symbol =
+    poolReserve?.isWrappedBaseAsset && true
+      ? currentNetworkConfig.baseAssetSymbol
+      : poolReserve?.symbol;
+  const nativeBalance =
+    walletBalances[API_ETH_MOCK_ADDRESS.toLowerCase()]?.amount || "0";
+  const tokenBalance =
+    walletBalances[poolReserve?.underlyingAsset.toLowerCase()]?.amount || "0";
+  const blockingError: ErrorType | undefined = undefined;
+  const blocked = blockingError !== undefined;
+  const supplyUnWrapped =
+    currentAssetDetails.underlyingAsset?.toLowerCase() ===
+    API_ETH_MOCK_ADDRESS.toLowerCase();
+  const poolAddress = supplyUnWrapped
+    ? API_ETH_MOCK_ADDRESS
+    : poolReserve?.underlyingAsset;
+  // console.log("poolAddress 1", isTestnet);
+  // console.log("poolAddress 2",poolAddress,utils.getAddress(poolAddress));
+
+  const {
+    approval,
+    action,
+    requiresApproval,
+    loadingTxns,
+    approvalTxState,
+    mainTxState,
+  } = useTransactionHandler({
+    // TODO: move tryPermit
+    tryPermit: true,
+
+    handleGetTxns: () => {
+      return supply({
+        amountToSupply: `${selectedAmount}`,
+        isWrongNetwork,
+        poolAddress,
+        symbol,
+        blocked,
+      });
+    },
+    handleGetPermitTxns: async (signature, deadline) => {
+      return supplyWithPermit({
+        reserve: poolAddress,
+        amount: `${selectedAmount}`,
+        signature,
+        deadline,
+      });
+    },
+    skip: !`${selectedAmount}` || parseFloat(`${selectedAmount}`) === 0,
+    deps: [`${selectedAmount}`, poolAddress],
+  });
+  // console.log("requiresApproval",approval)
+  const handleApproval = () => {
+    // console.log("reached here")
+    approval(`${selectedAmount}`, poolAddress);
+    // supply({
+    //   amountToSupply: `${selectedAmount}`,
+    //   isWrongNetwork,
+    //   poolAddress,
+    //   symbol,
+    //   blocked,
+    // })
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
+  };
+
+  const hasApprovalError =
+    requiresApproval &&
+    txError &&
+    txError.txAction === TxAction.APPROVAL &&
+    txError.actionBlocked;
+  const isAmountMissing = false;
+
+  function getMainParams() {
+    if (blocked)
+      return { disabled: true, content: <span>Supply {symbol}</span> };
+    if (
+      txError &&
+      txError.txAction === TxAction.GAS_ESTIMATION &&
+      txError.actionBlocked
+    )
+      return {
+        loading: false,
+        disabled: true,
+        content: <span>Supply {symbol}</span>,
+      };
+    if (
+      txError &&
+      txError.txAction === TxAction.MAIN_ACTION &&
+      txError.actionBlocked
+    )
+      return {
+        loading: false,
+        disabled: true,
+        content: <span>Supply {symbol}</span>,
+      };
+    if (isWrongNetwork)
+      return { disabled: true, content: <span>Wrong Network</span> };
+    if (isAmountMissing)
+      return { disabled: true, content: <span>Enter an amount</span> };
+    if (loadingTxns || isEmpty(mainTxState))
+      return { disabled: true, loading: true };
+    // if (hasApprovalError && handleRetry)
+    //   return { content: <Trans>Retry with approval</Trans>, handleClick: handleRetry };
+    if (mainTxState?.loading)
+      return {
+        loading: true,
+        disabled: true,
+        content: <span>Supplying {symbol}</span>,
+      };
+    if (requiresApproval && !approvalTxState?.success)
+      return { disabled: true, content: <span>Supply {symbol}</span> };
+    return { content: <span>Supply {symbol}</span>, handleClick: action };
+  }
+
+  function getApprovalParams() {
+    // console.log(
+    //   "from here",
+    //   !requiresApproval,
+    //   isWrongNetwork,
+    //   isAmountMissing,
+    //   loadingTxns,
+    //   hasApprovalError
+    // );
+    if (
+      !requiresApproval ||
+      isWrongNetwork ||
+      isAmountMissing ||
+      loadingTxns ||
+      hasApprovalError
+    )
+      return null;
+    if (approvalTxState?.loading)
+      return {
+        loading: true,
+        disabled: true,
+        content: <span>Approving {symbol}...</span>,
+      };
+    if (approvalTxState?.success)
+      return { disabled: true, content: <span>Approved</span> };
+    if (retryWithApproval)
+      return {
+        content: <span>Retry with approval</span>,
+        handleClick: handleApproval,
+      };
+    return {
+      content: <span>Approve to continue</span>,
+      handleClick: handleApproval,
+    };
+  }
+
+  const { content, disabled, loading, handleClick } = getMainParams();
+  const approvalParams = getApprovalParams();
+  // console.log("approvalParams", approvalParams);
+  // ! Effects ************************************************************************************************************
+  useEffect(() => {
+    console.log("supplyTxState", supplyTxState);
+    if (supplyTxState.success)
+      router.push({
+        pathname: "/lend/success",
+        query: {
+          underlyingAsset: currentAssetDetails.underlyingAsset,
+          amount: selectedAmount,
+        },
+      });
+  }, [supplyTxState]);
+
   useEffect(() => {
     if (selectedAsset) {
       const found = availableReserves.find(
@@ -197,7 +420,7 @@ function ChooseLendingAsset() {
     // if (decimalNumberRegex.test(event.target.value))
     setSelectedAmount(+event.target.value);
   };
-  const setMaxBalance = (balance: number ) => {
+  const setMaxBalance = (balance: number): any => {
     setSelectedAmount(balance);
   };
 
@@ -208,6 +431,19 @@ function ChooseLendingAsset() {
       return shortenNumber(selectedAmount * Number(interest_rate));
     return 0;
   };
+  // console.log(reserves);
+  const lendAsset = () => {
+    console.log("begin lending");
+
+    // supply({
+    //   amountToSupply: `${selectedAmount}`,
+    //   isWrongNetwork: false,
+    //   poolAddress: currentMarketData.addresses.LENDING_POOL,
+    //   symbol: currentNetworkConfig.baseAssetSymbol,
+    //   blocked: false,
+    // });
+  };
+  // console.log("handleApproval",handleApproval)
   return (
     <div className={styles.container}>
       <FlowLayout
@@ -222,15 +458,17 @@ function ChooseLendingAsset() {
           )
         }
         proceedButtonText="Lend"
-        nextPath="/lend/success"
+        // nextPath="/lend/success"
+        clickHandle={action}
       >
         <AssetAmountSelection
           selectedAmount={selectedAmount}
           selectedAsset={selectedAsset}
           updateAsset={handleAssetChange}
           updateAmount={handleAmountChange}
-          setMaxBalance={setMaxBalance}
+          setMaxBalance={setMaxBalance as any}
           availableReserves={availableReserves}
+          walletBalance={currentAssetDetails.walletBalance}
         />
         {selectedAsset && (
           <span className={styles.wallet_balance_text}>

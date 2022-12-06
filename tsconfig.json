@@ -15,7 +15,12 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
-    "removeComments": true
+    "removeComments": true, 
+    "allowSyntheticDefaultImports": true,
+    "preserveConstEnums": true,
+    "sourceMap": true, 
+    "typeRoots": ["./node_modules/@types"], 
+    "useUnknownInCatchVariables": false,
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "store/store.js"],
   "exclude": [

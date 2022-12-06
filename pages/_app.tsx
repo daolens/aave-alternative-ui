@@ -35,10 +35,12 @@ interface MyAppProps extends AppProps {
 }
 export default function App(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const getLayout = Component.getLayout ?? ((page: React.ReactNode) => page);
+  const getLayout = Component.getLayout ?? ((page: React.ReactElement) => page);
+  console.log("pageProps", pageProps);
+  
   return (
     <CacheProvider value={emotionCache}>
-      <LanguageProvider>
+      {/* <LanguageProvider> */}
         <Web3ReactProvider getLibrary={getWeb3Library}>
           <Web3ContextProvider>
             <AppGlobalStyles>
@@ -58,7 +60,7 @@ export default function App(props: MyAppProps) {
             </AppGlobalStyles>
           </Web3ContextProvider>
         </Web3ReactProvider>
-      </LanguageProvider>
+      {/* </LanguageProvider> */}
     </CacheProvider>
   );
 }

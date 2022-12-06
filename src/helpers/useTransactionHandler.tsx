@@ -1,14 +1,17 @@
-import { EthereumTransactionTypeExtended, GasType } from '@aave/contract-helpers';
-import { SignatureLike } from '@ethersproject/bytes';
-import { TransactionResponse } from '@ethersproject/providers';
-import { DependencyList, useEffect, useRef, useState } from 'react';
-import { useBackgroundDataProvider } from 'src/hooks/app-data-provider/BackgroundDataProvider';
-import { useModalContext } from 'src/hooks/useModal';
-import { useWeb3Context } from 'src/libs/hooks/useWeb3Context';
-import { useRootStore } from 'src/store/root';
-import { getErrorTextFromError, TxAction } from 'src/ui-config/errorMapping';
+import {
+  EthereumTransactionTypeExtended,
+  GasType,
+} from "@aave/contract-helpers";
+import { SignatureLike } from "@ethersproject/bytes";
+import { TransactionResponse } from "@ethersproject/providers";
+import { DependencyList, useEffect, useRef, useState } from "react";
+import { useBackgroundDataProvider } from "src/hooks/app-data-provider/BackgroundDataProvider";
+import { useModalContext } from "src/hooks/useModal";
+import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
+import { useRootStore } from "src/store/root";
+import { getErrorTextFromError, TxAction } from "src/ui-config/errorMapping";
 
-export const MOCK_SIGNED_HASH = 'Signed correctly';
+export const MOCK_SIGNED_HASH = "Signed correctly";
 
 interface UseTransactionHandlerProps {
   handleGetTxns: () => Promise<EthereumTransactionTypeExtended[]>;
@@ -47,8 +50,12 @@ export const useTransactionHandler = ({
   const [signatureDeadline, setSignatureDeadline] = useState<string>();
   const signERC20Approval = useRootStore((state) => state.signERC20Approval);
 
-  const [approvalTx, setApprovalTx] = useState<EthereumTransactionTypeExtended | undefined>();
-  const [actionTx, setActionTx] = useState<EthereumTransactionTypeExtended | undefined>();
+  const [approvalTx, setApprovalTx] = useState<
+    EthereumTransactionTypeExtended | undefined
+  >();
+  const [actionTx, setActionTx] = useState<
+    EthereumTransactionTypeExtended | undefined
+  >();
   const mounted = useRef(false);
 
   useEffect(() => {
@@ -88,7 +95,9 @@ export const useTransactionHandler = ({
         try {
           // TODO: what to do with this error?
           const error = await getTxError(txnResult.hash);
-          mounted.current && errorCallback && errorCallback(new Error(error), txnResult.hash);
+          mounted.current &&
+            errorCallback &&
+            errorCallback(new Error(error), txnResult.hash);
           return;
         } catch (e) {
           mounted.current && errorCallback && errorCallback(e, txnResult.hash);
@@ -104,6 +113,7 @@ export const useTransactionHandler = ({
 
   const approval = async (amount?: string, underlyingAsset?: string) => {
     if (approvalTx) {
+      console.log(usePermit, amount, underlyingAsset);
       if (usePermit && amount && underlyingAsset) {
         setApprovalTxState({ ...approvalTxState, loading: true });
         try {
@@ -127,7 +137,11 @@ export const useTransactionHandler = ({
             setTxError(undefined);
           } catch (error) {
             if (!mounted.current) return;
-            const parsedError = getErrorTextFromError(error, TxAction.APPROVAL, false);
+            const parsedError = getErrorTextFromError(
+              error as any,
+              TxAction.APPROVAL,
+              false
+            );
             setTxError(parsedError);
 
             setApprovalTxState({
@@ -146,7 +160,11 @@ export const useTransactionHandler = ({
           setUsePermit(false);
           setRetryWithApproval(true);
 
-          const parsedError = getErrorTextFromError(error, TxAction.GAS_ESTIMATION, false);
+          const parsedError = getErrorTextFromError(
+            error as any,
+            TxAction.GAS_ESTIMATION,
+            false
+          );
           setTxError(parsedError);
           setApprovalTxState({
             txHash: undefined,
@@ -169,7 +187,11 @@ export const useTransactionHandler = ({
               setTxError(undefined);
             },
             errorCallback: (error, hash) => {
-              const parsedError = getErrorTextFromError(error, TxAction.APPROVAL, false);
+              const parsedError = getErrorTextFromError(
+                error,
+                TxAction.APPROVAL,
+                false
+              );
               setTxError(parsedError);
               setApprovalTxState({
                 txHash: hash,
@@ -180,7 +202,11 @@ export const useTransactionHandler = ({
           });
         } catch (error) {
           if (!mounted.current) return;
-          const parsedError = getErrorTextFromError(error, TxAction.GAS_ESTIMATION, false);
+          const parsedError = getErrorTextFromError(
+            error as any,
+            TxAction.GAS_ESTIMATION,
+            false
+          );
           setTxError(parsedError);
           setApprovalTxState({
             txHash: undefined,
@@ -193,7 +219,7 @@ export const useTransactionHandler = ({
 
   const action = async () => {
     if (approvalTx && usePermit && handleGetPermitTxns) {
-      if (!signature || !signatureDeadline) throw new Error('signature needed');
+      if (!signature || !signatureDeadline) throw new Error("signature needed");
       try {
         setMainTxState({ ...mainTxState, loading: true });
         const txns = await handleGetPermitTxns(signature, signatureDeadline);
@@ -210,7 +236,10 @@ export const useTransactionHandler = ({
             setTxError(undefined);
           },
           errorCallback: (error, hash) => {
-            const parsedError = getErrorTextFromError(error, TxAction.MAIN_ACTION);
+            const parsedError = getErrorTextFromError(
+              error,
+              TxAction.MAIN_ACTION
+            );
             setTxError(parsedError);
             setMainTxState({
               txHash: hash,
@@ -220,7 +249,11 @@ export const useTransactionHandler = ({
           action: TxAction.MAIN_ACTION,
         });
       } catch (error) {
-        const parsedError = getErrorTextFromError(error, TxAction.GAS_ESTIMATION, false);
+        const parsedError = getErrorTextFromError(
+          error as any,
+          TxAction.GAS_ESTIMATION,
+          false
+        );
         setTxError(parsedError);
         setMainTxState({
           txHash: undefined,
@@ -244,7 +277,10 @@ export const useTransactionHandler = ({
             setTxError(undefined);
           },
           errorCallback: (error, hash) => {
-            const parsedError = getErrorTextFromError(error, TxAction.MAIN_ACTION);
+            const parsedError = getErrorTextFromError(
+              error,
+              TxAction.MAIN_ACTION
+            );
             setTxError(parsedError);
             setMainTxState({
               txHash: hash,
@@ -254,7 +290,11 @@ export const useTransactionHandler = ({
           action: TxAction.MAIN_ACTION,
         });
       } catch (error) {
-        const parsedError = getErrorTextFromError(error, TxAction.GAS_ESTIMATION, false);
+        const parsedError = getErrorTextFromError(
+          error as any,
+          TxAction.GAS_ESTIMATION,
+          false
+        );
         setTxError(parsedError);
         setMainTxState({
           txHash: undefined,
@@ -274,16 +314,16 @@ export const useTransactionHandler = ({
         return handleGetTxns()
           .then(async (data) => {
             if (!mounted.current) return;
-            setApprovalTx(data.find((tx) => tx.txType === 'ERC20_APPROVAL'));
+            setApprovalTx(data.find((tx) => tx.txType === "ERC20_APPROVAL"));
             setActionTx(
               data.find((tx) =>
                 [
-                  'DLP_ACTION',
-                  'REWARD_ACTION',
-                  'FAUCET_MINT',
-                  'STAKE_ACTION',
-                  'GOV_DELEGATION_ACTION',
-                  'GOVERNANCE_ACTION',
+                  "DLP_ACTION",
+                  "REWARD_ACTION",
+                  "FAUCET_MINT",
+                  "STAKE_ACTION",
+                  "GOV_DELEGATION_ACTION",
+                  "GOVERNANCE_ACTION",
                 ].includes(tx.txType)
               )
             );
@@ -295,10 +335,14 @@ export const useTransactionHandler = ({
             try {
               gas = await data[data.length - 1].gas();
             } catch (error) {
-              const parsedError = getErrorTextFromError(error, TxAction.GAS_ESTIMATION, false);
+              const parsedError = getErrorTextFromError(
+                error as any,
+                TxAction.GAS_ESTIMATION,
+                false
+              );
               setTxError(parsedError);
             }
-            setGasLimit(gas?.gasLimit || '');
+            setGasLimit(gas?.gasLimit || "");
             setLoadingTxns(false);
           })
           .catch((error) => {
@@ -306,7 +350,11 @@ export const useTransactionHandler = ({
             setMainTxState({
               txHash: undefined,
             });
-            const parsedError = getErrorTextFromError(error, TxAction.GAS_ESTIMATION, false);
+            const parsedError = getErrorTextFromError(
+              error,
+              TxAction.GAS_ESTIMATION,
+              false
+            );
             setTxError(parsedError);
             setLoadingTxns(false);
           });
