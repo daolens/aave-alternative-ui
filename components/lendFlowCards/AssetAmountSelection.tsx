@@ -1,10 +1,17 @@
-import React, { ChangeEventHandler, ReactNode, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  MouseEventHandler,
+  ReactNode,
+  useState,
+} from "react";
 import styles from "../../styles/componentStyles/lendFlowCards/assetAmountSelection.module.css";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import lendingAssetData from "../../store/staticData/lendingAssetDetails.json";
+import { shortenAPY, shortenNumber } from "src/helpers/shortenStrings";
+import { emptyObject } from "src/helpers/types";
 interface Props {
   selectedAsset?: string;
   selectedAmount: number;
@@ -12,45 +19,27 @@ interface Props {
     | ((event: SelectChangeEvent<string>, child: ReactNode) => void)
     | undefined;
   updateAmount?: ChangeEventHandler<HTMLInputElement> | undefined;
-  setMaxBalance?: Function;
+  setMaxBalance: MouseEventHandler<HTMLDivElement> | undefined;
+  availableReserves?: Array<object>;
+  walletBalance: number;
 }
-function createData(
-  id: string,
-  name: string,
-  interest_rate: string,
-  balance: number
-) {
-  return { id, name, interest_rate, balance };
-}
-// const rows = [
-//   createData('Frozen yoghurt', 159, 6.0),
-//   createData('Ice cream sandwich', 237, 9.0),
-//   createData('Eclair', 262, 16.0),
-//   createData('Cupcake', 305, 3.7),
-//   createData('Gingerbread', 356, 16.0),
-// ];
-
-const allAssetDetails = lendingAssetData.map((singleAssetData) => {
-  return createData(
-    singleAssetData.id,
-    singleAssetData.name,
-    singleAssetData.interest_rate,
-    singleAssetData.balance
-  );
-});
 function AssetAmountSelection({
   selectedAmount,
   selectedAsset,
   updateAsset,
   updateAmount,
   setMaxBalance,
+  availableReserves,
+  walletBalance,
 }: Props) {
   // ! Local helpers
   const fetchBalance = (assetId: string) => {
-    let found = allAssetDetails.find(
-      (singleAsset) => singleAsset.id == assetId
-    );
-    if (found) return found.balance;
+    if (availableReserves) {
+      const found: any = availableReserves.find(
+        (singleAsset: emptyObject) => singleAsset.id == assetId
+      );
+      if (found) return shortenNumber(+found?.walletBalance);
+    }
     return 0;
   };
   return (
@@ -76,19 +65,21 @@ function AssetAmountSelection({
             <span>Annual interest rate</span>
             <span>Wallet balance</span>
           </div>
-          {allAssetDetails.map((singleRow, index) => {
-            return (
-              <MenuItem
-                key={`${singleRow.name} ${index}`}
-                value={singleRow.id}
-                className={styles.table_container__data}
-              >
-                <span>{singleRow.name}</span>
-                <span>{singleRow.interest_rate}</span>
-                <span>{singleRow.balance}</span>
-              </MenuItem>
-            );
-          })}
+          {availableReserves &&
+            availableReserves.length > 0 &&
+            availableReserves?.map((singleRow: emptyObject, index: number) => {
+              return (
+                <MenuItem
+                  key={`${singleRow.name} ${index}`}
+                  value={singleRow.id}
+                  className={styles.table_container__data}
+                >
+                  <span>{singleRow.name}</span>
+                  <span>{shortenAPY(singleRow.supplyAPY)}</span>
+                  <span>{shortenNumber(+singleRow.walletBalance)}</span>
+                </MenuItem>
+              );
+            })}
           {/* </div> */}
         </Select>
       </FormControl>
@@ -98,7 +89,7 @@ function AssetAmountSelection({
             placeholder="Enter amount to lend"
             className={styles.amount_input_container__input}
             aria-label="amount-input"
-            type="text"
+            type="number"
             value={selectedAmount}
             onChange={updateAmount}
           />
@@ -108,7 +99,7 @@ function AssetAmountSelection({
           <span
             className={styles.amount_input_container__max_cta}
             onClick={() => {
-              setMaxBalance?.(fetchBalance(selectedAsset));
+              return setMaxBalance?.(walletBalance as any);
             }}
           >
             MAX

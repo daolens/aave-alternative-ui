@@ -6,37 +6,23 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import borrowingAssetData from "../../store/staticData/borrowingAssetDetails.json";
+import { emptyObject } from "src/helpers/types";
+import { shortenAPY } from "src/helpers/shortenStrings";
 interface Props {
   selectedAsset?: string;
-  selectedAmount: number ;
+  selectedAmount: number;
   updateAsset?:
     | ((event: SelectChangeEvent<string>, child: React.ReactNode) => void)
     | undefined;
   updateAmount?: React.ChangeEventHandler<HTMLInputElement> | undefined;
+  availableReserves?: Array<object> ;
 }
-function createData(id: string, name: string, interest_rate: string) {
-  return { id, name, interest_rate };
-}
-// const rows = [
-//   createData('Frozen yoghurt', 159, 6.0),
-//   createData('Ice cream sandwich', 237, 9.0),
-//   createData('Eclair', 262, 16.0),
-//   createData('Cupcake', 305, 3.7),
-//   createData('Gingerbread', 356, 16.0),
-// ];
-
-const allAssetDetails = borrowingAssetData.map((singleAssetData) => {
-  return createData(
-    singleAssetData.id,
-    singleAssetData.name,
-    singleAssetData.interest_rate
-  );
-});
 function AssetAmountSelection({
   selectedAmount,
   selectedAsset,
   updateAsset,
   updateAmount,
+  availableReserves,
 }: Props) {
   return (
     <div className={styles.container}>
@@ -60,18 +46,19 @@ function AssetAmountSelection({
             <span>Asset name</span>
             <span>Annual interest rate</span>
           </div>
-          {allAssetDetails.map((singleRow, index) => {
-            return (
-              <MenuItem
-                key={`${singleRow.name} ${index}`}
-                value={singleRow.id}
-                className={styles.table_container__data}
-              >
-                <span>{singleRow.name}</span>
-                <span>{singleRow.interest_rate}</span>
-              </MenuItem>
-            );
-          })}
+          {availableReserves && availableReserves.length > 0 &&
+            availableReserves?.map((singleRow: emptyObject, index: number) => {
+              return (
+                <MenuItem
+                  key={`${singleRow.name} ${index}`}
+                  value={singleRow.id}
+                  className={styles.table_container__data}
+                >
+                  <span>{singleRow.name}</span>
+                  <span>{shortenAPY(singleRow.supplyAPY)}</span>
+                </MenuItem>
+              );
+            })}
           {/* </div> */}
         </Select>
       </FormControl>
@@ -88,14 +75,6 @@ function AssetAmountSelection({
           <span className={styles.amount_input_container__dollar}>
             ${selectedAmount * 0.5}
           </span>
-          {/* <span
-            className={styles.amount_input_container__max_cta}
-            onClick={() => {
-              setMaxBalance(fetchBalance(selectedAsset));
-            }}
-          >
-            MAX
-          </span> */}
         </div>
       )}
     </div>

@@ -59,7 +59,7 @@ function DashboardLayout({ children }: Props) {
                   <Typography
                     className={styles.toolbar_left__typography}
                     color="#ffffff"
-                    variant="h6"
+                    variant="h4"
                     component="div"
                     sx={{ flexGrow: 1 }}
                     onClick={() => router.push("/")}
