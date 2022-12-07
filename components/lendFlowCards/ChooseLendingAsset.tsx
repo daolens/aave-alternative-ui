@@ -520,7 +520,7 @@ function ChooseLendingAsset() {
           >
             OR
           </Divider>
-        )}
+        )} 
         {selectedAsset ? (
           <div className={styles.selected_asset_details}>
             <div className={styles.selected_asset_details__container}>
