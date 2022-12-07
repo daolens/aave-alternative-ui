@@ -55,15 +55,27 @@ function HelpDrawer() {
           >
             <Tab
               label="General"
-              sx={{ textDecoration: "none", color: "#fff" }}
+              sx={{
+                textDecoration: "none",
+                color: "#fff",
+                padding: "8px 16px !important",
+              }}
             />
             <Tab
               label="Lend"
-              sx={{ textDecorationStyle: "none", color: "#fff" }}
+              sx={{
+                textDecorationStyle: "none",
+                color: "#fff",
+                padding: "8px 16px !important",
+              }}
             />
             <Tab
               label="Borrow"
-              sx={{ textDecoration: "none", color: "#fff" }}
+              sx={{
+                textDecoration: "none",
+                color: "#fff",
+                padding: "8px 16px !important",
+              }}
             />
           </Tabs>
 
@@ -72,6 +84,7 @@ function HelpDrawer() {
             sx={{
               backgroundColor: "transparent",
               borderBottom: "1px solid #3F424F",
+              "&::before": { backgroundColor: "transparent" },
             }}
           >
             <AccordionSummary
@@ -96,6 +109,7 @@ function HelpDrawer() {
             sx={{
               backgroundColor: "transparent",
               borderBottom: "1px solid #3F424F",
+              "&::before": { backgroundColor: "transparent" },
             }}
           >
             <AccordionSummary
@@ -122,6 +136,7 @@ function HelpDrawer() {
             sx={{
               backgroundColor: "transparent",
               borderBottom: "1px solid #3F424F",
+              "&::before": { backgroundColor: "transparent" },
             }}
           >
             <AccordionSummary
@@ -148,6 +163,7 @@ function HelpDrawer() {
             sx={{
               backgroundColor: "transparent",
               borderBottom: "1px solid #3F424F",
+              "&::before": { backgroundColor: "transparent" },
             }}
           >
             <AccordionSummary
