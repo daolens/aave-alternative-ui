@@ -90,6 +90,7 @@ function LendingSuccessful() {
             {!addedToWallet && (
               <AddToWallet
                 clickHandle={() => {
+                  setAddedToWallet(true);
                   addERC20Token({
                     address: addToken.address,
                     decimals: addToken.decimals,
