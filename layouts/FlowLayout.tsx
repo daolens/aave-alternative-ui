@@ -13,14 +13,17 @@ interface Props {
   title?: ReactNode;
   proceedButtonText?: string;
   nextPath?: string;
-  clickHandle?:  MouseEventHandler<HTMLDivElement> | undefined;
+  clickHandle?: MouseEventHandler<HTMLDivElement> | undefined;
+  isLoading?: boolean;
 }
 function FlowLayout({
   children,
   sectionTitle,
   title,
   proceedButtonText,
-  nextPath,clickHandle
+  nextPath,
+  clickHandle,
+  isLoading,
 }: Props) {
   return (
     <div className={styles.container}>
@@ -48,7 +51,12 @@ function FlowLayout({
         {proceedButtonText ? (
           <>
             <BackButton buttonText={"Back"} />
-            <ProceedButton buttonText={proceedButtonText} nextPath={nextPath} clickHandle={clickHandle} />
+            <ProceedButton
+              buttonText={proceedButtonText}
+              nextPath={nextPath}
+              clickHandle={clickHandle}
+              isLoading={isLoading}
+            />
           </>
         ) : (
           <>
