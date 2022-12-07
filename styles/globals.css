@@ -82,6 +82,14 @@ a {
   background-color: #2A2E3F;
 }
 
+.css-nfa4cw-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+  background-color: #292E41;
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiMenu-paper.MuiPaper-elevation8.MuiPopover-paper {
+  background-color: #292E41;
+}
+
 .css-1xheqax-MuiButtonBase-root-MuiMenuItem-root.Mui-focusVisible {
   background-color: #383D51;
 }
@@ -102,7 +110,7 @@ input[type=number] {
 }
 
 #lend_asset_selection_dropdown {
-padding-left: 10px;
+  padding-left: 10px;
 }
 
 #lend_asset_selection_dropdown span {

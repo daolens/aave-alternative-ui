@@ -58,7 +58,11 @@ function AssetAmountSelection({
           value={selectedAsset}
           onChange={updateAsset}
           label="Choose asset to lend"
-          sx={{ color: "#ffffff" }}
+          sx={{
+            color: "#ffffff",
+            "&::before": { border: "none" },
+            "&:hover": { border: "none" },
+          }}
         >
           {/* <div className={styles.table_container}> */}
           <div className={styles.table_container__head}>
