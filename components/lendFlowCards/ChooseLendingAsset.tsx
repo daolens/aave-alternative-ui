@@ -257,14 +257,6 @@ function ChooseLendingAsset() {
   }
 
   function getApprovalParams() {
-    // console.log(
-    //   "from here",
-    //   !requiresApproval,
-    //   isWrongNetwork,
-    //   isAmountMissing,
-    //   loadingTxns,
-    //   hasApprovalError
-    // );
     if (
       !requiresApproval ||
       isWrongNetwork ||
@@ -294,7 +286,7 @@ function ChooseLendingAsset() {
 
   const { content, disabled, loading, handleClick } = getMainParams();
   const approvalParams = getApprovalParams();
-  // console.log("approvalParams", approvalParams);
+  console.log("approvalParams", loadingTxns, approvalParams);
   // ! Effects ************************************************************************************************************
   useEffect(() => {
     // console.log("supplyTxState", supplyTxState);
@@ -464,7 +456,7 @@ function ChooseLendingAsset() {
   };
   // console.log(supplyReserves, user, selectedAsset);
   const lendAsset = () => {
-    // console.log("begin lending", walletBalances, currentAccount);
+    if (!selectedAmount) return alert("Add an amount greater than 0");
     const foundAsset: any = supplyReserves.find((singleAsset: emptyObject) => {
       return singleAsset.id == selectedAsset;
     });
@@ -472,8 +464,9 @@ function ChooseLendingAsset() {
     if (!foundAsset) return alert("Insufficient funds in your wallet");
     if (+foundAsset.walletBalance < +selectedAmount)
       return alert("Insufficient funds in your wallet");
-
-    return action();
+    return approvalParams && approvalParams.handleClick
+      ? approvalParams.handleClick()
+      : action();
   };
   // console.log("handleApproval",handleApproval)
   return (
@@ -489,9 +482,12 @@ function ChooseLendingAsset() {
             <>Let’s now choose the asset you want to lend</>
           )
         }
-        proceedButtonText="Lend"
+        proceedButtonText={
+          approvalParams && approvalParams.handleClick ? "Approve" : "Lend"
+        }
         // nextPath="/lend/success"
         clickHandle={lendAsset}
+        isLoading={loadingTxns || supplyTxState.loading}
       >
         <AssetAmountSelection
           selectedAmount={selectedAmount}
@@ -520,7 +516,7 @@ function ChooseLendingAsset() {
           >
             OR
           </Divider>
-        )} 
+        )}
         {selectedAsset ? (
           <div className={styles.selected_asset_details}>
             <div className={styles.selected_asset_details__container}>
@@ -567,7 +563,7 @@ function ChooseLendingAsset() {
                 return (
                   <WalletAssetDetails
                     key={`${singleToken.name} - ${index}`}
-                    tokenName={networkName}
+                    tokenName={singleToken.name}
                     tokenBalance={+shortenLongNumber(singleToken.walletBalance)}
                     tokenInterestRate={shortenAPY(singleToken.supplyAPY)}
                     tokenIcon={

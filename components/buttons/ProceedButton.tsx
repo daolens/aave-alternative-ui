@@ -9,10 +9,16 @@ interface Props {
   buttonText?: string;
   nextPath?: string;
   clickHandle?: MouseEventHandler<HTMLDivElement> | undefined;
+  isLoading?: boolean;
 }
-function ProceedButton({ buttonText, nextPath, clickHandle }: Props) {
+function ProceedButton({
+  buttonText,
+  nextPath,
+  clickHandle,
+  isLoading,
+}: Props) {
   const router = useRouter();
-  const { mainTxState: supplyTxState } = useModalContext();
+  // const { mainTxState: supplyTxState } = useModalContext();
   const routeToPath = () => {
     return nextPath ? router.push(nextPath) : null;
   };
@@ -22,7 +28,7 @@ function ProceedButton({ buttonText, nextPath, clickHandle }: Props) {
       onClick={clickHandle || routeToPath}
     >
       <span>{buttonText}</span>
-      {supplyTxState.loading ? (
+      {isLoading ? (
         <CircularProgress size={18} sx={{ margin: "0px" }} />
       ) : (
         <Image

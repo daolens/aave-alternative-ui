@@ -59,6 +59,7 @@ function ConnectWallet({ buttonText }: Props) {
             : "linear-gradient(55.94deg, #30BAC6 -29.83%, #9A4386 62.81%)",
           textTransform: "none",
           position: "relative",
+          color: "#ffffff",
         }}
       >
         {connected ? textCenterEllipsis(currentAccount, 6, 6) : buttonText}
