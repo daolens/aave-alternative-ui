@@ -85,7 +85,11 @@ function ConnectWallet({ buttonText }: Props) {
               alignItems: "flex-start",
             }}
           >
-            <Button sx={{ width: "100%" }} onClick={handleSwitchWallet}>
+            <Button
+              centerRipple={true}
+              sx={{ width: "100%", "&:hover": { backgroundColor: "#2D3347" } }}
+              onClick={handleSwitchWallet}
+            >
               <Image
                 src="/icons_svg/wallet_icon.svg"
                 alt="wallet_icon"
@@ -97,7 +101,7 @@ function ConnectWallet({ buttonText }: Props) {
                 sx={{
                   fontSize: "12px",
                   padding: "8px 5px",
-                  // "&:hover": { backgroundColor: "#2D3347" },
+                  color: "#ffffff",
                   width: "100%",
                   textAlign: "left",
                   display: "flex",
@@ -109,7 +113,11 @@ function ConnectWallet({ buttonText }: Props) {
               </Typography>
             </Button>
 
-            <Button sx={{ width: "100%" }} onClick={disconnectWallet}>
+            <Button
+              centerRipple={true}
+              sx={{ width: "100%", "&:hover": { backgroundColor: "#2D3347" } }}
+              onClick={disconnectWallet}
+            >
               <Image
                 src="/icons_svg/simple_cross.svg"
                 alt="wallet_icon"
@@ -121,7 +129,7 @@ function ConnectWallet({ buttonText }: Props) {
                 sx={{
                   fontSize: "12px",
                   padding: "8px 5px",
-                  // "&:hover": { backgroundColor: "#2D3347" },
+                  color: "#ffffff",
                   width: "100%",
                   textAlign: "left",
                   display: "flex",
