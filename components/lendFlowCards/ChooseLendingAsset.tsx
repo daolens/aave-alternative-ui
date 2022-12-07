@@ -40,6 +40,12 @@ import { TxAction } from "src/ui-config/errorMapping";
 import { isEmpty } from "lodash";
 import { ColorSwatchIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
+import {
+  GasStation,
+  getGasCosts,
+} from "src/components/transactions/GasStation/GasStation";
+import { parseUnits } from "ethers/lib/utils";
+import { useGasStation } from "src/hooks/useGasStation";
 export enum ErrorType {
   CAP_REACHED,
 }
@@ -67,6 +73,10 @@ function ChooseLendingAsset() {
   const { reserves, marketReferencePriceInUsd, user } = useAppDataContext();
   const { walletBalances } = useWalletBalances();
   const {
+    state,
+    gasPriceData: { data },
+  } = useGasStation();
+  const {
     currentNetworkConfig,
     currentChainId: marketChainId,
     currentMarketData,
@@ -84,6 +94,7 @@ function ChooseLendingAsset() {
     retryWithApproval,
     mainTxState: supplyTxState,
     close: clearModalContext,
+    gasLimit,
   } = useModalContext();
   const {
     bridge,
@@ -91,12 +102,14 @@ function ChooseLendingAsset() {
     baseAssetSymbol,
     name: networkName,
     networkLogoPath,
+    wrappedBaseAssetSymbol,
   } = currentNetworkConfig;
   const supply = useRootStore((state) => state.supply);
   const supplyWithPermit = useRootStore((state) => state.supplyWithPermit);
   // ! variables ************************************************************************************************************
   const requiredChainId = marketChainId;
   const isWrongNetwork = connectedChainId !== requiredChainId;
+
   const poolReserve = reserves.find((reserve) => {
     if (
       currentAssetDetails.underlyingAsset?.toLowerCase() ===
@@ -133,7 +146,21 @@ function ChooseLendingAsset() {
     : poolReserve?.underlyingAsset;
   // console.log("poolAddress 1", isTestnet);
   // console.log("poolAddress 2",poolAddress,utils.getAddress(poolAddress));
-
+  // const wrappedAsset = reserves.find(
+  //   (token) =>
+  //     token.symbol.toLowerCase() === wrappedBaseAssetSymbol?.toLowerCase()
+  // );
+  // const totalGasCostsUsd =
+  //   data && wrappedAsset
+  //     ? getGasCosts(
+  //         parseUnits(gasLimit || "0", "wei"),
+  //         state.gasOption,
+  //         state.customGas,
+  //         data,
+  //         wrappedAsset.priceInUSD
+  //       )
+  //     : undefined;
+  // console.log("totalGasCostsUsd",totalGasCostsUsd)
   const {
     approval,
     action,
@@ -270,7 +297,7 @@ function ChooseLendingAsset() {
   // console.log("approvalParams", approvalParams);
   // ! Effects ************************************************************************************************************
   useEffect(() => {
-    console.log("supplyTxState", supplyTxState);
+    // console.log("supplyTxState", supplyTxState);
     if (supplyTxState.success) {
       router.push({
         pathname: "/lend/success",
@@ -420,7 +447,7 @@ function ChooseLendingAsset() {
     setSelectedAsset(event.target.value);
   };
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("event.target.value", event.target.value);
+    // console.log("event.target.value", event.target.value);
     // if (decimalNumberRegex.test(event.target.value))
     setSelectedAmount(event.target.value);
   };
@@ -435,17 +462,18 @@ function ChooseLendingAsset() {
       return shortenNumber(+selectedAmount * Number(interest_rate));
     return 0;
   };
-  // console.log(reserves);
+  // console.log(supplyReserves, user, selectedAsset);
   const lendAsset = () => {
-    console.log("begin lending");
+    // console.log("begin lending", walletBalances, currentAccount);
+    const foundAsset: any = supplyReserves.find((singleAsset: emptyObject) => {
+      return singleAsset.id == selectedAsset;
+    });
+    // console.log("foundAsset", foundAsset);
+    if (!foundAsset) return alert("Insufficient funds in your wallet");
+    if (+foundAsset.walletBalance < +selectedAmount)
+      return alert("Insufficient funds in your wallet");
 
-    // supply({
-    //   amountToSupply: `${selectedAmount}`,
-    //   isWrongNetwork: false,
-    //   poolAddress: currentMarketData.addresses.LENDING_POOL,
-    //   symbol: currentNetworkConfig.baseAssetSymbol,
-    //   blocked: false,
-    // });
+    return action();
   };
   // console.log("handleApproval",handleApproval)
   return (
@@ -463,7 +491,7 @@ function ChooseLendingAsset() {
         }
         proceedButtonText="Lend"
         // nextPath="/lend/success"
-        clickHandle={action}
+        clickHandle={lendAsset}
       >
         <AssetAmountSelection
           selectedAmount={selectedAmount}
@@ -473,6 +501,7 @@ function ChooseLendingAsset() {
           setMaxBalance={setMaxBalance as any}
           availableReserves={availableReserves}
           walletBalance={currentAssetDetails.walletBalance}
+          poolReserve={poolReserve}
         />
         {selectedAsset && (
           <span className={styles.wallet_balance_text}>
@@ -555,6 +584,7 @@ function ChooseLendingAsset() {
               })}
           </div>
         )}
+        {/* <GasStation gasLimit={parseUnits(gasLimit || "0", "wei")} /> */}
       </FlowLayout>
     </div>
   );

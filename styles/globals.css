@@ -40,6 +40,10 @@ a {
   padding: 8px;
 }
 
+.MuiList-root {
+  border: 1px solid #3F424F;
+}
+
 .MuiTabs-scroller>span {
   display: none;
 }
