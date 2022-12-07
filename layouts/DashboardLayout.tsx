@@ -19,20 +19,28 @@ import HelpDrawer from "../components/HelpDrawer";
 import { HelpDrawerContextProvider } from "../contexts/HelpDrawerContextProvider";
 import { useRouter } from "next/router";
 import Switch from "@mui/material/Switch";
+import { getMarketInfoById, MarketLogo } from "src/components/MarketSwitcher";
+import { ListItemText } from "@mui/material";
+import { CustomMarket } from "src/ui-config/marketsConfig";
+import { availableMarkets } from "src/utils/marketsAndNetworksConfig";
+import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
 interface Props {
   children?: ReactNode;
 }
-type Anchor = "top" | "left" | "bottom" | "right";
-
-const HelpDrawerContext = createContext({});
+enum SelectedMarketVersion {
+  V2,
+  V3,
+}
 function DashboardLayout({ children }: Props) {
   const router = useRouter();
   // ! Local states
-  const [selectedMarket, setSelectedMarket] = useState("");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedMarket(event.target.value);
-  };
+  // const [selectedMarket, setSelectedMarket] = useState("");
+  const { currentMarket, setCurrentMarket } = useProtocolDataContext();
+  const [selectedMarketVersion, setSelectedMarketVersion] =
+    useState<SelectedMarketVersion>(SelectedMarketVersion.V3);
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setSelectedMarket(event.target.value);
+  // };
   const testnetsEnabledId = "testnetsEnabled";
   const [testnetsEnabled, setTestnetsMode] = useState(false);
   useEffect(() => {
@@ -46,13 +54,27 @@ function DashboardLayout({ children }: Props) {
     setTestnetsMode(!testnetsEnabled);
     window.localStorage.setItem(testnetsEnabledId, newState ? "true" : "false");
     // Set window.location to trigger a page reload when navigating to the the dashboard
-    window.location.reload()
+    window.location.reload();
   };
-  const label = {
-    inputProps: {
-      "aria-label": "Testnet",
-      label: "Testnet",
-    },
+  const getMarketHelpData = (marketName: string) => {
+    const testChains = [
+      "Görli",
+      "Ropsten",
+      "Mumbai",
+      "Fuji",
+      "Testnet",
+      "Kovan",
+      "Rinkeby",
+    ];
+    const arrayName = marketName.split(" ");
+    const testChainName = arrayName.filter((el) => testChains.indexOf(el) > -1);
+    const marketTitle = arrayName
+      .filter((el) => !testChainName.includes(el))
+      .join(" ");
+    return {
+      name: marketTitle,
+      testChainName: testChainName[0],
+    };
   };
   return (
     <div className={styles.container}>
@@ -132,12 +154,70 @@ function DashboardLayout({ children }: Props) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={selectedMarket}
-                      onChange={handleChange}
+                      value={currentMarket}
+                      onChange={(e) =>
+                        setCurrentMarket(
+                          e.target.value as unknown as CustomMarket
+                        )
+                      }
                       label="Market"
-                      sx={{ color: "#ffffff" }}
+                      sx={{
+                        border: "none",
+                        color: "#ffffff",
+                        display: "flex",
+                        marginRight: "10px",
+                        "&::before": { border: "none" },
+                        "> div": {
+                          display: "flex",
+                          "> div": { margin: "auto 5px" },
+                        },
+                      }}
                     >
-                      <MenuItem value={"Polygon 1"}>
+                      {availableMarkets.map((marketId: CustomMarket) => {
+                        const { market, network } = getMarketInfoById(marketId);
+                        const marketNaming = getMarketHelpData(
+                          market.marketTitle
+                        );
+                        return (
+                          <MenuItem
+                            key={marketId}
+                            data-cy={`marketSelector_${marketId}`}
+                            value={marketId}
+                            sx={{
+                              ".MuiListItemIcon-root": { minWidth: "unset" },
+                              color: "#ffffff",
+                              "&:hover": { backgroundColor: "#2D3347" },
+                              display:
+                                (market.v3 &&
+                                  selectedMarketVersion ===
+                                    SelectedMarketVersion.V2) ||
+                                (!market.v3 &&
+                                  selectedMarketVersion ===
+                                    SelectedMarketVersion.V3)
+                                  ? "none"
+                                  : "flex",
+                            }}
+                          >
+                            <MarketLogo
+                              size={32}
+                              logo={network.networkLogoPath}
+                              testChainName={marketNaming.testChainName}
+                            />
+                            <ListItemText sx={{ mr: 0 }}>
+                              {marketNaming.name} {market.isFork ? "Fork" : ""}
+                            </ListItemText>
+                            <ListItemText sx={{ textAlign: "right" }}>
+                              <Typography
+                                color="text.muted"
+                                variant="description"
+                              >
+                                {marketNaming.testChainName}
+                              </Typography>
+                            </ListItemText>
+                          </MenuItem>
+                        );
+                      })}
+                      {/* <MenuItem value={"Polygon 1"}>
                         <Image
                           src="/icons_svg/polygon_icon.svg"
                           alt="Polygon"
@@ -166,7 +246,7 @@ function DashboardLayout({ children }: Props) {
                           style={{ marginRight: "8px" }}
                         />{" "}
                         Polygon 3
-                      </MenuItem>
+                      </MenuItem> */}
                     </Select>
                   </FormControl>
                   <ConnectWallet buttonText={"Connect Wallet"} />

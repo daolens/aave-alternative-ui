@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -7,22 +7,33 @@ import { WalletModal } from "src/components/WalletConnection/WalletModal";
 import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
 import { textCenterEllipsis } from "src/helpers/text-center-ellipsis";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
+import { Typography } from "@mui/material";
 interface Props {
   buttonText?: string;
-  
 }
 function ConnectWallet({ buttonText }: Props) {
+  // ! Hooks
+  const router = useRouter();
+  // ! Local states
+  const [showDrowpdown, setShowDrowpdown] = useState(false);
+  // ! Contexts
   const { setWalletModalOpen } = useWalletModalContext();
   const { connected, currentAccount, disconnectWallet } = useWeb3Context();
   const { currentNetworkConfig } = useProtocolDataContext();
-  const router = useRouter();
+  const handleSwitchWallet = (): void => {
+    setWalletModalOpen(true);
+    setShowDrowpdown(false);
+  };
   return (
     <>
       <Button
         variant="contained"
         onClick={
           connected
-            ? () => disconnectWallet()
+            ? () => {
+                setShowDrowpdown(!showDrowpdown);
+                // disconnectWallet();
+              }
             : () => setWalletModalOpen(true)
         }
         startIcon={
@@ -47,9 +58,82 @@ function ConnectWallet({ buttonText }: Props) {
             ? "#3F424F"
             : "linear-gradient(55.94deg, #30BAC6 -29.83%, #9A4386 62.81%)",
           textTransform: "none",
+          position: "relative",
         }}
       >
-        {connected ? textCenterEllipsis(currentAccount, 4, 4) : buttonText}
+        {connected ? textCenterEllipsis(currentAccount, 6, 6) : buttonText}
+        {connected && (
+          <Image
+            src="/icons_svg/down_icon_drowpdown.svg"
+            alt="wallet_icon"
+            height={12}
+            width={12}
+            style={{ marginLeft: "5px" }}
+          />
+        )}
+        {showDrowpdown && (
+          <div
+            style={{
+              position: "absolute",
+              color: "#ffffff",
+              bottom: "-255%",
+              width: "100%",
+              borderRadius: "4px",
+              backgroundColor: "#2A2E3F",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <Button sx={{ width: "100%" }} onClick={handleSwitchWallet}>
+              <Image
+                src="/icons_svg/wallet_icon.svg"
+                alt="wallet_icon"
+                height={15}
+                width={15}
+                style={{ marginRight: "5px" }}
+              />
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  padding: "8px 5px",
+                  // "&:hover": { backgroundColor: "#2D3347" },
+                  width: "100%",
+                  textAlign: "left",
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "8px",
+                }}
+              >
+                Switch network
+              </Typography>
+            </Button>
+
+            <Button sx={{ width: "100%" }} onClick={disconnectWallet}>
+              <Image
+                src="/icons_svg/simple_cross.svg"
+                alt="wallet_icon"
+                height={12}
+                width={12}
+                style={{ marginRight: "5px" }}
+              />
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  padding: "8px 5px",
+                  // "&:hover": { backgroundColor: "#2D3347" },
+                  width: "100%",
+                  textAlign: "left",
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "8px",
+                }}
+              >
+                Disconnect wallet
+              </Typography>
+            </Button>
+          </div>
+        )}
       </Button>
       <WalletModal />
     </>
