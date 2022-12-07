@@ -15,7 +15,7 @@ interface Props {
     | ((event: SelectChangeEvent<string>, child: React.ReactNode) => void)
     | undefined;
   updateAmount?: React.ChangeEventHandler<HTMLInputElement> | undefined;
-  availableReserves?: Array<object> ;
+  availableReserves?: Array<object>;
 }
 function AssetAmountSelection({
   selectedAmount,
@@ -31,22 +31,27 @@ function AssetAmountSelection({
           id="demo-simple-select-standard-label"
           sx={{ color: "#ffffff" }}
         >
-          Choose asset to lend
+          Choose asset to borrow
         </InputLabel>
         <Select
           labelId="demo-simple-select-standard-label"
           id="demo-simple-select-standard"
           value={selectedAsset}
           onChange={updateAsset}
-          label="Choose asset to lend"
-          sx={{ color: "#ffffff" }}
+          label="Choose asset to borrow"
+          sx={{
+            color: "#ffffff",
+            "&::before": { border: "none" },
+            "&:hover": { border: "none" },
+          }}
         >
           {/* <div className={styles.table_container}> */}
           <div className={styles.table_container__head}>
             <span>Asset name</span>
             <span>Annual interest rate</span>
           </div>
-          {availableReserves && availableReserves.length > 0 &&
+          {availableReserves &&
+            availableReserves.length > 0 &&
             availableReserves?.map((singleRow: emptyObject, index: number) => {
               return (
                 <MenuItem

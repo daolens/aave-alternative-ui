@@ -167,6 +167,7 @@ function DashboardLayout({ children }: Props) {
                         display: "flex",
                         marginRight: "10px",
                         "&::before": { border: "none" },
+                        "&:hover": { border: "none" },
                         "> div": {
                           display: "flex",
                           "> div": { margin: "auto 5px" },
