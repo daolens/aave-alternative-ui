@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode, useContext } from "react";
 import HelpButton from "../components/buttons/HelpButton";
 import styles from "../styles/layoutStyles/flowLayout.module.css";
 import theme from "../themes/mui_theme";
@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import BackButton from "../components/buttons/BackButton";
 import ProceedButton from "../components/buttons/ProceedButton";
+import { HelpDrawerContext } from "contexts/HelpDrawerContextProvider";
 interface Props {
   children?: ReactNode;
   sectionTitle?: string;
@@ -25,6 +26,7 @@ function FlowLayout({
   clickHandle,
   isLoading,
 }: Props) {
+  const drawerContext = useContext(HelpDrawerContext);
   return (
     <div className={styles.container}>
       <div className={styles.container_children}>
@@ -66,8 +68,9 @@ function FlowLayout({
                 color={"link_button_color" as any}
                 sx={{ textTransform: "none" }}
                 variant="text"
+                onClick={drawerContext.toggleDrawer("right", true) as any}
               >
-                Whats is Aave?
+                What is Aave?
               </Button>
             </ThemeProvider>
             <ThemeProvider theme={theme}>
@@ -75,6 +78,7 @@ function FlowLayout({
                 color={"link_button_color" as any}
                 sx={{ textTransform: "none" }}
                 variant="text"
+                onClick={drawerContext.toggleDrawer("right", true) as any}
               >
                 What’s a wallet? Help me setup
               </Button>
