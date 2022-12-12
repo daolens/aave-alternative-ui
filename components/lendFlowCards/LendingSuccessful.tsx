@@ -43,12 +43,7 @@ function LendingSuccessful() {
       });
   }, [poolReserve]);
 
-  // const addToken: ERC20TokenType = {
-  //   address: poolReserve.aTokenAddress,
-  //   symbol: poolReserve.iconSymbol,
-  //   decimals: poolReserve.decimals,
-  //   aToken: true,
-  // };
+//  console.log("poolReserve",poolReserve)
 
   return (
     <div className={styles.container}>
@@ -74,7 +69,7 @@ function LendingSuccessful() {
           <Image
             src={
               poolReserve
-                ? `/icons/tokens/${poolReserve.name.toLowerCase()}.svg`
+                ? `/icons/tokens/${poolReserve.iconSymbol.toLowerCase()}.svg`
                 : "/icons_svg/tokens/eth_icon.svg"
             }
             alt="eth_icon"

@@ -60,7 +60,7 @@ function BorrowingSuccessful() {
           <Image
             src={
               poolReserve
-                ? `/icons/tokens/${poolReserve.name.toLowerCase()}.svg`
+                ? `/icons/tokens/${poolReserve.iconSymbol.toLowerCase()}.svg`
                 : "/icons_svg/tokens/eth_icon.svg"
             }
             alt="eth_icon"
