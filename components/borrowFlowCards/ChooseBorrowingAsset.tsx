@@ -36,10 +36,12 @@ import { useTransactionHandler } from "src/helpers/useTransactionHandler";
 import { isEmpty } from "lodash";
 import { TxAction } from "src/ui-config/errorMapping";
 import { useModalContext } from "src/hooks/useModal";
+import { useRouter } from "next/router";
 export enum ErrorType {
   CAP_REACHED,
 }
 function ChooseBorrowingAsset() {
+  const router = useRouter();
   // ! Regex ******************************************************************************************
   const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
   // ! Contexts ******************************************************************************************
@@ -51,7 +53,7 @@ function ChooseBorrowingAsset() {
   const {
     txError,
     retryWithApproval,
-    mainTxState: supplyTxState,
+    mainTxState: borrowTxState,
     close: clearModalContext,
     gasLimit,
   } = useModalContext();
@@ -182,7 +184,21 @@ function ChooseBorrowingAsset() {
     skip: !selectedAmount || selectedAmount === "0" || blocked,
     deps: [selectedAmount, interestRateMode],
   });
+  // console.log("currentAssetDetails.underlyingAsset",currentAssetDetails.underlyingAsset)
   // ! Effects ******************************************************************************************
+  useEffect(() => {
+    // console.log("supplyTxState", supplyTxState);
+    if (borrowTxState.success) {
+      router.push({
+        pathname: "/borrow/success",
+        query: {
+          underlyingAsset: currentAssetDetails.underlyingAsset,
+          amount: selectedAmount,
+        },
+      });
+      clearModalContext();
+    }
+  }, [borrowTxState]);
   useEffect(() => {
     setAmount(selectedAmount);
   }, [selectedAmount]);
@@ -431,13 +447,17 @@ function ChooseBorrowingAsset() {
   const approvalParams = getApprovalParams();
   const borrowAsset = () => {
     if (!selectedAmount) return alert("Add an amount greater than 0");
-    const foundAsset: any = supplyReserves.find((singleAsset: emptyObject) => {
-      return singleAsset.id == selectedAsset;
-    });
-    // console.log("foundAsset", foundAsset);
-    if (!foundAsset) return alert("Insufficient funds in your wallet");
-    if (+foundAsset.walletBalance < +selectedAmount)
-      return alert("Insufficient funds in your wallet");
+    if (+selectedAmount > +maxAmountToBorrow)
+      return alert(
+        `The max amount you can borrow is equivalent to $${maxAmountToBorrow}`
+      );
+    // const foundAsset: any = supplyReserves.find((singleAsset: emptyObject) => {
+    //   return singleAsset.id == selectedAsset;
+    // });
+    // // console.log("foundAsset", foundAsset);
+    // if (!foundAsset) return alert("Insufficient funds in your wallet");
+    // if (+foundAsset.walletBalance < +selectedAmount)
+    //   return alert("Insufficient funds in your wallet");
     return approvalParams && approvalParams.handleClick
       ? approvalParams.handleClick()
       : action();
@@ -460,6 +480,7 @@ function ChooseBorrowingAsset() {
         }
         proceedButtonText="Borrow"
         clickHandle={borrowAsset}
+        isLoading={loadingTxns || borrowTxState.loading}
       >
         <AssetAmountSelection
           selectedAmount={selectedAmount}

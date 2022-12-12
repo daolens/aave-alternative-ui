@@ -61,7 +61,7 @@ function LendingSuccessful() {
         />
         <span className={styles.container_top_title}>Awesome!</span>
         <span className={styles.container_top_subtitle}>
-          You lent {amount} ETH{" "}
+          You lent {amount} {poolReserve?.name}{" "}
           {addToken?.symbol && !/_/.test(addToken.symbol) && (
             <Base64Token
               symbol={addToken.symbol}
@@ -72,7 +72,11 @@ function LendingSuccessful() {
         </span>
         <div className={styles.lending_receipt_container}>
           <Image
-            src="/icons_svg/tokens/eth_icon.svg"
+            src={
+              poolReserve
+                ? `/icons/tokens/${poolReserve.name.toLowerCase()}.svg`
+                : "/icons_svg/tokens/eth_icon.svg"
+            }
             alt="eth_icon"
             height={32}
             width={32}
