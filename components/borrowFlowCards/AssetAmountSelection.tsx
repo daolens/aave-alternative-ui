@@ -4,18 +4,21 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import BigNumber from "bignumber.js";
 import borrowingAssetData from "../../store/staticData/borrowingAssetDetails.json";
 import { emptyObject } from "src/helpers/types";
 import { shortenAPY } from "src/helpers/shortenStrings";
+import { USD_DECIMALS, valueToBigNumber } from "@aave/math-utils";
+import { useAppDataContext } from "src/hooks/app-data-provider/useAppDataProvider";
 interface Props {
   selectedAsset?: string;
-  selectedAmount: number;
+  selectedAmount: string;
   updateAsset?:
     | ((event: SelectChangeEvent<string>, child: React.ReactNode) => void)
     | undefined;
   updateAmount?: React.ChangeEventHandler<HTMLInputElement> | undefined;
   availableReserves?: Array<object>;
+  poolReserve?: any;
 }
 function AssetAmountSelection({
   selectedAmount,
@@ -23,7 +26,16 @@ function AssetAmountSelection({
   updateAsset,
   updateAmount,
   availableReserves,
+  poolReserve,
 }: Props) {
+  // const { marketReferencePriceInUsd, user } = useAppDataContext();
+  // const amountIntEth = new BigNumber(selectedAmount).multipliedBy(
+  //   poolReserve?.formattedPriceInMarketReferenceCurrency
+  // );
+  const usdValue = poolReserve
+    ? valueToBigNumber(selectedAmount).multipliedBy(poolReserve.priceInUSD)
+    : "";
+
   return (
     <div className={styles.container}>
       <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
@@ -35,7 +47,7 @@ function AssetAmountSelection({
         </InputLabel>
         <Select
           labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
+          id="lend_asset_selection_dropdown"
           value={selectedAsset}
           onChange={updateAsset}
           label="Choose asset to borrow"
@@ -60,7 +72,11 @@ function AssetAmountSelection({
                   className={styles.table_container__data}
                 >
                   <span>{singleRow.name}</span>
-                  <span>{shortenAPY(singleRow.supplyAPY)}</span>
+                  <span>
+                    {shortenAPY(
+                      singleRow.stableBorrowAPY // only stable borrowing as of now
+                    )}
+                  </span>
                 </MenuItem>
               );
             })}
@@ -70,7 +86,7 @@ function AssetAmountSelection({
       {selectedAsset && (
         <div className={styles.amount_input_container}>
           <input
-            placeholder="Enter amount to lend"
+            placeholder="Enter amount to borrow"
             className={styles.amount_input_container__input}
             aria-label="amount-input"
             type="text"
@@ -78,7 +94,7 @@ function AssetAmountSelection({
             onChange={updateAmount}
           />
           <span className={styles.amount_input_container__dollar}>
-            ${selectedAmount * 0.5}
+            {selectedAmount && <>${usdValue.toString(10)}</>}
           </span>
         </div>
       )}

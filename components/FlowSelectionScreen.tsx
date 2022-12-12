@@ -5,7 +5,7 @@ import FlowLayout from "../layouts/FlowLayout";
 import styles from "../styles/componentStyles/connectWalletScreen.module.css";
 import TitleSubtitleCard from "./cards/TitleSubtitleCard";
 function FlowSelectionScreen() {
-    const router=useRouter()
+  const router = useRouter();
   return (
     <div className={styles.container}>
       <FlowLayout
@@ -21,7 +21,9 @@ function FlowSelectionScreen() {
         <TitleSubtitleCard
           title="Earn interest"
           subTitle="Deposit your crypto to the lending pool and earn interest"
-          clickHandler={() => {router.push("/lend/asset")}}
+          clickHandler={() => {
+            router.push("/lend/asset");
+          }}
           icon={
             <Image
               src="/icons_svg/increase_icon_green.svg"
@@ -34,7 +36,9 @@ function FlowSelectionScreen() {
         <TitleSubtitleCard
           title="Borrow"
           subTitle="Get instant overcollateralized crypto loans for trading"
-          clickHandler={() => {router.push("/borrow/cannot-borrow/")}}
+          clickHandler={() => {
+            router.push("/borrow/asset");
+          }}
           icon={
             <Image
               src="/icons_svg/decrease_icon_purple.svg"

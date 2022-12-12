@@ -1,24 +1,36 @@
-import { ReserveIncentiveResponse } from '@aave/math-utils/dist/esm/formatters/incentive/calculate-reserve-incentives';
-import { CheckIcon, ExclamationIcon } from '@heroicons/react/outline';
-import { ArrowNarrowRightIcon } from '@heroicons/react/solid';
-import { Trans } from '@lingui/macro';
-import { Box, FormControlLabel, SvgIcon, Switch, Typography } from '@mui/material';
-import { parseUnits } from 'ethers/lib/utils';
-import React, { ReactNode } from 'react';
-import { CollateralType } from 'src/helpers/types';
+import { ReserveIncentiveResponse } from "@aave/math-utils/dist/esm/formatters/incentive/calculate-reserve-incentives";
+import { CheckIcon, ExclamationIcon } from "@heroicons/react/outline";
+import { ArrowNarrowRightIcon } from "@heroicons/react/solid";
+import { Trans } from "@lingui/macro";
+import {
+  Box,
+  FormControlLabel,
+  SvgIcon,
+  Switch,
+  Typography,
+} from "@mui/material";
+import { parseUnits } from "ethers/lib/utils";
+import React, { ReactNode } from "react";
+import { CollateralType } from "src/helpers/types";
 
-import { HealthFactorNumber } from '../../HealthFactorNumber';
-import { IncentivesButton } from '../../incentives/IncentivesButton';
-import { FormattedNumber, FormattedNumberProps } from '../../primitives/FormattedNumber';
-import { Row } from '../../primitives/Row';
-import { TokenIcon } from '../../primitives/TokenIcon';
-import { GasStation } from '../GasStation/GasStation';
+import { HealthFactorNumber } from "../../HealthFactorNumber";
+import { IncentivesButton } from "../../incentives/IncentivesButton";
+import {
+  FormattedNumber,
+  FormattedNumberProps,
+} from "../../primitives/FormattedNumber";
+import { Row } from "../../primitives/Row";
+import { TokenIcon } from "../../primitives/TokenIcon";
+import { GasStation } from "../GasStation/GasStation";
 
 export interface TxModalDetailsProps {
   gasLimit?: string;
 }
 
-export const TxModalDetails: React.FC<TxModalDetailsProps> = ({ gasLimit, children }:any) => {
+export const TxModalDetails: React.FC<TxModalDetailsProps> = ({
+  gasLimit,
+  children,
+}: any) => {
   return (
     <Box sx={{ pt: 5 }}>
       <Typography sx={{ mb: 1 }} color="text.secondary">
@@ -29,8 +41,8 @@ export const TxModalDetails: React.FC<TxModalDetailsProps> = ({ gasLimit, childr
         sx={(theme) => ({
           p: 3,
           border: `1px solid ${theme.palette.divider}`,
-          borderRadius: '4px',
-          '.MuiBox-root:last-of-type': {
+          borderRadius: "4px",
+          ".MuiBox-root:last-of-type": {
             mb: 0,
           },
         })}
@@ -38,15 +50,15 @@ export const TxModalDetails: React.FC<TxModalDetailsProps> = ({ gasLimit, childr
         {children}
       </Box>
 
-      <GasStation gasLimit={parseUnits(gasLimit || '0', 'wei')} />
+      <GasStation gasLimit={parseUnits(gasLimit || "0", "wei")} />
     </Box>
   );
 };
 
 interface DetailsNumberLineProps extends FormattedNumberProps {
   description: ReactNode;
-  value: FormattedNumberProps['value'];
-  futureValue?: FormattedNumberProps['value'];
+  value: FormattedNumberProps["value"];
+  futureValue?: FormattedNumberProps["value"];
   numberPrefix?: ReactNode;
   iconSymbol?: string;
 }
@@ -61,16 +73,22 @@ export const DetailsNumberLine = ({
 }: DetailsNumberLineProps) => {
   return (
     <Row caption={description} captionVariant="description" mb={4}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {iconSymbol && <TokenIcon symbol={iconSymbol} sx={{ mr: 1, fontSize: '16px' }} />}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        {iconSymbol && (
+          <TokenIcon symbol={iconSymbol} sx={{ mr: 1, fontSize: "16px" }} />
+        )}
         {numberPrefix && <Typography sx={{ mr: 1 }}>{numberPrefix}</Typography>}
         <FormattedNumber value={value} variant="secondary14" {...rest} />
         {futureValue && (
           <>
-            <SvgIcon color="primary" sx={{ fontSize: '14px', mx: 1 }}>
+            <SvgIcon color="primary" sx={{ fontSize: "14px", mx: 1 }}>
               <ArrowNarrowRightIcon />
             </SvgIcon>
-            <FormattedNumber value={futureValue} variant="secondary14" {...rest} />
+            <FormattedNumber
+              value={futureValue}
+              variant="secondary14"
+              {...rest}
+            />
           </>
         )}
       </Box>
@@ -100,39 +118,68 @@ export const DetailsNumberLineWithSub = ({
   color,
 }: DetailsNumberLineWithSubProps) => {
   return (
-    <Row caption={description} captionVariant="description" mb={4} align="flex-start">
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Row
+      caption={description}
+      captionVariant="description"
+      mb={4}
+      align="flex-start"
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           {value && (
             <>
-              <FormattedNumber value={value} variant="secondary14" color={color} />
+              <FormattedNumber
+                value={value}
+                variant="secondary14"
+                color={color}
+              />
               {!hideSymbolSuffix && (
                 <Typography ml={1} variant="secondary14">
                   {symbol}
                 </Typography>
               )}
-              <SvgIcon color="primary" sx={{ fontSize: '14px', mx: 1 }}>
+              <SvgIcon color="primary" sx={{ fontSize: "14px", mx: 1 }}>
                 <ArrowNarrowRightIcon />
               </SvgIcon>
             </>
           )}
-          <FormattedNumber value={futureValue} variant="secondary14" color={color} />
+          <FormattedNumber
+            value={futureValue}
+            variant="secondary14"
+            color={color}
+          />
           {!hideSymbolSuffix && (
             <Typography ml={1} variant="secondary14">
               {symbol}
             </Typography>
           )}
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           {valueUSD && (
             <>
-              <FormattedNumber value={valueUSD} variant="helperText" compact symbol="USD" />
-              <SvgIcon color="primary" sx={{ fontSize: '14px', mx: 1 }}>
+              <FormattedNumber
+                value={valueUSD}
+                variant="helperText"
+                compact
+                symbol="USD"
+              />
+              <SvgIcon color="primary" sx={{ fontSize: "14px", mx: 1 }}>
                 <ArrowNarrowRightIcon />
               </SvgIcon>
             </>
           )}
-          <FormattedNumber value={futureValueUSD} variant="helperText" compact symbol="USD" />
+          <FormattedNumber
+            value={futureValueUSD}
+            variant="helperText"
+            compact
+            symbol="USD"
+          />
         </Box>
       </Box>
     </Row>
@@ -143,13 +190,19 @@ export interface DetailsCollateralLine {
   collateralType: CollateralType;
 }
 
-export const DetailsCollateralLine = ({ collateralType }: DetailsCollateralLine) => {
+export const DetailsCollateralLine = ({
+  collateralType,
+}: DetailsCollateralLine) => {
   return (
-    <Row caption={<Trans>Collateralization</Trans>} captionVariant="description" mb={4}>
-      <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+    <Row
+      caption={<Trans>Collateralization</Trans>}
+      captionVariant="description"
+      mb={4}
+    >
+      <Box sx={{ display: "inline-flex", alignItems: "center" }}>
         {collateralType === CollateralType.UNAVAILABLE && (
           <>
-            <SvgIcon sx={{ color: 'error.main', fontSize: 16, mr: '2px' }}>
+            <SvgIcon sx={{ color: "error.main", fontSize: 16, mr: "2px" }}>
               <ExclamationIcon />
             </SvgIcon>
             <Typography variant="description" color="error.main">
@@ -159,7 +212,7 @@ export const DetailsCollateralLine = ({ collateralType }: DetailsCollateralLine)
         )}
         {collateralType === CollateralType.ENABLED && (
           <>
-            <SvgIcon sx={{ color: 'success.main', fontSize: 16, mr: '2px' }}>
+            <SvgIcon sx={{ color: "success.main", fontSize: 16, mr: "2px" }}>
               <CheckIcon />
             </SvgIcon>
             <Typography variant="description" color="success.main">
@@ -169,7 +222,7 @@ export const DetailsCollateralLine = ({ collateralType }: DetailsCollateralLine)
         )}
         {collateralType === CollateralType.ISOLATED_ENABLED && (
           <>
-            <SvgIcon sx={{ color: 'warning.main', fontSize: 16, mr: '2px' }}>
+            <SvgIcon sx={{ color: "warning.main", fontSize: 16, mr: "2px" }}>
               <CheckIcon />
             </SvgIcon>
             <Typography variant="description" color="warning.main">
@@ -206,16 +259,28 @@ export const DetailsIncentivesLine = ({
   futureIncentives,
   futureSymbol,
 }: DetailsIncentivesLineProps) => {
-  if (!incentives || incentives.filter((i) => i.incentiveAPR !== '0').length === 0) return null;
+  if (
+    !incentives ||
+    incentives.filter((i) => i.incentiveAPR !== "0").length === 0
+  )
+    return null;
   return (
-    <Row caption={<Trans>Rewards APR</Trans>} captionVariant="description" mb={4} minHeight={24}>
+    <Row
+      caption={<Trans>Rewards APR</Trans>}
+      captionVariant="description"
+      mb={4}
+      minHeight={24}
+    >
       <IncentivesButton incentives={incentives} symbol={symbol} />
       {futureSymbol && (
         <>
-          <SvgIcon color="primary" sx={{ fontSize: '14px', mx: 1 }}>
+          <SvgIcon color="primary" sx={{ fontSize: "14px", mx: 1 }}>
             <ArrowNarrowRightIcon />
           </SvgIcon>
-          <IncentivesButton incentives={futureIncentives} symbol={futureSymbol} />
+          <IncentivesButton
+            incentives={futureIncentives}
+            symbol={futureSymbol}
+          />
         </>
       )}
     </Row>
@@ -233,7 +298,7 @@ export const DetailsHFLine = ({
   futureHealthFactor,
   visibleHfChange,
 }: DetailsHFLineProps) => {
-  if (healthFactor === '-1' && futureHealthFactor === '-1') return null;
+  if (healthFactor === "-1" && futureHealthFactor === "-1") return null;
   return (
     <Row
       caption={<Trans>Health factor</Trans>}
@@ -241,18 +306,26 @@ export const DetailsHFLine = ({
       mb={4}
       align="flex-start"
     >
-      <Box sx={{ textAlign: 'right' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <Box sx={{ textAlign: "right" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
           <HealthFactorNumber value={healthFactor} variant="secondary14" />
 
           {visibleHfChange && (
             <>
-              <SvgIcon color="primary" sx={{ fontSize: '14px', mx: 1 }}>
+              <SvgIcon color="primary" sx={{ fontSize: "14px", mx: 1 }}>
                 <ArrowNarrowRightIcon />
               </SvgIcon>
 
               <HealthFactorNumber
-                value={Number(futureHealthFactor) ? futureHealthFactor : healthFactor}
+                value={
+                  Number(futureHealthFactor) ? futureHealthFactor : healthFactor
+                }
                 variant="secondary14"
               />
             </>
@@ -261,7 +334,7 @@ export const DetailsHFLine = ({
 
         <Typography variant="helperText" color="text.secondary">
           <Trans>Liquidation at</Trans>
-          {' <1.0'}
+          {" <1.0"}
         </Typography>
       </Box>
     </Row>
@@ -290,11 +363,11 @@ export const DetailsUnwrapSwitch = ({
             disableRipple
             checked={unwrapped}
             onClick={() => setUnWrapped(!unwrapped)}
-            data-cy={'wrappedSwitcher'}
+            data-cy={"wrappedSwitcher"}
           />
         }
         labelPlacement="end"
-        label={''}
+        label={""}
       />
       <Typography>{`Unwrap ${symbol} (to withdraw ${unwrappedSymbol})`}</Typography>
     </Row>

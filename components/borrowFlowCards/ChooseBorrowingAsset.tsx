@@ -13,29 +13,50 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import { emptyObject } from "src/helpers/types";
 import {
   ComputedReserveData,
+  ComputedUserReserveData,
   useAppDataContext,
 } from "src/hooks/app-data-provider/useAppDataProvider";
 import { useWalletBalances } from "src/hooks/app-data-provider/useWalletBalances";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
-import { USD_DECIMALS, valueToBigNumber } from "@aave/math-utils";
+import {
+  calculateHealthFactorFromBalancesBigUnits,
+  USD_DECIMALS,
+  valueToBigNumber,
+} from "@aave/math-utils";
 import BigNumber from "bignumber.js";
-import { API_ETH_MOCK_ADDRESS } from "@aave/contract-helpers";
+import { API_ETH_MOCK_ADDRESS, InterestRate } from "@aave/contract-helpers";
 import { fetchIconSymbolAndName } from "src/ui-config/reservePatches";
-import { shortenNumber } from "src/helpers/shortenStrings";
-interface assetData {
-  id?: string;
-  name?: string;
-  balance?: number;
-  interest_rate?: string;
-  icon_slug?: string;
+import { shortenAPY, shortenNumber } from "src/helpers/shortenStrings";
+import { Icon } from "@mui/material";
+import { DetailsHFLine } from "src/components/transactions/FlowCommons/TxModalDetails";
+import { getMaxAmountAvailableToBorrow } from "src/utils/getMaxAmountAvailableToBorrow";
+import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
+import { useRootStore } from "src/store/root";
+import { useTransactionHandler } from "src/helpers/useTransactionHandler";
+import { isEmpty } from "lodash";
+import { TxAction } from "src/ui-config/errorMapping";
+import { useModalContext } from "src/hooks/useModal";
+import { useRouter } from "next/router";
+export enum ErrorType {
+  CAP_REACHED,
 }
 function ChooseBorrowingAsset() {
-  // ! Regex
+  const router = useRouter();
+  // ! Regex ******************************************************************************************
   const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
-  // ! Contexts
-  const { reserves, marketReferencePriceInUsd, user } = useAppDataContext();
+  // ! Contexts ******************************************************************************************
+  const { reserves, marketReferencePriceInUsd, user, loading } =
+    useAppDataContext();
   const { walletBalances } = useWalletBalances();
-  const { currentNetworkConfig, currentChainId } = useProtocolDataContext();
+  const { currentNetworkConfig, currentChainId: marketChainId } =
+    useProtocolDataContext();
+  const {
+    txError,
+    retryWithApproval,
+    mainTxState: borrowTxState,
+    close: clearModalContext,
+    gasLimit,
+  } = useModalContext();
   const {
     bridge,
     isTestnet,
@@ -43,20 +64,151 @@ function ChooseBorrowingAsset() {
     name: networkName,
     networkLogoPath,
   } = currentNetworkConfig;
-  // ! Local states
+  const {
+    connected,
+    currentAccount,
+    disconnectWallet,
+    chainId: connectedChainId,
+    watchModeOnlyAddress,
+  } = useWeb3Context();
+  const borrow = useRootStore((state) => state.borrow);
+  // ! Local states ******************************************************************************************
   const [selectedAsset, setSelectedAsset] = useState("");
-  const [selectedAmount, setSelectedAmount] = useState(0);
+  const [selectedAmount, setSelectedAmount] = useState("");
   const [currentAssetDetails, setcurrentAssetDetails] = useState(
     {} as emptyObject
   );
   const [availableReserves, setAvailableReserves] = useState([]);
   const [supplyReserves, setSupplyReserves] = useState([]);
-  // ! Effects
+  const [_amount, setAmount] = useState("");
+  const [interestRateMode, setInterestRateMode] = useState<InterestRate>(
+    InterestRate.Variable
+  );
+  const [borrowUnWrapped, setBorrowUnWrapped] = useState(true);
+  // ! Variables ******************************************************************************************
+  const borrowPositions =
+    user?.userReservesData.reduce((acc, userReserve) => {
+      if (userReserve.variableBorrows !== "0") {
+        acc.push({
+          ...userReserve,
+          borrowRateMode: InterestRate.Variable,
+          reserve: {
+            ...userReserve.reserve,
+            ...(userReserve.reserve.isWrappedBaseAsset
+              ? fetchIconSymbolAndName({
+                  symbol: currentNetworkConfig.baseAssetSymbol,
+                  underlyingAsset: API_ETH_MOCK_ADDRESS.toLowerCase(),
+                })
+              : {}),
+          },
+        });
+      }
+      if (userReserve.stableBorrows !== "0") {
+        acc.push({
+          ...userReserve,
+          borrowRateMode: InterestRate.Stable,
+          reserve: {
+            ...userReserve.reserve,
+            ...(userReserve.reserve.isWrappedBaseAsset
+              ? fetchIconSymbolAndName({
+                  symbol: currentNetworkConfig.baseAssetSymbol,
+                  underlyingAsset: API_ETH_MOCK_ADDRESS.toLowerCase(),
+                })
+              : {}),
+          },
+        });
+      }
+      return acc;
+    }, [] as (ComputedUserReserveData & { borrowRateMode: InterestRate })[]) ||
+    [];
+  const poolReserve = reserves.find((reserve) => {
+    if (
+      currentAssetDetails.underlyingAsset?.toLowerCase() ===
+      API_ETH_MOCK_ADDRESS.toLowerCase()
+    )
+      return reserve.isWrappedBaseAsset;
+    return currentAssetDetails.underlyingAsset === reserve.underlyingAsset;
+  }) as ComputedReserveData;
+  const maxAmountToBorrow = poolReserve
+    ? getMaxAmountAvailableToBorrow(poolReserve, user, interestRateMode)
+    : "0";
+  const isMaxSelected = _amount === "-1";
+  const amount = isMaxSelected ? maxAmountToBorrow.toString(10) : _amount;
+  const amountToBorrowInUsd = poolReserve
+    ? valueToBigNumber(amount)
+        .multipliedBy(poolReserve.formattedPriceInMarketReferenceCurrency)
+        .multipliedBy(marketReferencePriceInUsd)
+        .shiftedBy(-USD_DECIMALS)
+    : "";
+
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency: user.totalCollateralUSD,
+    borrowBalanceMarketReferenceCurrency: valueToBigNumber(
+      user.totalBorrowsUSD
+    ).plus(amountToBorrowInUsd),
+    currentLiquidationThreshold: user.currentLiquidationThreshold,
+  });
+  const symbol =
+    poolReserve?.isWrappedBaseAsset && true
+      ? currentNetworkConfig.baseAssetSymbol
+      : poolReserve?.symbol;
+  const blockingError: ErrorType | undefined = undefined;
+  const blocked = blockingError !== undefined;
+  const poolAddress =
+    borrowUnWrapped && poolReserve?.isWrappedBaseAsset
+      ? API_ETH_MOCK_ADDRESS
+      : poolReserve?.underlyingAsset;
+  const requiredChainId = marketChainId;
+  const isWrongNetwork = connectedChainId !== requiredChainId;
+
+  const {
+    action,
+    loadingTxns,
+    mainTxState,
+    approval,
+    requiresApproval,
+    approvalTxState,
+  } = useTransactionHandler({
+    tryPermit: false,
+    handleGetTxns: async () => {
+      return borrow({
+        interestRateMode,
+        amount: selectedAmount,
+        reserve: poolAddress,
+        debtTokenAddress:
+          interestRateMode === InterestRate.Variable
+            ? poolReserve.variableDebtTokenAddress
+            : poolReserve.stableDebtTokenAddress,
+      });
+    },
+    skip: !selectedAmount || selectedAmount === "0" || blocked,
+    deps: [selectedAmount, interestRateMode],
+  });
+  // console.log("currentAssetDetails.underlyingAsset",currentAssetDetails.underlyingAsset)
+  // ! Effects ******************************************************************************************
+  useEffect(() => {
+    // console.log("supplyTxState", supplyTxState);
+    if (borrowTxState.success) {
+      router.push({
+        pathname: "/borrow/success",
+        query: {
+          underlyingAsset: currentAssetDetails.underlyingAsset,
+          amount: selectedAmount,
+        },
+      });
+      clearModalContext();
+    }
+  }, [borrowTxState]);
+  useEffect(() => {
+    setAmount(selectedAmount);
+  }, [selectedAmount]);
+
   useEffect(() => {
     if (selectedAsset) {
-      const found = borrowingAssetData.find(
-        (singleAsset) => singleAsset.id == selectedAsset
+      const found = availableReserves.find(
+        (singleAsset: emptyObject) => singleAsset.id == selectedAsset
       );
+      console.log("found asset", found);
       if (found) setcurrentAssetDetails(found);
       else setcurrentAssetDetails({});
       //   if (found) return found;
@@ -183,31 +335,132 @@ function ChooseBorrowingAsset() {
     setSupplyReserves(filteredSupplyReserves as any);
   }, [reserves]);
 
-  // ! Local handlers
+  // ! Local handlers ******************************************************************************************
   const handleAssetChange = (event: SelectChangeEvent) => {
-    setMaxBalance(0);
+    setMaxBalance("");
     setSelectedAsset(event.target.value);
   };
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("event.target.value", event.target.value);
+    // console.log("event.target.value", event.target.value);
     // if (decimalNumberRegex.test(event.target.value))
-    setSelectedAmount(+event.target.value);
+    setSelectedAmount(event.target.value);
   };
-  const setMaxBalance = (balance: number) => {
+  const setMaxBalance = (balance: string): any => {
     setSelectedAmount(balance);
   };
-  //   const fetchBalance = (assetId: string) => {
-  //     let found = walletAssetData.find(
-  //       (singleAsset) => singleAsset.id == assetId
-  //     );
-  //     if (found) return found.balance;
-  //     return 0;
-  //   };
- const fetchYearlyEarnings = () => {
-    const interest_rate = currentAssetDetails.supplyAPY;
-    if (Number(interest_rate))
-      return shortenNumber(selectedAmount * Number(interest_rate));
-    return 0;
+  const handleApproval = () => {
+    // console.log("reached here")
+    approval(`${selectedAmount}`, poolAddress);
+    // supply({
+    //   amountToSupply: `${selectedAmount}`,
+    //   isWrongNetwork,
+    //   poolAddress,
+    //   symbol,
+    //   blocked,
+    // })
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
+  };
+  const hasApprovalError =
+    requiresApproval &&
+    txError &&
+    txError.txAction === TxAction.APPROVAL &&
+    txError.actionBlocked;
+  const isAmountMissing = false;
+
+  function getMainParams() {
+    if (blocked)
+      return { disabled: true, content: <span>Supply {symbol}</span> };
+    if (
+      txError &&
+      txError.txAction === TxAction.GAS_ESTIMATION &&
+      txError.actionBlocked
+    )
+      return {
+        loading: false,
+        disabled: true,
+        content: <span>Supply {symbol}</span>,
+      };
+    if (
+      txError &&
+      txError.txAction === TxAction.MAIN_ACTION &&
+      txError.actionBlocked
+    )
+      return {
+        loading: false,
+        disabled: true,
+        content: <span>Supply {symbol}</span>,
+      };
+    if (isWrongNetwork)
+      return { disabled: true, content: <span>Wrong Network</span> };
+    if (isAmountMissing)
+      return { disabled: true, content: <span>Enter an amount</span> };
+    if (loadingTxns || isEmpty(mainTxState))
+      return { disabled: true, loading: true };
+    // if (hasApprovalError && handleRetry)
+    //   return { content: <Trans>Retry with approval</Trans>, handleClick: handleRetry };
+    if (mainTxState?.loading)
+      return {
+        loading: true,
+        disabled: true,
+        content: <span>Supplying {symbol}</span>,
+      };
+    if (requiresApproval && !approvalTxState?.success)
+      return { disabled: true, content: <span>Supply {symbol}</span> };
+    return { content: <span>Supply {symbol}</span>, handleClick: action };
+  }
+
+  function getApprovalParams() {
+    if (
+      !requiresApproval ||
+      isWrongNetwork ||
+      isAmountMissing ||
+      loadingTxns ||
+      hasApprovalError
+    )
+      return null;
+    if (approvalTxState?.loading)
+      return {
+        loading: true,
+        disabled: true,
+        content: <span>Approving {symbol}...</span>,
+      };
+    if (approvalTxState?.success)
+      return { disabled: true, content: <span>Approved</span> };
+    if (retryWithApproval)
+      return {
+        content: <span>Retry with approval</span>,
+        handleClick: handleApproval,
+      };
+    return {
+      content: <span>Approve to continue</span>,
+      handleClick: handleApproval,
+    };
+  }
+
+  const {
+    content,
+    disabled,
+    loading: mainLoading,
+    handleClick,
+  } = getMainParams();
+  const approvalParams = getApprovalParams();
+  const borrowAsset = () => {
+    if (!selectedAmount) return alert("Add an amount greater than 0");
+    if (+selectedAmount > +maxAmountToBorrow)
+      return alert(
+        `The max amount you can borrow is equivalent to $${maxAmountToBorrow}`
+      );
+    // const foundAsset: any = supplyReserves.find((singleAsset: emptyObject) => {
+    //   return singleAsset.id == selectedAsset;
+    // });
+    // // console.log("foundAsset", foundAsset);
+    // if (!foundAsset) return alert("Insufficient funds in your wallet");
+    // if (+foundAsset.walletBalance < +selectedAmount)
+    //   return alert("Insufficient funds in your wallet");
+    return approvalParams && approvalParams.handleClick
+      ? approvalParams.handleClick()
+      : action();
   };
   return (
     <div className={styles.container}>
@@ -226,7 +479,8 @@ function ChooseBorrowingAsset() {
           )
         }
         proceedButtonText="Borrow"
-        nextPath="/borrow/success"
+        clickHandle={borrowAsset}
+        isLoading={loadingTxns || borrowTxState.loading}
       >
         <AssetAmountSelection
           selectedAmount={selectedAmount}
@@ -234,18 +488,52 @@ function ChooseBorrowingAsset() {
           updateAsset={handleAssetChange}
           updateAmount={handleAmountChange}
           availableReserves={availableReserves}
+          poolReserve={poolReserve}
         />
-        {selectedAsset && (
-          <Divider
-            sx={{
-              color: "#A5A8B6",
-              margin: "20px 0",
-              "&::after": { borderTop: "thin dotted #3F424F" },
-              "&::before": { borderTop: "thin dotted #3F424F" },
-            }}
-          >
-            OR
-          </Divider>
+
+        <Divider
+          sx={{
+            color: "#A5A8B6",
+            margin: "20px 0",
+            "&::after": { borderTop: "thin dotted #3F424F" },
+            "&::before": { borderTop: "thin dotted #3F424F" },
+          }}
+        >
+          {selectedAsset ? " " : "Borrowed Assets"}
+        </Divider>
+
+        {!loading && borrowPositions?.length > 0 && !selectedAsset && (
+          <div className={styles.wallet_assets_container}>
+            {borrowPositions.map((singleToken: emptyObject, index) => {
+              return (
+                <WalletAssetDetails
+                  key={singleToken.underlyingAsset + singleToken.borrowRateMode}
+                  tokenName={singleToken.reserve.name}
+                  balanceTitle="Debt"
+                  tokenBalance={Number(
+                    singleToken.borrowRateMode === InterestRate.Variable
+                      ? singleToken.variableBorrowsUSD
+                      : singleToken.stableBorrowsUSD
+                  )}
+                  tokenInterestRate={shortenAPY(
+                    // singleToken.borrowRateMode === InterestRate.Variable
+                    //   ? singleToken.reserve.variableBorrowAPY
+                    //   : singleToken.reserve.stableBorrowAPY
+                    singleToken.reserve.stableBorrowAPY // ! Only stable for now
+                  )}
+                  tokenIcon={
+                    <Image
+                      src={`/icons/tokens/${singleToken.reserve.iconSymbol.toLowerCase()}.svg`}
+                      width={28}
+                      height={28}
+                      alt={`${singleToken.reserve.iconSymbol}_icon`}
+                    />
+                  }
+                  clickHandle={() => setSelectedAsset(singleToken.reserve.id)}
+                />
+              );
+            })}
+          </div>
         )}
         {selectedAsset ? (
           <div className={styles.selected_asset_details}>
@@ -276,13 +564,22 @@ function ChooseBorrowingAsset() {
             <div className={styles.selected_asset_details__container}>
               <span>Annual interest rate</span>
               <span style={{ fontSize: "24px", color: "#31C48D" }}>
-                {currentAssetDetails.interest_rate}
+                {shortenAPY(
+                  // currentAssetDetails.borrowRateMode === InterestRate.Variable
+                  //   ? currentAssetDetails.variableBorrowAPY
+                  //   : currentAssetDetails.stableBorrowAPY
+                  currentAssetDetails.stableBorrowAPY // ! Only stable for now
+                )}
               </span>
             </div>
             <div className={styles.selected_asset_details__container}>
-              <span>Credit health score</span>
+              <span>Credit health factor</span>
               <span style={{ fontSize: "24px", color: "#31C48D" }}>
-                {fetchYearlyEarnings()}
+                <DetailsHFLine
+                  visibleHfChange={!!_amount}
+                  healthFactor={user.healthFactor}
+                  futureHealthFactor={newHealthFactor.toString(10)}
+                />
               </span>
             </div>
           </div>

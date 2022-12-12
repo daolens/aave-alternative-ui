@@ -564,7 +564,8 @@ function ChooseLendingAsset() {
                   <WalletAssetDetails
                     key={`${singleToken.name} - ${index}`}
                     tokenName={singleToken.name}
-                    tokenBalance={+shortenLongNumber(singleToken.walletBalance)}
+                    balanceTitle="Wallet balance"
+                    tokenBalance={singleToken.walletBalance}
                     tokenInterestRate={shortenAPY(singleToken.supplyAPY)}
                     tokenIcon={
                       <Image
