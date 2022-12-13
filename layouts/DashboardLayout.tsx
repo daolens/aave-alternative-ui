@@ -20,7 +20,7 @@ import { HelpDrawerContextProvider } from "../contexts/HelpDrawerContextProvider
 import { useRouter } from "next/router";
 import Switch from "@mui/material/Switch";
 import { getMarketInfoById, MarketLogo } from "src/components/MarketSwitcher";
-import { ListItemText } from "@mui/material";
+import { Container, ListItemText, Menu } from "@mui/material";
 import { CustomMarket } from "src/ui-config/marketsConfig";
 import { availableMarkets } from "src/utils/marketsAndNetworksConfig";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
@@ -38,11 +38,19 @@ function DashboardLayout({ children }: Props) {
   const { currentMarket, setCurrentMarket } = useProtocolDataContext();
   const [selectedMarketVersion, setSelectedMarketVersion] =
     useState<SelectedMarketVersion>(SelectedMarketVersion.V3);
-  // const handleChange = (event: SelectChangeEvent) => {
-  //   setSelectedMarket(event.target.value);
-  // };
+
   const testnetsEnabledId = "testnetsEnabled";
   const [testnetsEnabled, setTestnetsMode] = useState(false);
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
   useEffect(() => {
     const testnetsEnabledLocalstorage =
       window.localStorage.getItem(testnetsEnabledId) === "true" || false;
@@ -89,7 +97,11 @@ function DashboardLayout({ children }: Props) {
             <link rel="icon" href="/favicon.ico" />
           </Head>
           <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" color="transparent">
+            <AppBar
+              position="static"
+              color="transparent"
+              sx={{ display: { xs: "none", md: "flex" } }}
+            >
               <Toolbar className={styles.toolbar}>
                 <div className={styles.toolbar_left}>
                   <Image
@@ -100,16 +112,16 @@ function DashboardLayout({ children }: Props) {
                     style={{ cursor: "pointer" }}
                     onClick={() => router.push("/")}
                   />
-                  <Typography
-                    className={styles.toolbar_left__typography}
-                    color="#ffffff"
-                    variant="h4"
-                    component="div"
-                    sx={{ flexGrow: 1 }}
-                    onClick={() => router.push("/")}
-                  >
-                    Home
-                  </Typography>
+                  {/* <Typography
+                      className={styles.toolbar_left__typography}
+                      color="#ffffff"
+                      variant="h4"
+                      component="div"
+                      sx={{ flexGrow: 1 }}
+                      onClick={() => router.push("/")}
+                    >
+                      Home
+                    </Typography> */}
                   {/* <Typography
                     className={styles.toolbar_left__typography}
                     color="#ffffff"
@@ -139,7 +151,11 @@ function DashboardLayout({ children }: Props) {
                   <HelpButton />
                   <FormControl
                     variant="standard"
-                    sx={{ m: 1, minWidth: 100, transform: "translateY(-5px)" }}
+                    sx={{
+                      m: 1,
+                      minWidth: 100,
+                      transform: "translateY(-5px)",
+                    }}
                   >
                     <InputLabel
                       id="demo-simple-select-standard-label"
@@ -251,6 +267,191 @@ function DashboardLayout({ children }: Props) {
                     </Select>
                   </FormControl>
                   <ConnectWallet buttonText={"Connect Wallet"} />
+                </div>
+              </Toolbar>
+            </AppBar>
+            <AppBar
+              position="static"
+              color="transparent"
+              sx={{ display: { xs: "flex", md: "none" } }}
+            >
+              <Toolbar className={styles.toolbar}>
+                <div className={styles.toolbar_left}>
+                  <Image
+                    src="/icons_svg/aave_logo.svg"
+                    alt="Aave"
+                    width={100}
+                    height={50}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => router.push("/")}
+                  />
+                </div>
+                <div className={styles.toolbar_right}>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleOpenNavMenu}
+                    color="inherit"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                    sx={{
+                      display: { xs: "block", md: "none" },
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: " 10px",
+                      }}
+                    >
+                      <Typography
+                        className={styles.toolbar_left__typography}
+                        color="#ffffff"
+                        variant="h4"
+                        component="div"
+                        sx={{
+                          flexGrow: 1,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          margin: "0 !important",
+                        }}
+                        // onClick={() => router.push("/")}
+                      >
+                        <span>Testnet</span>
+                        <Switch
+                          checked={testnetsEnabled}
+                          onChange={toggleTestnetsEnabled}
+                          inputProps={{ "aria-label": "controlled" }}
+                        />
+                      </Typography>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "1px",
+                          backgroundColor: "#3F424F",
+                        }}
+                      ></div>
+                      {/* <HelpButton /> */}
+                      <FormControl
+                        variant="standard"
+                        sx={{
+                          m: 1,
+                          minWidth: 100,
+                          // transform: "translateY(-5px)",
+                          margin: "10px 0 20px 0",
+                        }}
+                      >
+                        <InputLabel
+                          id="demo-simple-select-standard-label"
+                          sx={{
+                            color: "#ffffff",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          Markets
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-standard-label"
+                          id="demo-simple-select-standard"
+                          value={currentMarket}
+                          onChange={(e) =>
+                            setCurrentMarket(
+                              e.target.value as unknown as CustomMarket
+                            )
+                          }
+                          label="Market"
+                          sx={{
+                            border: "none",
+                            color: "#ffffff",
+                            display: "flex",
+                            marginRight: "10px",
+                            "&::before": { border: "none" },
+                            "&:hover": { border: "none" },
+                            "> div": {
+                              display: "flex",
+                              "> div": { margin: "auto 5px" },
+                            },
+                          }}
+                        >
+                          {availableMarkets.map((marketId: CustomMarket) => {
+                            const { market, network } =
+                              getMarketInfoById(marketId);
+                            const marketNaming = getMarketHelpData(
+                              market.marketTitle
+                            );
+                            return (
+                              <MenuItem
+                                key={marketId}
+                                data-cy={`marketSelector_${marketId}`}
+                                value={marketId}
+                                sx={{
+                                  ".MuiListItemIcon-root": {
+                                    minWidth: "unset",
+                                  },
+                                  color: "#ffffff",
+                                  "&:hover": { backgroundColor: "#2D3347" },
+                                  display:
+                                    (market.v3 &&
+                                      selectedMarketVersion ===
+                                        SelectedMarketVersion.V2) ||
+                                    (!market.v3 &&
+                                      selectedMarketVersion ===
+                                        SelectedMarketVersion.V3)
+                                      ? "none"
+                                      : "flex",
+                                }}
+                              >
+                                <MarketLogo
+                                  size={32}
+                                  logo={network.networkLogoPath}
+                                  testChainName={marketNaming.testChainName}
+                                />
+                                <ListItemText sx={{ mr: 0 }}>
+                                  {marketNaming.name}{" "}
+                                  {market.isFork ? "Fork" : ""}
+                                </ListItemText>
+                                <ListItemText sx={{ textAlign: "right" }}>
+                                  <Typography
+                                    color="text.muted"
+                                    variant="description"
+                                  >
+                                    {marketNaming.testChainName}
+                                  </Typography>
+                                </ListItemText>
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                       <div
+                        style={{
+                          width: "100%",
+                          height: "1px",
+                          backgroundColor: "#3F424F",
+                        }}
+                      ></div>
+                      <ConnectWallet buttonText={"Connect Wallet"} />
+                    </div>
+                  </Menu>
                 </div>
               </Toolbar>
             </AppBar>

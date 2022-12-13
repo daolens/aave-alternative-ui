@@ -6,7 +6,13 @@ interface Props {
   isWalletSet?: boolean;
 }
 function CustomBoxComponent({ children, isWalletSet }: Props) {
-  const matches = useMediaQuery("(max-width:700px)");
+  const matches1 = useMediaQuery("(max-width:900px)");
+  const matches2 = useMediaQuery("(max-width:600px)");
+  const getWidth = () => {
+    if (matches2) return "90%";
+    if (matches1) return "80%";
+    return "60%";
+  };
   return (
     <>
       {" "}
@@ -17,7 +23,7 @@ function CustomBoxComponent({ children, isWalletSet }: Props) {
           flexWrap: "wrap",
           backgroundColor: "#2A2E3F",
           height: "80%",
-          width: matches ? "80%" : "60%",
+          width: getWidth()
         }}
       >
         {children}

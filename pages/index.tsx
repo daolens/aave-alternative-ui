@@ -18,15 +18,22 @@ export default function Home() {
     if (loading) return;
     setIsLoading(false);
   }, [loading]);
-  if (windowSize && windowSize.width) {
-    return windowSize?.width < 1200 ? (
-      <MobileScreenMessage />
-    ) : (
-      <DashboardLayout>
-        <CustomBoxComponent>
-          {connected ? <FlowSelectionScreen /> : <ConnectWalletScreen />}
-        </CustomBoxComponent>
-      </DashboardLayout>
-    );
-  }
+  return (
+    <DashboardLayout>
+      <CustomBoxComponent>
+        {connected ? <FlowSelectionScreen /> : <ConnectWalletScreen />}
+      </CustomBoxComponent>
+    </DashboardLayout>
+  );
+  // if (windowSize && windowSize.width) {
+  //   return windowSize?.width < 1200 ? (
+  //     <MobileScreenMessage />
+  //   ) : (
+  //     <DashboardLayout>
+  //       <CustomBoxComponent>
+  //         {connected ? <FlowSelectionScreen /> : <ConnectWalletScreen />}
+  //       </CustomBoxComponent>
+  //     </DashboardLayout>
+  //   );
+  // }
 }
