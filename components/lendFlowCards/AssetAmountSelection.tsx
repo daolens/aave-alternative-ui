@@ -81,7 +81,7 @@ function AssetAmountSelection({
             {/* <div className={styles.table_container}> */}
             <div className={styles.table_container__head}>
               <span>Asset name</span>
-              <span>Annual interest rate</span>
+              <span>Annual Interest rate</span>
               <span>Wallet balance</span>
             </div>
             {availableReserves &&

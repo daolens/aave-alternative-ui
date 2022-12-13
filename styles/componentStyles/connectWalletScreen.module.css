@@ -32,3 +32,13 @@
     padding: 16px 32px;
     border-top: 1px solid #3F424F;
 }
+
+@media screen and (max-width:600px) {
+    .container_top__typography {
+        font-size: 20px;
+    }
+
+    .container_bottom {
+        padding: 8px 16px;
+    }
+}

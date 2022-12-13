@@ -12,13 +12,9 @@ export default function Home() {
     router.push("/lend/asset");
   }, []);
 
-  if (windowSize && windowSize.width) {
-    return windowSize?.width < 1200 ? (
-      <MobileScreenMessage />
-    ) : (
-      <DashboardLayout>
-        <CustomBoxComponent></CustomBoxComponent>
-      </DashboardLayout>
-    );
-  }
+  return (
+    <DashboardLayout>
+      <CustomBoxComponent></CustomBoxComponent>
+    </DashboardLayout>
+  );
 }

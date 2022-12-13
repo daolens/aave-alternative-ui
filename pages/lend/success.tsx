@@ -7,17 +7,11 @@ import CustomBoxComponent from "../../components/wrappers/CustomBoxComponent";
 import DashboardLayout from "../../layouts/DashboardLayout";
 
 export default function Home() {
-  const { windowSize } = useWindowSize();
-
-  if (windowSize && windowSize.width) {
-    return windowSize?.width < 1200 ? (
-      <MobileScreenMessage />
-    ) : (
-      <DashboardLayout>
-        <CustomBoxComponent>
-          <LendingSuccessful />
-        </CustomBoxComponent>
-      </DashboardLayout>
-    );
-  }
+  return (
+    <DashboardLayout>
+      <CustomBoxComponent>
+        <LendingSuccessful />
+      </CustomBoxComponent>
+    </DashboardLayout>
+  );
 }

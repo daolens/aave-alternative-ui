@@ -37,7 +37,11 @@
     line-height: 32px;
     color: #F4F2F2;
     margin-bottom: 32px;
+
+
 }
+
+
 
 .container_bottom {
     display: flex;
@@ -54,4 +58,19 @@
     justify-content: space-between;
     padding: 16px 32px;
     border-top: 1px solid #3F424F;
+}
+
+@media screen and (max-width:600px) {
+    .container_children__title {
+        font-size: 18px;
+        line-height: 26px;
+    }
+
+    .container_children {
+        padding: 0 16px;
+    }
+
+    .container_bottom {
+        padding: 8px 16px;
+    }
 }
