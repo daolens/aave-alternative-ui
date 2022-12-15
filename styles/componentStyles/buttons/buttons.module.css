@@ -26,6 +26,7 @@
     cursor: pointer;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
     border-radius: 8px;
+    position: relative;
 }
 
 .proceed_container span {
@@ -36,4 +37,16 @@
     font-size: 14px;
     line-height: 20px;
     color: #EAEBEF;
+}
+
+.proceed_tooltip {
+    position: absolute;
+    /* bottom: -100%; */
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background: #383D51;
 }

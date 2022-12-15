@@ -127,7 +127,13 @@ function ChooseLendingAsset() {
       return userReserve.reserve.isWrappedBaseAsset;
     return currentAssetDetails.underlyingAsset === userReserve.underlyingAsset;
   }) as ComputedUserReserveData;
-
+  const amountIntEth = new BigNumber(
+    +selectedAmount * currentAssetDetails?.supplyAPY
+  ).multipliedBy(poolReserve?.formattedPriceInMarketReferenceCurrency);
+  // TODO: is it correct to ut to -1 if user doesnt exist?
+  const amountInUsd = amountIntEth
+    .multipliedBy(marketReferencePriceInUsd)
+    .shiftedBy(-USD_DECIMALS);
   const symbol =
     poolReserve?.isWrappedBaseAsset && true
       ? currentNetworkConfig.baseAssetSymbol
@@ -468,7 +474,11 @@ function ChooseLendingAsset() {
       ? approvalParams.handleClick()
       : action();
   };
-  // console.log("handleApproval",handleApproval)
+  const createTooltipText = () => {
+    if (loadingTxns) return "Loading transactions from wallet";
+    if (supplyTxState.loading) return "Processing your transaction";
+    return "";
+  };
   return (
     <div className={styles.container}>
       <FlowLayout
@@ -488,6 +498,7 @@ function ChooseLendingAsset() {
         // nextPath="/lend/success"
         clickHandle={lendAsset}
         isLoading={loadingTxns || supplyTxState.loading}
+        tooltipText={createTooltipText()}
       >
         <AssetAmountSelection
           selectedAmount={selectedAmount}
@@ -554,6 +565,15 @@ function ChooseLendingAsset() {
               <span style={{ fontSize: "24px", color: "#31C48D" }}>
                 {fetchYearlyEarnings()}
               </span>
+              {selectedAmount && fetchYearlyEarnings() == 0 && (
+                <span>
+                  ${amountInUsd.toString(10)}
+                  <br style={{ marginTop: "10px" }} />
+                  The earnings are really low
+                  <br />
+                  for the selected amount
+                </span>
+              )}
             </div>
           </div>
         ) : (

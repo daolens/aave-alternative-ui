@@ -10,12 +10,14 @@ interface Props {
   nextPath?: string;
   clickHandle?: MouseEventHandler<HTMLDivElement> | undefined;
   isLoading?: boolean;
+  tooltipText?: string;
 }
 function ProceedButton({
   buttonText,
   nextPath,
   clickHandle,
   isLoading,
+  tooltipText,
 }: Props) {
   const router = useRouter();
   // const { mainTxState: supplyTxState } = useModalContext();
@@ -25,7 +27,13 @@ function ProceedButton({
   return (
     <div
       className={styles.proceed_container}
-      onClick={clickHandle || routeToPath}
+      onClick={
+        !isLoading
+          ? clickHandle || routeToPath
+          : () => {
+              return;
+            }
+      }
     >
       <span>{buttonText}</span>
       {isLoading ? (
@@ -37,6 +45,10 @@ function ProceedButton({
           height={12}
           width={12}
         />
+      )}
+      {/* <span className={styles.proceed_tooltip}>Loading transactions from your wallet</span> */}
+      {isLoading && (
+        <span className={styles.proceed_tooltip}>{tooltipText}</span>
       )}
     </div>
   );

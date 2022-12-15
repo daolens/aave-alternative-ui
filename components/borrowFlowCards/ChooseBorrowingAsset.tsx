@@ -462,6 +462,11 @@ function ChooseBorrowingAsset() {
       ? approvalParams.handleClick()
       : action();
   };
+    const createTooltipText = () => {
+    if (loadingTxns) return "Loading transactions from wallet";
+    if (borrowTxState.loading) return "Processing your transaction";
+    return "";
+  };
   return (
     <div className={styles.container}>
       <FlowLayout
@@ -481,6 +486,7 @@ function ChooseBorrowingAsset() {
         proceedButtonText="Borrow"
         clickHandle={borrowAsset}
         isLoading={loadingTxns || borrowTxState.loading}
+        tooltipText={createTooltipText()}
       >
         <AssetAmountSelection
           selectedAmount={selectedAmount}
