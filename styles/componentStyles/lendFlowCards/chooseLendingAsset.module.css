@@ -52,6 +52,13 @@
     line-height: 20px;
     color: #A5A8B6;
 }
+.selected_asset_details__container span:last-child {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #7c818c;
+}
 
 @media screen and (max-width:600px) {
     .wallet_assets_container {

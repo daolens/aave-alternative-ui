@@ -16,6 +16,7 @@ interface Props {
   nextPath?: string;
   clickHandle?: MouseEventHandler<HTMLDivElement> | undefined;
   isLoading?: boolean;
+  tooltipText?: string;
 }
 function FlowLayout({
   children,
@@ -24,7 +25,7 @@ function FlowLayout({
   proceedButtonText,
   nextPath,
   clickHandle,
-  isLoading,
+  isLoading,tooltipText
 }: Props) {
   const drawerContext = useContext(HelpDrawerContext);
   return (
@@ -58,6 +59,7 @@ function FlowLayout({
               nextPath={nextPath}
               clickHandle={clickHandle}
               isLoading={isLoading}
+              tooltipText={tooltipText}
             />
           </>
         ) : (

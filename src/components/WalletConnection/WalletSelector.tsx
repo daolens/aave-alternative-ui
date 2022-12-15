@@ -166,7 +166,7 @@ export const WalletSelector = () => {
       {error && <Warning severity="error">{handleBlocking()}</Warning>}
       <WalletRow
         key="browser_wallet"
-        walletName="Browser wallet"
+        walletName="Browser wallet (eg. Metamask)"
         walletType={WalletType.INJECTED}
       />
       <WalletRow
