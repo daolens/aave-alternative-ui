@@ -22,13 +22,13 @@
     line-height: 20px;
     color: #A5A8B6;
     display: inline-block;
-    margin-top: 28px;
+    margin-top: 10px;
 }
 
 .selected_asset_details {
     display: flex;
     align-items: center;
-
+    margin-top: 28px;
 }
 
 .selected_asset_details__container {
@@ -52,6 +52,7 @@
     line-height: 20px;
     color: #A5A8B6;
 }
+
 .selected_asset_details__container span:last-child {
     font-style: normal;
     font-weight: 500;
@@ -76,7 +77,9 @@
         align-items: flex-start;
     }
 
-    .selected_asset_details__container {width: 100%;}
+    .selected_asset_details__container {
+        width: 100%;
+    }
 
     .selected_asset_details__container+.selected_asset_details__container {
         margin-left: 0;

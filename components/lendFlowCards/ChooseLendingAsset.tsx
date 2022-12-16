@@ -482,9 +482,7 @@ function ChooseLendingAsset() {
   return (
     <div className={styles.container}>
       <FlowLayout
-        sectionTitle={
-          selectedAsset ? "Select lending amount" : "Select lending asset"
-        }
+        sectionTitle={"Aave help"}
         title={
           selectedAsset ? (
             <>Enter how much you want to lend and earn interest</>
@@ -530,7 +528,7 @@ function ChooseLendingAsset() {
         )}
         {selectedAsset ? (
           <div className={styles.selected_asset_details}>
-            <div className={styles.selected_asset_details__container}>
+            {/* <div className={styles.selected_asset_details__container}>
               <span>People invested</span>
               <span>
                 <AvatarGroup
@@ -553,7 +551,7 @@ function ChooseLendingAsset() {
                   />
                 </AvatarGroup>
               </span>
-            </div>
+            </div> */}
             <div className={styles.selected_asset_details__container}>
               <span>Annual interest rate</span>
               <span style={{ fontSize: "24px", color: "#31C48D" }}>
@@ -589,8 +587,11 @@ function ChooseLendingAsset() {
                     tokenInterestRate={shortenAPY(singleToken.supplyAPY)}
                     tokenIcon={
                       <Image
-                        src={`${networkLogoPath}`}
-                        alt="back_btn"
+                        src={
+
+                             `/icons/tokens/${singleToken.iconSymbol.toLowerCase()}.svg`
+                        }
+                        alt="icon"
                         height={28}
                         width={28}
                       />

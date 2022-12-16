@@ -83,8 +83,7 @@ function LendingSuccessful() {
             <span
               className={styles.lending_receipt_container__details__subtitle}
             >
-              Atokens are It’s a representation of the asset you lent to track
-              your balance
+              Lenders receive funds in the form of a special token known as an aToken, which is pegged to the value of another asset. These atokens in your wallet keep increasing to reflect the interest you are earning.
             </span>
             {!addedToWallet && (
               <AddToWallet

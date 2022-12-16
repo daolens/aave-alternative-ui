@@ -127,4 +127,41 @@ input[type=number] {
 
 #lend_asset_selection_dropdown span:first-child {
   display: block !important;
+
+}
+
+#lend_asset_selection_dropdown span:first-child img {
+  transform: translateY(4px);
+
+}
+
+.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl {
+  transform: translateY(12px);
+}
+
+.MuiInputLabel-shrink {
+  display: none;
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline {
+  margin-top: 0;
+  height: 48px;
+  /* margin-bottom: 16px; */
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline:hover {
+  border: none !important;
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline::before {
+  border: none !important;
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline::after {
+  border: none !important;
+}
+
+.MuiMenu-paper {
+  margin-top: 20px;
+  box-shadow: 0px 10px 45px 9px rgba(107, 53, 118, 0.16), 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
 }

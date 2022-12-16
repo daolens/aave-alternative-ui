@@ -471,7 +471,7 @@ function ChooseBorrowingAsset() {
     <div className={styles.container}>
       <FlowLayout
         sectionTitle={
-          selectedAsset ? "Select borrowing amount" : "Select borrowing asset"
+         "Aave help"
         }
         title={
           selectedAsset ? (
@@ -543,7 +543,7 @@ function ChooseBorrowingAsset() {
         )}
         {selectedAsset ? (
           <div className={styles.selected_asset_details}>
-            <div className={styles.selected_asset_details__container}>
+            {/* <div className={styles.selected_asset_details__container}>
               <span>People invested</span>
               <span>
                 <AvatarGroup
@@ -566,7 +566,7 @@ function ChooseBorrowingAsset() {
                   />
                 </AvatarGroup>
               </span>
-            </div>
+            </div> */}
             <div className={styles.selected_asset_details__container}>
               <span>Annual interest rate</span>
               <span style={{ fontSize: "24px", color: "#31C48D" }}>
