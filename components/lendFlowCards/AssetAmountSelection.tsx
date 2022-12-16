@@ -18,6 +18,7 @@ import { useTheme } from "@mui/material";
 import BigNumber from "bignumber.js";
 import { useAppDataContext } from "src/hooks/app-data-provider/useAppDataProvider";
 import { USD_DECIMALS } from "@aave/math-utils";
+import Image from "next/image";
 interface Props {
   selectedAsset?: string;
   selectedAmount: string;
@@ -71,7 +72,7 @@ function AssetAmountSelection({
             id="lend_asset_selection_dropdown"
             value={selectedAsset}
             onChange={updateAsset}
-            label="Choose asset to lend"
+            label=""
             sx={{
               color: "#ffffff",
               "&::before": { border: "none" },
@@ -94,7 +95,18 @@ function AssetAmountSelection({
                       value={singleRow.id}
                       className={styles.table_container__data}
                     >
-                      <span>{singleRow.name}</span>
+                      <span
+                        style={{ display: "inline-flex", alignItems: "center" }}
+                      >
+                        <Image
+                          src={`/icons/tokens/${singleRow.iconSymbol.toLowerCase()}.svg`}
+                          alt="icon"
+                          height={18}
+                          width={18}
+                          style={{marginRight:"8px"}}
+                        />
+                        {singleRow.name}
+                      </span>
                       <span>{shortenAPY(singleRow.supplyAPY)}</span>
                       <span>{shortenNumber(+singleRow.walletBalance)}</span>
                     </MenuItem>
@@ -116,9 +128,7 @@ function AssetAmountSelection({
               onChange={updateAmount}
             />
             <span className={styles.amount_input_container__dollar}>
-              {selectedAmount && (
-                <>${amountInUsd.toString(10)}</>
-              )}
+              {selectedAmount && <>${amountInUsd.toString(10)}</>}
               {/* <FormattedNumber
                 value={Number(selectedAmount || 0)}
                 symbol="USD"

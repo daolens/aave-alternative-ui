@@ -9,7 +9,7 @@ function FlowSelectionScreen() {
   return (
     <div className={styles.container}>
       <FlowLayout
-        sectionTitle="Select Flow"
+        sectionTitle="Aave help"
         title={
           <>
             Hello, Welcome to Aave! ✨<br />

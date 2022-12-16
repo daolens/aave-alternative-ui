@@ -79,7 +79,7 @@ function HelpDrawer() {
             />
           </Tabs>
 
-          {selectedTab === 0 ? (
+          {selectedTab === 0 && (
             <>
               <Accordion
                 disableGutters
@@ -216,24 +216,37 @@ function HelpDrawer() {
                 </AccordionDetails>
               </Accordion>
             </>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                src="/icons_svg/aave_mascot.svg"
-                alt="back_btn"
-                height={64}
-                width={64}
-                style={{ margin: "0 10px" }}
-              />
-              <p>More content coming soon!</p>
-            </div>
-          )}
+          ) }
+          {selectedTab === 2 && (
+            <>
+              <Accordion
+                disableGutters
+                sx={{
+                  backgroundColor: "transparent",
+                  borderBottom: "1px solid #3F424F",
+                  "&::before": { backgroundColor: "transparent" },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={{ color: "#ffffff" }} />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  sx={{ padding: "0" }}
+                >
+                  <Typography sx={{ color: "#EAEBEF" }}>
+                    What is health factor?
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ padding: "0 0 20px 0" }}>
+                  <Typography sx={{ color: "#ffffff" }}>
+                     It is a number that represents the safety of an asset we deposit as collateral against borrowed assets. The higher the value is, the safer the state of your funds are against a liquidation scenario. If the health factor reaches 1, the liquidation of your deposits will be triggered.
+                    
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            
+            </>
+          ) }
         </div>
       </SwipeableDrawer>
     </React.Fragment>

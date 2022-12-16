@@ -10,6 +10,7 @@ import { emptyObject } from "src/helpers/types";
 import { shortenAPY } from "src/helpers/shortenStrings";
 import { USD_DECIMALS, valueToBigNumber } from "@aave/math-utils";
 import { useAppDataContext } from "src/hooks/app-data-provider/useAppDataProvider";
+import Image from "next/image";
 interface Props {
   selectedAsset?: string;
   selectedAmount: string;
@@ -73,7 +74,16 @@ function AssetAmountSelection({
                       value={singleRow.id}
                       className={styles.table_container__data}
                     >
-                      <span>{singleRow.name}</span>
+                      <span
+                        style={{ display: "inline-flex", alignItems: "center" }}
+                      >
+                        <Image
+                          src={`/icons/tokens/${singleRow.iconSymbol.toLowerCase()}.svg`}
+                          alt="icon"
+                          height={18}
+                          width={18}
+                          style={{marginRight:"8px"}}
+                        />{singleRow.name}</span>
                       <span>
                         {shortenAPY(
                           singleRow.stableBorrowAPY // only stable borrowing as of now
