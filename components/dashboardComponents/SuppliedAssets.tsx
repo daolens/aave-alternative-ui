@@ -81,7 +81,6 @@ function SuppliedAssets() {
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   // ! Variables ********************************************************************************
   const requiredChainId = marketChainId;
   const isWrongNetwork = connectedChainId !== requiredChainId;
@@ -312,7 +311,7 @@ function SuppliedAssets() {
     // console.log("foundAsset", foundAsset);
     if (!currentAssetDetails.reserve) return alert("Cannot withdraw");
     if (+currentAssetDetails.underlyingBalance < +selectedAmount)
-      return alert("Insufficient funds in your wallet");
+      return alert("Cannot withdraw more than you lent");
     return approvalParams && approvalParams.handleClick
       ? approvalParams.handleClick()
       : action();
@@ -388,7 +387,7 @@ function SuppliedAssets() {
               {isSuccessful ? (
                 <div></div>
               ) : (
-                "Withdraw" + currentAssetDetails.reserve.name
+                "Withdraw " + currentAssetDetails.reserve.name
               )}
             </span>
             <Image

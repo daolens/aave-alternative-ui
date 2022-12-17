@@ -349,17 +349,7 @@ function ChooseBorrowingAsset() {
     setSelectedAmount(balance);
   };
   const handleApproval = () => {
-    // console.log("reached here")
-    approval(`${selectedAmount}`, poolAddress);
-    // supply({
-    //   amountToSupply: `${selectedAmount}`,
-    //   isWrongNetwork,
-    //   poolAddress,
-    //   symbol,
-    //   blocked,
-    // })
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
+    approval(`${selectedAmount}`, poolAddress); 
   };
   const hasApprovalError =
     requiresApproval &&
