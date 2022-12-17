@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+}
+
+.single_detail {
+  margin-right: 10px;
+  background: #393D4F;
+  border: 1px solid #3F424F;
+  border-radius: 8px;
+  padding: 12px 18px;
+}
+
+.single_detail__top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.single_detail__top img {
+  margin-right: 10px;
+}
+
+.single_detail__bottom {
+  display: flex;
+  align-items: center;
+
+}
+
+.single_detail__bottom span {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  color: #FFFFFF;
+}

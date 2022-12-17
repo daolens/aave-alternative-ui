@@ -10,14 +10,14 @@ import DashboardLayout from "../layouts/DashboardLayout";
 
 export default function Home() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const { connected, loading } = useWeb3Context();
-  const { windowSize } = useWindowSize();
+  // const { windowSize } = useWindowSize();
   // console.log("connected", connected);
-  useEffect(() => {
-    if (loading) return;
-    setIsLoading(false);
-  }, [loading]);
+  // useEffect(() => {
+  //   if (loading) return;
+  //   setIsLoading(false);
+  // }, [loading]);
   return (
     <DashboardLayout>
       <CustomBoxComponent>

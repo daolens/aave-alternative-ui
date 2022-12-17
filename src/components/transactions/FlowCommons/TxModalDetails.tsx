@@ -305,6 +305,7 @@ export const DetailsHFLine = ({
       captionVariant="description"
       mb={4}
       align="flex-start"
+      width={"100%"}
     >
       <Box sx={{ textAlign: "right" }}>
         <Box

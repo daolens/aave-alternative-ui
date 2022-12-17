@@ -112,25 +112,26 @@ function DashboardLayout({ children }: Props) {
                     style={{ cursor: "pointer" }}
                     onClick={() => router.push("/")}
                   />
-                  {/* <Typography
-                      className={styles.toolbar_left__typography}
-                      color="#ffffff"
-                      variant="h4"
-                      component="div"
-                      sx={{ flexGrow: 1 }}
-                      onClick={() => router.push("/")}
-                    >
-                      Home
-                    </Typography> */}
-                  {/* <Typography
+                  <Typography
                     className={styles.toolbar_left__typography}
                     color="#ffffff"
-                    variant="h6"
+                    variant="h4"
                     component="div"
                     sx={{ flexGrow: 1 }}
+                    onClick={() => router.push("/")}
+                  >
+                    Home
+                  </Typography>
+                  <Typography
+                    className={styles.toolbar_left__typography}
+                    color="#ffffff"
+                    variant="h4"
+                    component="div"
+                    sx={{ flexGrow: 1 }}
+                    onClick={() => router.push("/dashboard")}
                   >
                     Dashboard
-                  </Typography> */}
+                  </Typography>
                 </div>
                 <div className={styles.toolbar_right}>
                   <Typography
@@ -317,6 +318,26 @@ function DashboardLayout({ children }: Props) {
                       display: { xs: "block", md: "none" },
                     }}
                   >
+                    <Typography
+                      className={styles.toolbar_left__typography}
+                      color="#ffffff"
+                      variant="h4"
+                      component="div"
+                      sx={{ flexGrow: 1 }}
+                      onClick={() => router.push("/")}
+                    >
+                      Home
+                    </Typography>
+                    <Typography
+                      className={styles.toolbar_left__typography}
+                      color="#ffffff"
+                      variant="h4"
+                      component="div"
+                      sx={{ flexGrow: 1 }}
+                      onClick={() => router.push("/dashboard")}
+                    >
+                      Dashboard
+                    </Typography>
                     <div
                       style={{
                         display: "flex",
