@@ -216,7 +216,44 @@ function HelpDrawer() {
                 </AccordionDetails>
               </Accordion>
             </>
-          ) }
+          )}
+          {selectedTab === 1 && (
+            <>
+              <Accordion
+                disableGutters
+                sx={{
+                  backgroundColor: "transparent",
+                  borderBottom: "1px solid #3F424F",
+                  "&::before": { backgroundColor: "transparent" },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={{ color: "#ffffff" }} />}
+                  aria-controls="panel4a-content"
+                  id="panel4a-header"
+                  sx={{ padding: "0" }}
+                >
+                  <Typography sx={{ color: "#EAEBEF" }}>
+                    How to lend?
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ padding: "0 0 20px 0" }}>
+                  <Typography sx={{ color: "#ffffff" }}>
+                    Please click on the link to watch a video about lending
+                    assets
+                    <br />
+                    <br />
+                    <a
+                      href="https://www.loom.com/share/e109b17aaa484ba3a92738dfc106ba36"
+                      style={{ color: "#8DA2FB" }}
+                    >
+                      How to lend assets?
+                    </a>
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </>
+          )}
           {selectedTab === 2 && (
             <>
               <Accordion
@@ -239,14 +276,49 @@ function HelpDrawer() {
                 </AccordionSummary>
                 <AccordionDetails sx={{ padding: "0 0 20px 0" }}>
                   <Typography sx={{ color: "#ffffff" }}>
-                     It is a number that represents the safety of an asset we deposit as collateral against borrowed assets. The higher the value is, the safer the state of your funds are against a liquidation scenario. If the health factor reaches 1, the liquidation of your deposits will be triggered.
-                    
+                    It is a number that represents the safety of an asset we
+                    deposit as collateral against borrowed assets. The higher
+                    the value is, the safer the state of your funds are against
+                    a liquidation scenario. If the health factor reaches 1, the
+                    liquidation of your deposits will be triggered.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
-            
+              <Accordion
+                disableGutters
+                sx={{
+                  backgroundColor: "transparent",
+                  borderBottom: "1px solid #3F424F",
+                  "&::before": { backgroundColor: "transparent" },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={{ color: "#ffffff" }} />}
+                  aria-controls="panel4a-content"
+                  id="panel4a-header"
+                  sx={{ padding: "0" }}
+                >
+                  <Typography sx={{ color: "#EAEBEF" }}>
+                    How to borrow?
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ padding: "0 0 20px 0" }}>
+                  <Typography sx={{ color: "#ffffff" }}>
+                    Please click on the link to watch a video about borrowing
+                    assets
+                    <br />
+                    <br />
+                    <a
+                      href="https://www.loom.com/share/9345ad77b3d44f1185e75147b1946e02"
+                      style={{ color: "#8DA2FB" }}
+                    >
+                      How to borrow assets?
+                    </a>
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
             </>
-          ) }
+          )}
         </div>
       </SwipeableDrawer>
     </React.Fragment>

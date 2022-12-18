@@ -37,6 +37,8 @@ import { useTheme } from "@mui/material/styles";
 import { DetailsHFLine } from "src/components/transactions/FlowCommons/TxModalDetails";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
+import { GasStation } from "src/components/transactions/GasStation/GasStation";
+import { parseUnits } from "ethers/lib/utils";
 
 function SuppliedAssets() {
   const router = useRouter();
@@ -276,7 +278,7 @@ function SuppliedAssets() {
 
   const { content, disabled, loading, handleClick } = getMainParams();
   const approvalParams = getApprovalParams();
-  console.log("loadingTxns", loadingTxns, withdrawTxState);
+  // console.log("loadingTxns", loadingTxns, withdrawTxState);
   const suppliedPosition =
     user?.userReservesData
       .filter((userReserve) => userReserve.underlyingBalance !== "0")
@@ -469,7 +471,7 @@ function SuppliedAssets() {
                         setSelectedAmount(ev.target.value);
                       }}
                     />
-                    <span>50$</span>
+                    {/* <span>50$</span> */}
                   </div>
                 </div>
                 <span className={styles.wallet_balance}>
@@ -484,8 +486,11 @@ function SuppliedAssets() {
                   healthFactor={user ? user.healthFactor : "-1"}
                   futureHealthFactor={healthFactorAfterWithdraw.toString(10)}
                 />
+                {/* <GasStation gasLimit={parseUnits(gasLimit || "0", "wei")} /> */}
                 <div className={styles.main_cta} onClick={withdrawAsset}>
-                  <span>Withdraw</span>
+                  <span> {approvalParams && approvalParams.handleClick
+                      ? "Approve"
+                      : "Withdraw"}</span>
                   {(loadingTxns || withdrawTxState.loading) && (
                     <CircularProgress size={18} sx={{ margin: "0px" }} />
                   )}
