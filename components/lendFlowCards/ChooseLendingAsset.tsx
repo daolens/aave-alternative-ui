@@ -566,10 +566,10 @@ function ChooseLendingAsset() {
               {selectedAmount && fetchYearlyEarnings() == 0 && (
                 <span>
                   ${amountInUsd.toString(10)}
-                  <br style={{ marginTop: "10px" }} />
+                  {/* <br style={{ marginTop: "10px" }} />
                   The earnings are really low
                   <br />
-                  for the selected amount
+                  for the selected amount */}
                 </span>
               )}
             </div>
@@ -587,10 +587,7 @@ function ChooseLendingAsset() {
                     tokenInterestRate={shortenAPY(singleToken.supplyAPY)}
                     tokenIcon={
                       <Image
-                        src={
-
-                             `/icons/tokens/${singleToken.iconSymbol.toLowerCase()}.svg`
-                        }
+                        src={`/icons/tokens/${singleToken.iconSymbol.toLowerCase()}.svg`}
                         alt="icon"
                         height={28}
                         width={28}

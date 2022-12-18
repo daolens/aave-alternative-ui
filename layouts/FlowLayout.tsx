@@ -65,7 +65,7 @@ function FlowLayout({
         ) : (
           <>
             <HelpButton />
-            <ThemeProvider theme={theme}>
+            {/* <ThemeProvider theme={theme}>
               <Button
                 color={"link_button_color" as any}
                 sx={{ textTransform: "none" }}
@@ -84,7 +84,7 @@ function FlowLayout({
               >
                 What’s a wallet? Help me setup
               </Button>
-            </ThemeProvider>
+            </ThemeProvider> */}
           </>
         )}
       </div>

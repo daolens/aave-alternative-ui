@@ -4,6 +4,7 @@ import {
   valueToBigNumber,
 } from "@aave/math-utils";
 import { useTheme } from "@emotion/react";
+import BigNumber from "bignumber.js";
 import {
   CircularProgress,
   Dialog,
@@ -30,7 +31,10 @@ import { useRootStore } from "src/store/root";
 import { TxAction } from "src/ui-config/errorMapping";
 import { permitByChainAndToken } from "src/ui-config/permitConfig";
 import { fetchIconSymbolAndName } from "src/ui-config/reservePatches";
+import { getNetworkConfig } from "src/utils/marketsAndNetworksConfig";
 import styles from "../../styles/componentStyles/dashboardComponents/DashboardContent.module.css";
+import { GasStation } from "src/components/transactions/GasStation/GasStation";
+import { parseUnits } from "ethers/lib/utils";
 export enum ErrorType {
   CAP_REACHED,
 }
@@ -62,7 +66,7 @@ function BorrowedAssets() {
     mainTxState: repayTxState,
     retryWithApproval,
     close: clearModalContext,
-    args,
+    gasLimit,
   } = useModalContext();
   const { permissions } = usePermissions();
 
@@ -139,9 +143,33 @@ function BorrowedAssets() {
     iconSymbol: poolReserve?.iconSymbol,
     balance: currentAssetDetails.underlyingBalance,
   };
+  const networkConfig = getNetworkConfig(marketChainId);
+  let maxAmountToRepay: BigNumber;
+  let balance: string;
   const repayWithATokens =
     tokenToRepayWith.address === poolReserve?.aTokenAddress;
-
+  if (repayWithATokens) {
+    maxAmountToRepay = BigNumber.min(
+      currentAssetDetails.underlyingBalance,
+      userReserve?.stableBorrows
+    );
+    balance = currentAssetDetails.underlyingBalance;
+  } else {
+    const normalizedWalletBalance = valueToBigNumber(
+      tokenToRepayWith.balance
+    ).minus(
+      userReserve?.reserve.symbol.toUpperCase() ===
+        networkConfig.baseAssetSymbol
+        ? "0.004"
+        : "0"
+    );
+    balance = normalizedWalletBalance.toString(10);
+    maxAmountToRepay = BigNumber.min(
+      normalizedWalletBalance,
+      userReserve?.stableBorrows
+    );
+  }
+//   console.log("currentAssetDetails", currentAssetDetails);
   const poolAddress =
     borrowUnWrapped && poolReserve?.isWrappedBaseAsset
       ? API_ETH_MOCK_ADDRESS
@@ -161,7 +189,12 @@ function BorrowedAssets() {
         amountToRepay: selectedAmount,
         poolAddress,
         repayWithATokens,
-        debtType: InterestRate.Stable,
+        debtType:
+          InterestRate[
+            currentAssetDetails.borrowRateMode === "Stable"
+              ? "Stable"
+              : "Variable"
+          ],
         poolReserve,
         isWrongNetwork,
         symbol,
@@ -174,7 +207,12 @@ function BorrowedAssets() {
         isWrongNetwork,
         poolAddress,
         symbol,
-        debtType: InterestRate.Stable,
+        debtType:
+          InterestRate[
+            currentAssetDetails.borrowRateMode === "Stable"
+              ? "Stable"
+              : "Variable"
+          ],
         repayWithATokens,
         signature,
         deadline,
@@ -323,6 +361,8 @@ function BorrowedAssets() {
       setIsSuccessful(true);
     }
   }, [repayTxState]);
+//   console.log("loadingTxns", txError);
+
   return (
     <>
       {borrowPositions.length > 0 &&
@@ -441,8 +481,7 @@ function BorrowedAssets() {
                     margin: "5px 0 20px 0",
                   }}
                 >
-                  You withdrew {selectedAmount}{" "}
-                  {currentAssetDetails.reserve.name}
+                  You repaid {selectedAmount} {currentAssetDetails.reserve.name}
                 </span>
                 <div className={styles.main_cta} onClick={handleClose}>
                   <span>Done</span>
@@ -469,7 +508,7 @@ function BorrowedAssets() {
                         setSelectedAmount(ev.target.value);
                       }}
                     />
-                    <span>50$</span>
+                    {/* <span>50$</span> */}
                   </div>
                 </div>
                 <span className={styles.wallet_balance}>
@@ -484,8 +523,13 @@ function BorrowedAssets() {
                   healthFactor={user ? user.healthFactor : "-1"}
                   futureHealthFactor={newHF}
                 />
+                {/* <GasStation gasLimit={parseUnits(gasLimit || "0", "wei")} /> */}
                 <div className={styles.main_cta} onClick={repayAsset}>
-                  <span>Repay</span>
+                  <span>
+                    {approvalParams && approvalParams.handleClick
+                      ? "Approve"
+                      : "Repay"}
+                  </span>
                   {(loadingTxns || repayTxState.loading) && (
                     <CircularProgress size={18} sx={{ margin: "0px" }} />
                   )}

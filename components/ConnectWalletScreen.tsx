@@ -27,7 +27,7 @@ function ConnectWalletScreen() {
       </div>
       <div className={styles.container_bottom}>
         <HelpButton />
-        <ThemeProvider theme={theme}>
+        {/* <ThemeProvider theme={theme}>
           <Button
             color={"link_button_color" as any}
             sx={{ textTransform: "none" }}
@@ -46,7 +46,7 @@ function ConnectWalletScreen() {
           >
             What’s a wallet? Help me setup
           </Button>
-        </ThemeProvider>
+        </ThemeProvider> */}
       </div>
     </div>
   );
