@@ -169,7 +169,7 @@ function BorrowedAssets() {
       userReserve?.stableBorrows
     );
   }
-//   console.log("currentAssetDetails", currentAssetDetails);
+  //   console.log("currentAssetDetails", currentAssetDetails);
   const poolAddress =
     borrowUnWrapped && poolReserve?.isWrappedBaseAsset
       ? API_ETH_MOCK_ADDRESS
@@ -361,11 +361,11 @@ function BorrowedAssets() {
       setIsSuccessful(true);
     }
   }, [repayTxState]);
-//   console.log("loadingTxns", txError);
+  //   console.log("loadingTxns", txError);
 
   return (
     <>
-      {borrowPositions.length > 0 &&
+      {borrowPositions.length > 0 ? (
         borrowPositions.map((singleBorrow) => {
           return (
             <Fragment key={singleBorrow.underlyingAsset}>
@@ -406,7 +406,10 @@ function BorrowedAssets() {
               </div>
             </Fragment>
           );
-        })}
+        })
+      ) : (
+        <p style={{ width: "100%", textAlign: "center" }}>No assets borrowed yet</p>
+      )}
       {currentAssetDetails?.reserve && (
         <Dialog
           // fullScreen={fullScreen}

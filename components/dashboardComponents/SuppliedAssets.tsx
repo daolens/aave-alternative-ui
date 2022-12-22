@@ -330,7 +330,7 @@ function SuppliedAssets() {
   }, [withdrawTxState]);
   return (
     <>
-      {suppliedPosition.length > 0 &&
+      {suppliedPosition.length > 0 ? (
         suppliedPosition.map((singleSupply) => {
           return (
             <Fragment key={singleSupply.underlyingAsset}>
@@ -368,7 +368,10 @@ function SuppliedAssets() {
               </div>
             </Fragment>
           );
-        })}
+        })
+      ) : (
+        <p style={{ width: "100%", textAlign: "center" }}>No assets lent yet</p>
+      )}
       {currentAssetDetails?.reserve && (
         <Dialog
           // fullScreen={fullScreen}
@@ -488,9 +491,12 @@ function SuppliedAssets() {
                 />
                 {/* <GasStation gasLimit={parseUnits(gasLimit || "0", "wei")} /> */}
                 <div className={styles.main_cta} onClick={withdrawAsset}>
-                  <span> {approvalParams && approvalParams.handleClick
+                  <span>
+                    {" "}
+                    {approvalParams && approvalParams.handleClick
                       ? "Approve"
-                      : "Withdraw"}</span>
+                      : "Withdraw"}
+                  </span>
                   {(loadingTxns || withdrawTxState.loading) && (
                     <CircularProgress size={18} sx={{ margin: "0px" }} />
                   )}
