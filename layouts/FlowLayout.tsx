@@ -25,7 +25,8 @@ function FlowLayout({
   proceedButtonText,
   nextPath,
   clickHandle,
-  isLoading,tooltipText
+  isLoading,
+  tooltipText,
 }: Props) {
   const drawerContext = useContext(HelpDrawerContext);
   return (
@@ -38,7 +39,12 @@ function FlowLayout({
             height={32}
             width={32}
           />
-          <span>{sectionTitle}</span>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={drawerContext.toggleDrawer("right", true) as any}
+          >
+            {sectionTitle}
+          </span>
         </div>
         <h1 className={styles.container_children__title}>{title}</h1>
         {children}

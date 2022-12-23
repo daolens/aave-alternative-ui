@@ -63,6 +63,7 @@
   border-bottom: 1px solid #3F424F;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-gap: 10px;
   align-items: center;
 }
 
@@ -71,7 +72,9 @@
   border-bottom: 1px solid #3F424F;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-gap: 10px;
   align-items: center;
+  overflow-x: scroll;
 }
 
 .table_content>span:first-child {
@@ -188,4 +191,10 @@
   color: #EAEBEF;
   display: inline-block;
   margin-right: 10px;
+}
+
+@media screen and (max-width:760px) {
+  .flow_selector_container {
+    width: 270px;
+  }
 }

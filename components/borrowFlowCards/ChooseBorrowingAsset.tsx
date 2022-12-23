@@ -43,7 +43,7 @@ export enum ErrorType {
 function ChooseBorrowingAsset() {
   const router = useRouter();
   // ! Regex ******************************************************************************************
-  const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
+  // const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
   // ! Contexts ******************************************************************************************
   const { reserves, marketReferencePriceInUsd, user, loading } =
     useAppDataContext();
@@ -55,21 +55,21 @@ function ChooseBorrowingAsset() {
     retryWithApproval,
     mainTxState: borrowTxState,
     close: clearModalContext,
-    gasLimit,
+    // gasLimit,
   } = useModalContext();
   const {
-    bridge,
-    isTestnet,
+    // bridge,
+    // isTestnet,
     baseAssetSymbol,
-    name: networkName,
-    networkLogoPath,
+    // name: networkName,
+    // networkLogoPath,
   } = currentNetworkConfig;
   const {
-    connected,
-    currentAccount,
-    disconnectWallet,
+    // connected,
+    // currentAccount,
+    // disconnectWallet,
     chainId: connectedChainId,
-    watchModeOnlyAddress,
+    // watchModeOnlyAddress,
     switchNetwork,
   } = useWeb3Context();
   const borrow = useRootStore((state) => state.borrow);

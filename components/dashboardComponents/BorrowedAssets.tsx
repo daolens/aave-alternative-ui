@@ -11,7 +11,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { utils } from "ethers";
+// import { utils } from "ethers";
 import { isEmpty } from "lodash";
 import Image from "next/image";
 import React, { Fragment, useEffect, useState } from "react";
@@ -47,16 +47,19 @@ function BorrowedAssets() {
   const [_amount, setAmount] = useState("");
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const [interestRateMode, setInterestRateMode] = useState<InterestRate>(
-    InterestRate.Variable
-  );
-  const [borrowUnWrapped, setBorrowUnWrapped] = useState(true);
+  // const [interestRateMode, setInterestRateMode] = useState<InterestRate>(
+  //   InterestRate.Variable
+  // );
+  const [
+    borrowUnWrapped,
+    // setBorrowUnWrapped
+  ] = useState(true);
   const theme = useTheme();
   // ! Contexts
   const {
     currentChainId: marketChainId,
     currentNetworkConfig,
-    currentMarketData,
+    // currentMarketData,
   } = useProtocolDataContext();
   const { chainId: connectedChainId, switchNetwork } = useWeb3Context();
 
@@ -66,9 +69,9 @@ function BorrowedAssets() {
     mainTxState: repayTxState,
     retryWithApproval,
     close: clearModalContext,
-    gasLimit,
+    // gasLimit,
   } = useModalContext();
-  const { permissions } = usePermissions();
+  // const { permissions } = usePermissions();
 
   // ! Variables
   const borrowPositions =

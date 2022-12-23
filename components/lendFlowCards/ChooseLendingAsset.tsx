@@ -7,11 +7,11 @@ import Image from "next/image";
 import Divider from "@mui/material/Divider";
 import AssetAmountSelection from "./AssetAmountSelection";
 import { SelectChangeEvent } from "@mui/material/Select";
-import Avatar from "@mui/material/Avatar";
-import AvatarGroup from "@mui/material/AvatarGroup";
+// import Avatar from "@mui/material/Avatar";
+// import AvatarGroup from "@mui/material/AvatarGroup";
 import {
   ComputedReserveData,
-  ComputedUserReserveData,
+  // ComputedUserReserveData,
   useAppDataContext,
 } from "src/hooks/app-data-provider/useAppDataProvider";
 import { useWalletBalances } from "src/hooks/app-data-provider/useWalletBalances";
@@ -19,8 +19,8 @@ import { USD_DECIMALS, valueToBigNumber } from "@aave/math-utils";
 import BigNumber from "bignumber.js";
 import {
   API_ETH_MOCK_ADDRESS,
-  EthereumTransactionTypeExtended,
-  Pool,
+  // EthereumTransactionTypeExtended,
+  // Pool,
 } from "@aave/contract-helpers";
 import { fetchIconSymbolAndName } from "src/ui-config/reservePatches";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
@@ -33,18 +33,18 @@ import { emptyObject } from "src/helpers/types";
 import { useRootStore } from "src/store/root";
 import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
 import { useTransactionHandler } from "src/helpers/useTransactionHandler";
-import { utils } from "ethers";
-import { permitByChainAndToken } from "src/ui-config/permitConfig";
+// import { utils } from "ethers";
+// import { permitByChainAndToken } from "src/ui-config/permitConfig";
 import { useModalContext } from "src/hooks/useModal";
 import { TxAction } from "src/ui-config/errorMapping";
 import { isEmpty } from "lodash";
-import { ColorSwatchIcon } from "@heroicons/react/outline";
+// import { ColorSwatchIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
-import {
-  GasStation,
-  getGasCosts,
-} from "src/components/transactions/GasStation/GasStation";
-import { parseUnits } from "ethers/lib/utils";
+// import {
+//   GasStation,
+//   getGasCosts,
+// } from "src/components/transactions/GasStation/GasStation";
+// import { parseUnits } from "ethers/lib/utils";
 import { useGasStation } from "src/hooks/useGasStation";
 export enum ErrorType {
   CAP_REACHED,
@@ -60,7 +60,7 @@ interface assetData {
 function ChooseLendingAsset() {
   const router = useRouter();
   // ! Regex ************************************************************************************************************
-  const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
+  // const decimalNumberRegex = /([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/;
   // ! Local states ************************************************************************************************************
   const [selectedAsset, setSelectedAsset] = useState("");
   const [selectedAmount, setSelectedAmount] = useState("");
@@ -73,21 +73,21 @@ function ChooseLendingAsset() {
   const { reserves, marketReferencePriceInUsd, user } = useAppDataContext();
   const { walletBalances } = useWalletBalances();
   const {
-    state,
+    // state,
     gasPriceData: { data },
   } = useGasStation();
   const {
     currentNetworkConfig,
     currentChainId: marketChainId,
-    currentMarketData,
-    jsonRpcProvider,
+    // currentMarketData,
+    // jsonRpcProvider,
   } = useProtocolDataContext();
   const {
-    connected,
-    currentAccount,
-    disconnectWallet,
+    // connected,
+    // currentAccount,
+    // disconnectWallet,
     chainId: connectedChainId,
-    watchModeOnlyAddress,
+    // watchModeOnlyAddress,
     switchNetwork,
   } = useWeb3Context();
   const {
@@ -95,15 +95,15 @@ function ChooseLendingAsset() {
     retryWithApproval,
     mainTxState: supplyTxState,
     close: clearModalContext,
-    gasLimit,
+    // gasLimit,
   } = useModalContext();
   const {
-    bridge,
-    isTestnet,
+    // bridge,
+    // isTestnet,
     baseAssetSymbol,
-    name: networkName,
-    networkLogoPath,
-    wrappedBaseAssetSymbol,
+    // name: networkName,
+    // networkLogoPath,
+    // wrappedBaseAssetSymbol,
   } = currentNetworkConfig;
   const supply = useRootStore((state) => state.supply);
   const supplyWithPermit = useRootStore((state) => state.supplyWithPermit);
@@ -120,14 +120,14 @@ function ChooseLendingAsset() {
     return currentAssetDetails.underlyingAsset === reserve.underlyingAsset;
   }) as ComputedReserveData;
 
-  const userReserve = user?.userReservesData.find((userReserve) => {
-    if (
-      currentAssetDetails.underlyingAsset?.toLowerCase() ===
-      API_ETH_MOCK_ADDRESS.toLowerCase()
-    )
-      return userReserve.reserve.isWrappedBaseAsset;
-    return currentAssetDetails.underlyingAsset === userReserve.underlyingAsset;
-  }) as ComputedUserReserveData;
+  // const userReserve = user?.userReservesData.find((userReserve) => {
+  //   if (
+  //     currentAssetDetails.underlyingAsset?.toLowerCase() ===
+  //     API_ETH_MOCK_ADDRESS.toLowerCase()
+  //   )
+  //     return userReserve.reserve.isWrappedBaseAsset;
+  //   return currentAssetDetails.underlyingAsset === userReserve.underlyingAsset;
+  // }) as ComputedUserReserveData;
   const amountIntEth = new BigNumber(
     +selectedAmount * currentAssetDetails?.supplyAPY
   ).multipliedBy(poolReserve?.formattedPriceInMarketReferenceCurrency);
@@ -139,10 +139,10 @@ function ChooseLendingAsset() {
     poolReserve?.isWrappedBaseAsset && true
       ? currentNetworkConfig.baseAssetSymbol
       : poolReserve?.symbol;
-  const nativeBalance =
-    walletBalances[API_ETH_MOCK_ADDRESS.toLowerCase()]?.amount || "0";
-  const tokenBalance =
-    walletBalances[poolReserve?.underlyingAsset.toLowerCase()]?.amount || "0";
+  // const nativeBalance =
+  //   walletBalances[API_ETH_MOCK_ADDRESS.toLowerCase()]?.amount || "0";
+  // const tokenBalance =
+  //   walletBalances[poolReserve?.underlyingAsset.toLowerCase()]?.amount || "0";
   const blockingError: ErrorType | undefined = undefined;
   const blocked = blockingError !== undefined;
   const supplyUnWrapped =
@@ -458,10 +458,14 @@ function ChooseLendingAsset() {
   const fetchYearlyEarnings = () => {
     const interest_rate = currentAssetDetails.supplyAPY;
     if (Number(interest_rate))
-      return shortenNumber(+selectedAmount * Number(interest_rate));
-    return 0;
+      return (
+        shortenNumber(+selectedAmount * Number(interest_rate)) +
+        " " +
+        currentAssetDetails.symbol
+      );
+    return 0 + " " + currentAssetDetails.symbol;
   };
-  // console.log(supplyReserves, user, selectedAsset);
+  // console.log("selectedAsset", currentAssetDetails);
   const lendAsset = () => {
     if (isWrongNetwork) {
       if (confirm("Your selected network is incorrect. Switch now?")) {
@@ -572,7 +576,7 @@ function ChooseLendingAsset() {
               <span style={{ fontSize: "24px", color: "#31C48D" }}>
                 {fetchYearlyEarnings()}
               </span>
-              {selectedAmount && fetchYearlyEarnings() == 0 && (
+              {selectedAmount && fetchYearlyEarnings().split(" ")[0] == "0" && (
                 <span>
                   ${amountInUsd.toString(10)}
                   {/* <br style={{ marginTop: "10px" }} />
