@@ -70,6 +70,7 @@ function ChooseBorrowingAsset() {
     disconnectWallet,
     chainId: connectedChainId,
     watchModeOnlyAddress,
+    switchNetwork,
   } = useWeb3Context();
   const borrow = useRootStore((state) => state.borrow);
   // ! Local states ******************************************************************************************
@@ -349,7 +350,7 @@ function ChooseBorrowingAsset() {
     setSelectedAmount(balance);
   };
   const handleApproval = () => {
-    approval(`${selectedAmount}`, poolAddress); 
+    approval(`${selectedAmount}`, poolAddress);
   };
   const hasApprovalError =
     requiresApproval &&
@@ -436,6 +437,14 @@ function ChooseBorrowingAsset() {
   } = getMainParams();
   const approvalParams = getApprovalParams();
   const borrowAsset = () => {
+    if (isWrongNetwork) {
+      if (confirm("Your selected network is incorrect. Switch now?")) {
+        switchNetwork(requiredChainId);
+        return;
+      } else {
+        return;
+      }
+    }
     if (!selectedAmount) return alert("Add an amount greater than 0");
     if (+selectedAmount > +maxAmountToBorrow)
       return alert(
@@ -452,7 +461,7 @@ function ChooseBorrowingAsset() {
       ? approvalParams.handleClick()
       : action();
   };
-    const createTooltipText = () => {
+  const createTooltipText = () => {
     if (loadingTxns) return "Loading transactions from wallet";
     if (borrowTxState.loading) return "Processing your transaction";
     return "";
@@ -460,9 +469,7 @@ function ChooseBorrowingAsset() {
   return (
     <div className={styles.container}>
       <FlowLayout
-        sectionTitle={
-         "Aave help"
-        }
+        sectionTitle={"Aave help"}
         title={
           selectedAsset ? (
             <>

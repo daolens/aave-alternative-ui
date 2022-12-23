@@ -58,6 +58,7 @@ function SuppliedAssets() {
     disconnectWallet,
     chainId: connectedChainId,
     watchModeOnlyAddress,
+    switchNetwork,
   } = useWeb3Context();
   const {
     txError,
@@ -307,6 +308,14 @@ function SuppliedAssets() {
     setOpen(false);
   };
   const withdrawAsset = () => {
+    if (isWrongNetwork) {
+      if (confirm("Your selected network is incorrect. Switch now?")) {
+        switchNetwork(requiredChainId);
+        return;
+      } else {
+        return;
+      }
+    }
     if (loadingTxns || withdrawTxState.loading) return;
     if (!selectedAmount) return alert("Add an amount greater than 0");
 
