@@ -26,19 +26,15 @@ import { TxAction } from "src/ui-config/errorMapping";
 export enum ErrorType {
   CAP_REACHED,
 }
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { DetailsHFLine } from "src/components/transactions/FlowCommons/TxModalDetails";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
-import { GasStation } from "src/components/transactions/GasStation/GasStation";
-import { parseUnits } from "ethers/lib/utils";
+// import { GasStation } from "src/components/transactions/GasStation/GasStation";
+// import { parseUnits } from "ethers/lib/utils";
 
 function SuppliedAssets() {
   const router = useRouter();
@@ -49,15 +45,15 @@ function SuppliedAssets() {
   const {
     currentNetworkConfig,
     currentChainId: marketChainId,
-    currentMarketData,
-    jsonRpcProvider,
+    // currentMarketData,
+    // jsonRpcProvider,
   } = useProtocolDataContext();
   const {
-    connected,
-    currentAccount,
-    disconnectWallet,
+    // connected,
+    // currentAccount,
+    // disconnectWallet,
     chainId: connectedChainId,
-    watchModeOnlyAddress,
+    // watchModeOnlyAddress,
     switchNetwork,
   } = useWeb3Context();
   const {
@@ -65,15 +61,15 @@ function SuppliedAssets() {
     retryWithApproval,
     mainTxState: withdrawTxState,
     close: clearModalContext,
-    gasLimit,
+    // gasLimit,
   } = useModalContext();
   const {
-    bridge,
-    isTestnet,
-    baseAssetSymbol,
-    name: networkName,
-    networkLogoPath,
-    wrappedBaseAssetSymbol,
+    // bridge,
+    // isTestnet,
+    // baseAssetSymbol,
+    // name: networkName,
+    // networkLogoPath,
+    // wrappedBaseAssetSymbol,
   } = currentNetworkConfig;
   // ! Hooks ********************************************************************************
   const [selectedAmount, setSelectedAmount] = useState("");
@@ -83,7 +79,7 @@ function SuppliedAssets() {
   const [_amount, setAmount] = useState("");
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const theme = useTheme();
+  // const theme = useTheme();
   // ! Variables ********************************************************************************
   const requiredChainId = marketChainId;
   const isWrongNetwork = connectedChainId !== requiredChainId;

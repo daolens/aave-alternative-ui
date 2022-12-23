@@ -110,7 +110,7 @@ function ConnectWallet({ buttonText }: Props) {
                   marginLeft: "8px",
                 }}
               >
-                Switch network
+                Switch wallet
               </Typography>
             </Button>
 

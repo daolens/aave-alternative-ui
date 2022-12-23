@@ -23,7 +23,8 @@ function CustomBoxComponent({ children, isWalletSet }: Props) {
           flexWrap: "wrap",
           backgroundColor: "#2A2E3F",
           height: "80%",
-          width: getWidth()
+          width: getWidth(),
+          overflowY: "scroll",
         }}
       >
         {children}

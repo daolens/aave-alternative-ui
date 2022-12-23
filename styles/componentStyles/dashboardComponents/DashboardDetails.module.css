@@ -17,6 +17,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 8px;
+  font-size: 14px;
 }
 
 .single_detail__top img {
@@ -35,4 +36,18 @@
   font-size: 20px;
   line-height: 28px;
   color: #FFFFFF;
+}
+
+@media screen and (max-width:760px) {
+  .single_detail__top {
+    font-size: 12px;
+  }
+
+  .single_detail__bottom span {
+    font-size: 14px;
+  }
+
+  .single_detail {
+    margin-top: 10px;
+  }
 }

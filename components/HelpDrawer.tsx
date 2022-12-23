@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -15,11 +15,20 @@ function HelpDrawer() {
   const drawerContext = useContext(HelpDrawerContext);
   // ! Local states
   const [selectedTab, setSelectedTab] = useState(0);
+  const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
-  // console.log("selectedTab", selectedTab);
+  const handleChangeAccordion =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+
+  useEffect(() => {
+    setExpanded("panel1");
+  }, [selectedTab]);
+
   return (
     <React.Fragment key={"right"}>
       <SwipeableDrawer
@@ -82,6 +91,8 @@ function HelpDrawer() {
           {selectedTab === 0 && (
             <>
               <Accordion
+                expanded={expanded === "panel1"}
+                onChange={handleChangeAccordion("panel1")}
                 disableGutters
                 sx={{
                   backgroundColor: "transparent",
@@ -116,6 +127,8 @@ function HelpDrawer() {
                 </AccordionDetails>
               </Accordion>
               <Accordion
+                expanded={expanded === "panel2"}
+                onChange={handleChangeAccordion("panel2")}
                 disableGutters
                 sx={{
                   backgroundColor: "transparent",
@@ -149,6 +162,8 @@ function HelpDrawer() {
                 </AccordionDetails>
               </Accordion>
               <Accordion
+                expanded={expanded === "panel3"}
+                onChange={handleChangeAccordion("panel3")}
                 disableGutters
                 sx={{
                   backgroundColor: "transparent",
@@ -182,6 +197,8 @@ function HelpDrawer() {
                 </AccordionDetails>
               </Accordion>
               <Accordion
+                expanded={expanded === "panel4"}
+                onChange={handleChangeAccordion("panel4")}
                 disableGutters
                 sx={{
                   backgroundColor: "transparent",
@@ -220,6 +237,8 @@ function HelpDrawer() {
           {selectedTab === 1 && (
             <>
               <Accordion
+                expanded={expanded === "panel1"}
+                onChange={handleChangeAccordion("panel1")}
                 disableGutters
                 sx={{
                   backgroundColor: "transparent",
@@ -257,6 +276,8 @@ function HelpDrawer() {
           {selectedTab === 2 && (
             <>
               <Accordion
+                expanded={expanded === "panel1"}
+                onChange={handleChangeAccordion("panel1")}
                 disableGutters
                 sx={{
                   backgroundColor: "transparent",
@@ -285,6 +306,8 @@ function HelpDrawer() {
                 </AccordionDetails>
               </Accordion>
               <Accordion
+                expanded={expanded === "panel2"}
+                onChange={handleChangeAccordion("panel2")}
                 disableGutters
                 sx={{
                   backgroundColor: "transparent",
