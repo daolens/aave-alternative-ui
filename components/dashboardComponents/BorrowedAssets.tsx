@@ -58,7 +58,7 @@ function BorrowedAssets() {
     currentNetworkConfig,
     currentMarketData,
   } = useProtocolDataContext();
-  const { chainId: connectedChainId, watchModeOnlyAddress } = useWeb3Context();
+  const { chainId: connectedChainId, switchNetwork } = useWeb3Context();
 
   const { user, reserves } = useAppDataContext();
   const {
@@ -319,6 +319,14 @@ function BorrowedAssets() {
     setOpen(false);
   };
   const repayAsset = () => {
+    if (isWrongNetwork) {
+      if (confirm("Your selected network is incorrect. Switch now?")) {
+        switchNetwork(requiredChainId);
+        return;
+      } else {
+        return;
+      }
+    }
     if (loadingTxns || repayTxState.loading) return;
     if (!selectedAmount) return alert("Add an amount greater than 0");
 
@@ -361,7 +369,7 @@ function BorrowedAssets() {
       setIsSuccessful(true);
     }
   }, [repayTxState]);
-  //   console.log("loadingTxns", txError);
+  console.log("repayTxState", repayTxState);
 
   return (
     <>
@@ -408,7 +416,9 @@ function BorrowedAssets() {
           );
         })
       ) : (
-        <p style={{ width: "100%", textAlign: "center" }}>No assets borrowed yet</p>
+        <p style={{ width: "100%", textAlign: "center" }}>
+          No assets borrowed yet
+        </p>
       )}
       {currentAssetDetails?.reserve && (
         <Dialog

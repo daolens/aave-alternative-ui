@@ -88,6 +88,7 @@ function ChooseLendingAsset() {
     disconnectWallet,
     chainId: connectedChainId,
     watchModeOnlyAddress,
+    switchNetwork,
   } = useWeb3Context();
   const {
     txError,
@@ -109,7 +110,7 @@ function ChooseLendingAsset() {
   // ! variables ************************************************************************************************************
   const requiredChainId = marketChainId;
   const isWrongNetwork = connectedChainId !== requiredChainId;
-
+  console.log("isWrongNetwork", isWrongNetwork);
   const poolReserve = reserves.find((reserve) => {
     if (
       currentAssetDetails.underlyingAsset?.toLowerCase() ===
@@ -462,6 +463,14 @@ function ChooseLendingAsset() {
   };
   // console.log(supplyReserves, user, selectedAsset);
   const lendAsset = () => {
+    if (isWrongNetwork) {
+      if (confirm("Your selected network is incorrect. Switch now?")) {
+        switchNetwork(requiredChainId);
+        return;
+      } else {
+        return;
+      }
+    }
     if (!selectedAmount) return alert("Add an amount greater than 0");
     const foundAsset: any = supplyReserves.find((singleAsset: emptyObject) => {
       return singleAsset.id == selectedAsset;
