@@ -18,6 +18,19 @@ export default function Home() {
   //   if (loading) return;
   //   setIsLoading(false);
   // }, [loading]);
+  const [showPage, setShowPage] = useState(false);
+  useEffect(() => {
+    // setTimeout(() => {
+    setShowPage(true);
+
+    // }, 2000);
+  }, []);
+  if (!showPage)
+    return (
+      <div
+        style={{ height: "100vh", width: "100vw", backgroundColor: "#1B2030" }}
+      ></div>
+    );
   return (
     <DashboardLayout>
       <CustomBoxComponent>

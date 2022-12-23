@@ -15,6 +15,7 @@ import { GasStationProvider } from "src/components/transactions/GasStation/GasSt
 import { PermissionProvider } from "src/hooks/usePermissions";
 import { BackgroundDataProvider } from "src/hooks/app-data-provider/BackgroundDataProvider";
 import { AddressBlocked } from "src/components/AddressBlocked";
+import { useEffect, useState } from "react";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -36,6 +37,8 @@ interface MyAppProps extends AppProps {
 export default function App(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const getLayout = Component.getLayout ?? ((page: React.ReactElement) => page);
+ 
+  
   return (
     <CacheProvider value={emotionCache}>
       {/*@ts-ignore */}
