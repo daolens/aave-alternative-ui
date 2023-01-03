@@ -333,13 +333,16 @@ function SuppliedAssets() {
       setIsSuccessful(true);
     }
   }, [withdrawTxState]);
-   useEffect(() => {
-    window?.document.addEventListener("wheel", function (event) {
-      if (window?.document?.activeElement?.type === "number") {
-        window?.document?.activeElement?.blur();
-      }
-    }); 
-  }, []);
+  // useEffect(() => {
+  //   window?.document.addEventListener("wheel", function (event) {
+  //     if (
+
+  //       window?.document?.activeElement?.type === "number"
+  //     ) {
+  //       window?.document?.activeElement?.blur();
+  //     }
+  //   });
+  // }, []);
   return (
     <>
       {suppliedPosition.length > 0 ? (
@@ -479,6 +482,7 @@ function SuppliedAssets() {
                       {currentAssetDetails.reserve.name}
                     </span>
                     <input
+                     onWheel={(e) => e.currentTarget.blur()}
                       type="number"
                       placeholder="Enter Amount"
                       value={selectedAmount}

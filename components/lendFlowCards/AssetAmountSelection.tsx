@@ -48,13 +48,13 @@ function AssetAmountSelection({
   const downToSM = useMediaQuery(theme.breakpoints.down("sm"));
   const valueTypographyVariant = downToSM ? "main16" : "main21";
   const noDataTypographyVariant = downToSM ? "secondary16" : "secondary21";
-  useEffect(() => {
-    window?.document.addEventListener("wheel", function (event) {
-      if (window?.document?.activeElement?.type === "number") {
-        window?.document?.activeElement?.blur();
-      }
-    }); 
-  }, []);
+  // useEffect(() => {
+  //   window?.document.addEventListener("wheel", function (event) {
+  //     if (window?.document?.activeElement?.type === "number") {
+  //       window?.document?.activeElement?.blur();
+  //     }
+  //   });
+  // }, []);
 
   // Calculation of future HF
   const amountIntEth = new BigNumber(selectedAmount).multipliedBy(
@@ -128,6 +128,7 @@ function AssetAmountSelection({
           <div className={styles.amount_input_container}>
             {/* <Divider orientation="vertical" variant="middle" flexItem /> */}
             <input
+              onWheel={(e) => e.currentTarget.blur()}
               placeholder="Enter amount to lend"
               className={styles.amount_input_container__input}
               aria-label="amount-input"
