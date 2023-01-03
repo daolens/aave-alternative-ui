@@ -333,6 +333,13 @@ function SuppliedAssets() {
       setIsSuccessful(true);
     }
   }, [withdrawTxState]);
+   useEffect(() => {
+    window?.document.addEventListener("wheel", function (event) {
+      if (window?.document?.activeElement?.type === "number") {
+        window?.document?.activeElement?.blur();
+      }
+    }); 
+  }, []);
   return (
     <>
       {suppliedPosition.length > 0 ? (

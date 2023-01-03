@@ -37,3 +37,14 @@
     width: 100%;
     height: calc(100% - 64px);
 }
+
+@media screen and (max-width:960px) {
+    .toolbar_left__typography {
+        /* margin-left: 0; */
+        margin: 10px 0 10px 10px;
+    }
+
+    .toolbar_left__typography:last-child {
+        margin-bottom: 0;
+    }
+}

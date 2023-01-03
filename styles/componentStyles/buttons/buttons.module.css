@@ -42,11 +42,12 @@
 .proceed_tooltip {
     position: absolute;
     /* bottom: -100%; */
-    top: calc(100% + 10px);
-    left: 50%;
+    top: calc(-100% + -20px);
+    left: 20%;
     transform: translateX(-50%);
     width: 200px;
     padding: 5px 10px;
     border-radius: 4px;
     background: #383D51;
+    z-index: 2000;
 }

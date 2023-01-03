@@ -2,6 +2,7 @@ import React, {
   ChangeEventHandler,
   MouseEventHandler,
   ReactNode,
+  useEffect,
   useState,
 } from "react";
 import styles from "../../styles/componentStyles/lendFlowCards/assetAmountSelection.module.css";
@@ -47,6 +48,13 @@ function AssetAmountSelection({
   const downToSM = useMediaQuery(theme.breakpoints.down("sm"));
   const valueTypographyVariant = downToSM ? "main16" : "main21";
   const noDataTypographyVariant = downToSM ? "secondary16" : "secondary21";
+  useEffect(() => {
+    window?.document.addEventListener("wheel", function (event) {
+      if (window?.document?.activeElement?.type === "number") {
+        window?.document?.activeElement?.blur();
+      }
+    }); 
+  }, []);
 
   // Calculation of future HF
   const amountIntEth = new BigNumber(selectedAmount).multipliedBy(
@@ -103,7 +111,7 @@ function AssetAmountSelection({
                           alt="icon"
                           height={18}
                           width={18}
-                          style={{marginRight:"8px"}}
+                          style={{ marginRight: "8px" }}
                         />
                         {singleRow.name}
                       </span>

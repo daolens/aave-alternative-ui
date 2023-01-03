@@ -448,6 +448,7 @@ function ChooseLendingAsset() {
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // console.log("event.target.value", event.target.value);
     // if (decimalNumberRegex.test(event.target.value))
+    if (+event.target.value < 0) return;
     setSelectedAmount(event.target.value);
   };
   const setMaxBalance = (balance: string): any => {
