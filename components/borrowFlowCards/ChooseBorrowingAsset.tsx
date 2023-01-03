@@ -344,6 +344,7 @@ function ChooseBorrowingAsset() {
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // console.log("event.target.value", event.target.value);
     // if (decimalNumberRegex.test(event.target.value))
+    if (+event.target.value < 0) return;
     setSelectedAmount(event.target.value);
   };
   const setMaxBalance = (balance: string): any => {
@@ -464,7 +465,7 @@ function ChooseBorrowingAsset() {
   const createTooltipText = () => {
     if (loadingTxns) return "Loading transactions from wallet";
     if (borrowTxState.loading) return "Processing your transaction";
-    return "";
+    return ""; 
   };
   return (
     <div className={styles.container}>
@@ -482,6 +483,7 @@ function ChooseBorrowingAsset() {
         }
         proceedButtonText="Borrow"
         clickHandle={borrowAsset}
+        // isLoading={true}
         isLoading={loadingTxns || borrowTxState.loading}
         tooltipText={createTooltipText()}
       >

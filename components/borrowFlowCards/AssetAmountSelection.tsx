@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/componentStyles/borrowFlowCards/assetAmountSelection.module.css";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -36,7 +36,13 @@ function AssetAmountSelection({
   const usdValue = poolReserve
     ? valueToBigNumber(selectedAmount).multipliedBy(poolReserve.priceInUSD)
     : "";
-
+//  useEffect(() => {
+//     window?.document.addEventListener("wheel", function (event) {
+//       if (window?.document?.activeElement?.type === "number") {
+//         window?.document?.activeElement?.blur();
+//       }
+//     }); 
+//   }, []);
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -102,9 +108,10 @@ function AssetAmountSelection({
               placeholder="Enter amount to borrow"
               className={styles.amount_input_container__input}
               aria-label="amount-input"
-              type="text"
+              type="number"
               value={selectedAmount}
               onChange={updateAmount}
+              onWheel={(e) => e.currentTarget.blur()}
             />
             <span className={styles.amount_input_container__dollar}>
               {selectedAmount && <>${usdValue.toString(10)}</>}

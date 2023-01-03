@@ -17,16 +17,8 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    /* color-scheme: dark; */
-  }
 
-  body {
-    /* color: white; */
-    background: #0B1124;
-  }
-}
+
 
 /* ! MUI override styles */
 .css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon {
@@ -87,19 +79,19 @@ a {
   margin-top: 0;
 } */
 .css-b11kyg-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
-  background-color: #2A2E3F;
+  background-color: #2A2E3F !important;
 }
 
 .css-nfa4cw-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
-  background-color: #292E41;
+  background-color: #292E41 !important;
 }
 
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiMenu-paper.MuiPaper-elevation8.MuiPopover-paper {
-  background-color: #292E41;
+  background-color: #292E41 !important;
 }
 
 .css-1xheqax-MuiButtonBase-root-MuiMenuItem-root.Mui-focusVisible {
-  background-color: #383D51;
+  background-color: #383D51 !important;
 }
 
 input::-webkit-outer-spin-button,

@@ -372,7 +372,14 @@ function BorrowedAssets() {
       setIsSuccessful(true);
     }
   }, [repayTxState]);
-  console.log("repayTxState", repayTxState);
+  //  useEffect(() => {
+  //   window?.document.addEventListener("wheel", function (event) {
+  //     if (window?.document?.activeElement?.type === "number") {
+  //       window?.document?.activeElement?.blur();
+  //     }
+  //   });
+  // }, []);
+  // console.log("repayTxState", repayTxState);
 
   return (
     <>
@@ -517,6 +524,7 @@ function BorrowedAssets() {
                       {currentAssetDetails.reserve.name}
                     </span>
                     <input
+                     onWheel={(e) => e.currentTarget.blur()}
                       type="number"
                       placeholder="Enter Amount"
                       value={selectedAmount}
