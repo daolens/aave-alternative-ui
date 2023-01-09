@@ -127,6 +127,10 @@ input[type=number] {
 
 }
 
+#demo-simple-select-standard-label-1 {
+  transform: translateY(13px);
+}
+
 .MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl {
   transform: translateY(12px);
 }
@@ -154,6 +158,6 @@ input[type=number] {
 }
 
 .MuiMenu-paper {
-  margin-top: 20px;
+  margin-top: 61px;
   box-shadow: 0px 10px 45px 9px rgba(107, 53, 118, 0.16), 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
 }

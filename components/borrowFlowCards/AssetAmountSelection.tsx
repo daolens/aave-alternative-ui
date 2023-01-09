@@ -48,13 +48,13 @@ function AssetAmountSelection({
       <div className={styles.container}>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
           <InputLabel
-            id="demo-simple-select-standard-label"
+            id="demo-simple-select-standard-label-1"
             sx={{ color: "#ffffff" }}
           >
             Choose asset to borrow
           </InputLabel>
           <Select
-            labelId="demo-simple-select-standard-label"
+            labelId="demo-simple-select-standard-label-1"
             id="lend_asset_selection_dropdown"
             value={selectedAsset}
             onChange={updateAsset}

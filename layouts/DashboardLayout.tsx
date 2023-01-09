@@ -39,8 +39,6 @@ function DashboardLayout({ children }: Props) {
   const [selectedMarketVersion, setSelectedMarketVersion] =
     useState<SelectedMarketVersion>(SelectedMarketVersion.V3);
 
-  const testnetsEnabledId = "testnetsEnabled";
-  const [testnetsEnabled, setTestnetsMode] = useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -57,6 +55,8 @@ function DashboardLayout({ children }: Props) {
     setTestnetsMode(testnetsEnabledLocalstorage);
   }, []);
 
+  const testnetsEnabledId = "testnetsEnabled";
+  const [testnetsEnabled, setTestnetsMode] = useState(false);
   const toggleTestnetsEnabled = () => {
     const newState = !testnetsEnabled;
     setTestnetsMode(!testnetsEnabled);
@@ -134,21 +134,7 @@ function DashboardLayout({ children }: Props) {
                   </Typography>
                 </div>
                 <div className={styles.toolbar_right}>
-                  <Typography
-                    className={styles.toolbar_left__typography}
-                    color="#ffffff"
-                    variant="h4"
-                    component="div"
-                    sx={{ flexGrow: 1 }}
-                    // onClick={() => router.push("/")}
-                  >
-                    Testnet
-                  </Typography>
-                  <Switch
-                    checked={testnetsEnabled}
-                    onChange={toggleTestnetsEnabled}
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
+                  
                   <HelpButton />
                   <FormControl
                     variant="standard"
