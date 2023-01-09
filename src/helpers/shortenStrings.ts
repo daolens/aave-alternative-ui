@@ -1,5 +1,5 @@
 export const shortenLongNumber = (num: string) => {
-  return num?.length > 6 ? num.slice(0, 6) : num;
+  return num?.length > 9 ? num.slice(0, 9) : num;
 };
 export const shortenAPY = (apy: number) => {
   if (!apy) return "-";

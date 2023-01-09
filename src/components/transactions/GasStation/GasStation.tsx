@@ -34,7 +34,7 @@ export const getGasCosts = (
 export const GasStation: React.FC<GasStationProps> = ({ gasLimit }) => {
   const {
     state,
-    gasPriceData: { data },
+    gasPriceData,
   } = useGasStation();
   const { reserves } = useAppDataContext();
   const {
@@ -45,12 +45,10 @@ export const GasStation: React.FC<GasStationProps> = ({ gasLimit }) => {
   const wrappedAsset = reserves.find(
     (token) => token.symbol.toLowerCase() === wrappedBaseAssetSymbol?.toLowerCase()
   );
-
   const totalGasCostsUsd =
-    data && wrappedAsset
-      ? getGasCosts(gasLimit, state.gasOption, state.customGas, data, wrappedAsset.priceInUSD)
+    gasPriceData.data && wrappedAsset
+      ? getGasCosts(gasLimit, state.gasOption, state.customGas, gasPriceData.data, wrappedAsset.priceInUSD)
       : undefined;
-
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', mt: 6 }}>
       <LocalGasStationIcon color="primary" sx={{ fontSize: '16px', mr: 1.5 }} />

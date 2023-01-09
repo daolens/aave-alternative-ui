@@ -54,10 +54,8 @@ const useGetGasPrices = (): GetGasPricesHook => {
     setData(rawToGasPriceData(feeData));
     setError(false);
   };
-
   const estimateGasPrice = async () => {
     let apiRequestError;
-
     try {
       await web3Request();
     } catch (web3ProviderError) {
