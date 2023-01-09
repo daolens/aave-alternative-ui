@@ -23,11 +23,12 @@ import {
   USD_DECIMALS,
   valueToBigNumber,
 } from "@aave/math-utils";
+import InfoIcon from "@mui/icons-material/Info";
 import BigNumber from "bignumber.js";
 import { API_ETH_MOCK_ADDRESS, InterestRate } from "@aave/contract-helpers";
 import { fetchIconSymbolAndName } from "src/ui-config/reservePatches";
 import { shortenAPY, shortenNumber } from "src/helpers/shortenStrings";
-import { Icon } from "@mui/material";
+import { Icon, Tooltip } from "@mui/material";
 import { DetailsHFLine } from "src/components/transactions/FlowCommons/TxModalDetails";
 import { getMaxAmountAvailableToBorrow } from "src/utils/getMaxAmountAvailableToBorrow";
 import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
@@ -37,8 +38,12 @@ import { isEmpty } from "lodash";
 import { TxAction } from "src/ui-config/errorMapping";
 import { useModalContext } from "src/hooks/useModal";
 import { useRouter } from "next/router";
+
 export enum ErrorType {
-  CAP_REACHED,
+  STABLE_RATE_NOT_ENABLED,
+  NOT_ENOUGH_LIQUIDITY,
+  BORROWING_NOT_AVAILABLE,
+  NOT_ENOUGH_BORROWED,
 }
 function ChooseBorrowingAsset() {
   const router = useRouter();
@@ -162,6 +167,8 @@ function ChooseBorrowingAsset() {
   const requiredChainId = marketChainId;
   const isWrongNetwork = connectedChainId !== requiredChainId;
 
+  const displayRiskCheckbox =
+    newHealthFactor.toNumber() < 1.5 && newHealthFactor.toString() !== "-1";
   const {
     action,
     loadingTxns,
@@ -342,10 +349,11 @@ function ChooseBorrowingAsset() {
     setSelectedAsset(event.target.value);
   };
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log("event.target.value", event.target.value);
-    // if (decimalNumberRegex.test(event.target.value))
+    if (borrowTxState?.loading) return;
     if (+event.target.value < 0) return;
-    setSelectedAmount(event.target.value);
+    if (+event.target.value > +maxAmountToBorrow)
+      return setSelectedAmount(maxAmountToBorrow.toString(10));
+    return setSelectedAmount(event.target.value);
   };
   const setMaxBalance = (balance: string): any => {
     setSelectedAmount(balance);
@@ -578,12 +586,29 @@ function ChooseBorrowingAsset() {
             </div>
             <div className={styles.selected_asset_details__container}>
               <span>Credit health factor</span>
-              <span style={{ fontSize: "24px", color: "#31C48D" }}>
+              <span
+                style={{
+                  fontSize: "24px",
+                  color: "#31C48D",
+                  display: "inline-flex",
+                  alignItems: "flex-start",
+                }}
+              >
                 <DetailsHFLine
                   visibleHfChange={!!_amount}
                   healthFactor={user.healthFactor}
                   futureHealthFactor={newHealthFactor.toString(10)}
                 />
+                {+newHealthFactor.toString(10) < 1.5 && (
+                  <Tooltip title="If you borrow this amount, you are at a risk of liquidation">
+                    <InfoIcon
+                      color="error"
+                      fontSize="small"
+                      sx={{ marginLeft: "10px" }}
+                      id="small-amount-tooltip"
+                    />
+                  </Tooltip>
+                )}
               </span>
             </div>
           </div>

@@ -482,12 +482,20 @@ function SuppliedAssets() {
                       {currentAssetDetails.reserve.name}
                     </span>
                     <input
-                     onWheel={(e) => e.currentTarget.blur()}
+                      onWheel={(e) => e.currentTarget.blur()}
                       type="number"
                       placeholder="Enter Amount"
                       value={selectedAmount}
                       onChange={(ev) => {
-                        setSelectedAmount(ev.target.value);
+                        if (
+                          +ev.target.value >
+                          +currentAssetDetails.underlyingBalance
+                        ) {
+                          return setSelectedAmount(
+                            currentAssetDetails.underlyingBalance
+                          );
+                        }
+                        return setSelectedAmount(ev.target.value);
                       }}
                     />
                     {/* <span>50$</span> */}
@@ -497,14 +505,21 @@ function SuppliedAssets() {
                   Amount lent:{" "}
                   {Number(currentAssetDetails.underlyingBalance).toFixed(5)}
                 </span>
-                <span className={styles.wallet_balance}>
-                  Credit health score
-                </span>
-                <DetailsHFLine
-                  visibleHfChange={!!_amount}
-                  healthFactor={user ? user.healthFactor : "-1"}
-                  futureHealthFactor={healthFactorAfterWithdraw.toString(10)}
-                />
+                {user?.healthFactor !== "-1" && (
+                  <>
+                    {" "}
+                    <span className={styles.wallet_balance}>
+                      Credit health score
+                    </span>
+                    <DetailsHFLine
+                      visibleHfChange={!!_amount}
+                      healthFactor={user ? user.healthFactor : "-1"}
+                      futureHealthFactor={healthFactorAfterWithdraw.toString(
+                        10
+                      )}
+                    />
+                  </>
+                )}
                 {/* <GasStation gasLimit={parseUnits(gasLimit || "0", "wei")} /> */}
                 <div className={styles.main_cta} onClick={withdrawAsset}>
                   <span>

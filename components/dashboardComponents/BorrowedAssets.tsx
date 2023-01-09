@@ -35,6 +35,7 @@ import { getNetworkConfig } from "src/utils/marketsAndNetworksConfig";
 import styles from "../../styles/componentStyles/dashboardComponents/DashboardContent.module.css";
 import { GasStation } from "src/components/transactions/GasStation/GasStation";
 import { parseUnits } from "ethers/lib/utils";
+import { useWalletBalances } from "src/hooks/app-data-provider/useWalletBalances";
 export enum ErrorType {
   CAP_REACHED,
 }
@@ -62,7 +63,7 @@ function BorrowedAssets() {
     // currentMarketData,
   } = useProtocolDataContext();
   const { chainId: connectedChainId, switchNetwork } = useWeb3Context();
-
+  const { walletBalances } = useWalletBalances();
   const { user, reserves } = useAppDataContext();
   const {
     txError,
@@ -524,12 +525,30 @@ function BorrowedAssets() {
                       {currentAssetDetails.reserve.name}
                     </span>
                     <input
-                     onWheel={(e) => e.currentTarget.blur()}
+                      onWheel={(e) => e.currentTarget.blur()}
                       type="number"
                       placeholder="Enter Amount"
                       value={selectedAmount}
                       onChange={(ev) => {
-                        setSelectedAmount(ev.target.value);
+                        if (
+                          +ev.target.value > +currentAssetDetails.totalBorrows
+                        ) {
+                          const debt =
+                            currentAssetDetails.borrowRateMode === "Stable"
+                              ? userReserve?.stableBorrows
+                              : userReserve?.variableBorrows;
+                          // const safeAmountToRepayAll =
+                          //   valueToBigNumber(debt).multipliedBy("0.9999");
+                          console.log(
+                            "currentAssetDetails",
+                            walletBalances[userReserve.underlyingAsset].amount
+                          );
+
+                          return setSelectedAmount(
+                            walletBalances[userReserve.underlyingAsset].amount
+                          );
+                        }
+                        return setSelectedAmount(ev.target.value);
                       }}
                     />
                     {/* <span>50$</span> */}
@@ -539,14 +558,19 @@ function BorrowedAssets() {
                   Amount borrowed:{" "}
                   {Number(currentAssetDetails.totalBorrows).toFixed(5)}
                 </span>
-                <span className={styles.wallet_balance}>
-                  Credit health score
-                </span>
-                <DetailsHFLine
-                  visibleHfChange={!!_amount}
-                  healthFactor={user ? user.healthFactor : "-1"}
-                  futureHealthFactor={newHF}
-                />
+
+                {user?.healthFactor !== "-1" && (
+                  <>
+                    <span className={styles.wallet_balance}>
+                      Credit health score
+                    </span>
+                    <DetailsHFLine
+                      visibleHfChange={!!_amount}
+                      healthFactor={user ? user.healthFactor : "-1"}
+                      futureHealthFactor={newHF}
+                    />
+                  </>
+                )}
                 {/* <GasStation gasLimit={parseUnits(gasLimit || "0", "wei")} /> */}
                 <div className={styles.main_cta} onClick={repayAsset}>
                   <span>

@@ -46,6 +46,10 @@ import { useRouter } from "next/router";
 // } from "src/components/transactions/GasStation/GasStation";
 // import { parseUnits } from "ethers/lib/utils";
 import { useGasStation } from "src/hooks/useGasStation";
+import InfoIcon from "@mui/icons-material/Info";
+import { Tooltip } from "@mui/material";
+import { GasStation } from "src/components/transactions/GasStation/GasStation";
+import { parseUnits } from "ethers/lib/utils";
 export enum ErrorType {
   CAP_REACHED,
 }
@@ -95,7 +99,7 @@ function ChooseLendingAsset() {
     retryWithApproval,
     mainTxState: supplyTxState,
     close: clearModalContext,
-    // gasLimit,
+    gasLimit,
   } = useModalContext();
   const {
     // bridge,
@@ -293,7 +297,7 @@ function ChooseLendingAsset() {
 
   const { content, disabled, loading, handleClick } = getMainParams();
   const approvalParams = getApprovalParams();
-  console.log("approvalParams", loadingTxns, approvalParams);
+
   // ! Effects ************************************************************************************************************
   useEffect(() => {
     // console.log("supplyTxState", supplyTxState);
@@ -446,16 +450,17 @@ function ChooseLendingAsset() {
     setSelectedAsset(event.target.value);
   };
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log("event.target.value", event.target.value);
-    // if (decimalNumberRegex.test(event.target.value))
+    if (supplyTxState?.loading) return;
     if (+event.target.value < 0) return;
-    setSelectedAmount(event.target.value);
+    if (+event.target.value > +currentAssetDetails.walletBalance)
+      return setSelectedAmount(currentAssetDetails.walletBalance);
+    return setSelectedAmount(event.target.value);
   };
   const setMaxBalance = (balance: string): any => {
     setSelectedAmount(balance);
   };
 
-  // console.log("supplyReserves", availableReserves, supplyReserves);
+  console.log("gasLimit", gasLimit);
   const fetchYearlyEarnings = () => {
     const interest_rate = currentAssetDetails.supplyAPY;
     if (Number(interest_rate))
@@ -539,30 +544,6 @@ function ChooseLendingAsset() {
         )}
         {selectedAsset ? (
           <div className={styles.selected_asset_details}>
-            {/* <div className={styles.selected_asset_details__container}>
-              <span>People invested</span>
-              <span>
-                <AvatarGroup
-                  max={4}
-                  sx={{ ">div": { width: 20, height: 20, fontSize: "10px" } }}
-                >
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                  <Avatar
-                    alt="Travis Howard"
-                    src="/static/images/avatar/2.jpg"
-                  />
-                  <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                  <Avatar
-                    alt="Agnes Walker"
-                    src="/static/images/avatar/4.jpg"
-                  />
-                  <Avatar
-                    alt="Trevor Henderson"
-                    src="/static/images/avatar/5.jpg"
-                  />
-                </AvatarGroup>
-              </span>
-            </div> */}
             <div className={styles.selected_asset_details__container}>
               <span>Annual interest rate</span>
               <span style={{ fontSize: "24px", color: "#31C48D" }}>
@@ -571,19 +552,30 @@ function ChooseLendingAsset() {
             </div>
             <div className={styles.selected_asset_details__container}>
               <span>Yearly earning</span>
-              <span style={{ fontSize: "24px", color: "#31C48D" }}>
+              <span
+                style={{
+                  fontSize: "24px",
+                  color: "#31C48D",
+                  display: "inline-flex",
+                  alignItems: "center",
+                }}
+              >
                 {fetchYearlyEarnings()}
+
+                <Tooltip title="If yearly earnings are too low, the amount will be close to 0.">
+                  <InfoIcon
+                    color="info"
+                    fontSize="small"
+                    sx={{ marginLeft: "10px" }}
+                    id="small-amount-tooltip"
+                  />
+                </Tooltip>
               </span>
               {selectedAmount && fetchYearlyEarnings().split(" ")[0] == "0" && (
-                <span>
-                  ${amountInUsd.toString(10)}
-                  {/* <br style={{ marginTop: "10px" }} />
-                  The earnings are really low
-                  <br />
-                  for the selected amount */}
-                </span>
+                <span>${amountInUsd.toString(10)}</span>
               )}
             </div>
+            {/* <GasStation gasLimit={parseUnits(gasLimit || '0', 'wei')} /> */}
           </div>
         ) : (
           <div className={styles.wallet_assets_container}>

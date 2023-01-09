@@ -14,6 +14,7 @@
     justify-content: center;
     flex-direction: column;
     height: 100%;
+    padding-top: 2rem;
 }
 
 .container_top_title {
