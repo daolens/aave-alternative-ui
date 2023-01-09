@@ -438,14 +438,7 @@ function ChooseBorrowingAsset() {
   } = getMainParams();
   const approvalParams = getApprovalParams();
   const borrowAsset = () => {
-    if (isWrongNetwork) {
-      if (confirm("Your selected network is incorrect. Switch now?")) {
-        switchNetwork(requiredChainId);
-        return;
-      } else {
-        return;
-      }
-    }
+    if (isWrongNetwork) return switchNetwork(requiredChainId);
     if (!selectedAmount) return alert("Add an amount greater than 0");
     if (+selectedAmount > +maxAmountToBorrow)
       return alert(
@@ -465,7 +458,7 @@ function ChooseBorrowingAsset() {
   const createTooltipText = () => {
     if (loadingTxns) return "Loading transactions from wallet";
     if (borrowTxState.loading) return "Processing your transaction";
-    return ""; 
+    return "";
   };
   return (
     <div className={styles.container}>
@@ -481,7 +474,13 @@ function ChooseBorrowingAsset() {
             <>Let’s now choose the asset you want to borrow</>
           )
         }
-        proceedButtonText="Borrow"
+        proceedButtonText={
+          isWrongNetwork
+            ? "Switch Network"
+            : approvalParams && approvalParams.handleClick
+            ? "Approve"
+            : "Borrow"
+        }
         clickHandle={borrowAsset}
         // isLoading={true}
         isLoading={loadingTxns || borrowTxState.loading}

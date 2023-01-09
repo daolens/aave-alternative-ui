@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -7,7 +7,8 @@ import { WalletModal } from "src/components/WalletConnection/WalletModal";
 import { useWeb3Context } from "src/libs/hooks/useWeb3Context";
 import { textCenterEllipsis } from "src/helpers/text-center-ellipsis";
 import { useProtocolDataContext } from "src/hooks/useProtocolDataContext";
-import { Typography } from "@mui/material";
+import { Switch, Typography } from "@mui/material";
+import styles from "../../styles/layoutStyles/dashboardLayout.module.css"
 interface Props {
   buttonText?: string;
 }
@@ -24,6 +25,22 @@ function ConnectWallet({ buttonText }: Props) {
     setWalletModalOpen(true);
     setShowDrowpdown(false);
   };
+  // ! Local handlers
+  const testnetsEnabledId = "testnetsEnabled";
+  const [testnetsEnabled, setTestnetsMode] = useState(false);
+  const toggleTestnetsEnabled = () => {
+    const newState = !testnetsEnabled;
+    setTestnetsMode(!testnetsEnabled);
+    window.localStorage.setItem(testnetsEnabledId, newState ? "true" : "false");
+    // Set window.location to trigger a page reload when navigating to the the dashboard
+    window.location.reload();
+  };
+// ! Effects
+  useEffect(() => {
+    const testnetsEnabledLocalstorage =
+      window.localStorage.getItem(testnetsEnabledId) === "true" || false;
+    setTestnetsMode(testnetsEnabledLocalstorage);
+  }, []);
   return (
     <>
       <Button
@@ -77,7 +94,7 @@ function ConnectWallet({ buttonText }: Props) {
             style={{
               position: "absolute",
               color: "#ffffff",
-              bottom: "-255%",
+              bottom: "-380%",
               width: "100%",
               borderRadius: "4px",
               backgroundColor: "#2A2E3F",
@@ -141,6 +158,23 @@ function ConnectWallet({ buttonText }: Props) {
                 Disconnect wallet
               </Typography>
             </Button>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",marginBottom:"10px"}}>
+              <Typography
+                // className={styles.toolbar_left__typography}
+                color="#ffffff"
+                variant="h4"
+                component="div"
+                sx={{ flexGrow: 1,marginLeft:"10px",textAlign:"left",fontWeight:"500",fontSize:"14px" }}
+                // onClick={() => router.push("/")}
+              >
+                Testnet
+              </Typography>
+              <Switch
+                checked={testnetsEnabled}
+                onChange={toggleTestnetsEnabled}
+                inputProps={{ "aria-label": "controlled" }}
+              />
+            </div>
           </div>
         )}
       </Button>

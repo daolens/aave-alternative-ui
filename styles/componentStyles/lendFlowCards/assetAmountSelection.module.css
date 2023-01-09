@@ -3,10 +3,14 @@
     padding: 2px;
 }
 
-.container { 
+.container {
     background-color: #292E41;
     display: flex;
     align-items: center;
+}
+
+.container .MuiFormControl-root {
+    display: none;
 }
 
 .table_container {
